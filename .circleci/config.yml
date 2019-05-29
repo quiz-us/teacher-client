@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:10
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run: npm install
+
+      # install python
+      # - run:
+      #     name: Install python
+      #     working_directory: /
+      #     command: |
+      #       sudo apt-get -y -qq update
+      #       sudo apt-get -y -qq install python3.4-dev
+      #       sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      #       python3.4 get-pip.py --user
+      
+      # install awscli
+      # - run:
+      #     name: Install AWS CLI
+      #     command: /home/circleci/.local/bin/pip install awscli --upgrade --user
+
+      # - save_cache:
+      #     paths:
+      #       - node_modules
+      #     key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Run Jest Tests
+          command: npm test
