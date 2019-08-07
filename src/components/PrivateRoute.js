@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Auth from '../services/Auth';
 import { Route, Redirect } from 'react-router-dom';
 
-const fakeAuth = {
-  isAuthenticated: true
-};
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    Auth.isAuthenticated().then(authStatus => {
+      setIsAuthenticated(authStatus);
+    });
+  });
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      fakeAuth.isAuthenticated === true ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/login" />
-      )
-    }
-  />
-);
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
+};
 
 export default PrivateRoute;
