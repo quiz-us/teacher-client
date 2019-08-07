@@ -1,21 +1,22 @@
 import React from 'react';
 import { ThemeProvider } from '@material-ui/styles';
-import { QuizUsTheme, QuestionForm } from '@quiz-us/kit';
-
-const standards = [
-  { id: 1, name: '6.5A' },
-  { id: 2, name: '8.5A' },
-  { id: 3, name: '8.8A' }
-];
-
-const questionTypes = ['Free Response'];
+import { QuizUsTheme } from '@quiz-us/kit';
+import Nav from './components/nav/Nav';
+import Home from './components/home/Home';
+import PrivateRoute from './components/PrivateRoute';
+import Login from './components/auth/Login';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <ThemeProvider theme={QuizUsTheme}>
-      <QuestionForm standards={standards} questionTypes={questionTypes} />
-    </ThemeProvider>
-  )
+    <Router>
+      <ThemeProvider theme={QuizUsTheme}>
+        <Nav />
+        <PrivateRoute exact path="/" component={Home} />
+        <Route path="/login" component={Login} />
+      </ThemeProvider>
+    </Router>
+  );
 }
 
 export default App;
