@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 const fakeAuth = {
-  isAuthenticated: false
+  isAuthenticated: true
 };
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
