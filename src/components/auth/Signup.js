@@ -17,19 +17,25 @@ const SIGNUP = gql`
   }
 `;
 
-export default () => {
+export default ({ history }) => {
   const classes = useAuthFormStyles();
-  const [signUpTeacher, { loading, error, data }] = useMutation(SIGNUP);
+  const [signUpTeacher, { loading, error }] = useMutation(SIGNUP);
   const { inputs, handleInputChange } = useForm({
     email: '',
     password: ''
   });
-  console.log('data', data);
-  console.log('error', error);
-  console.log('loading', loading);
-  const handleSubmit = e => {
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    signUpTeacher({ variables: inputs });
+    const {
+      data: {
+        signUpTeacher: { token }
+      }
+    } = await signUpTeacher({ variables: inputs });
+    if (token) {
+      localStorage.setItem('__QUIZUS__', token);
+      history.push('/');
+    }
   };
 
   return (

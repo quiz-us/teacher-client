@@ -11,8 +11,6 @@ const standardsQuery = gql`
 `;
 
 export default () => {
-  const { loading, data } = useQuery(standardsQuery);
-  console.log('loading', loading);
-  console.log('data', data);
+  const { data } = useQuery(standardsQuery);
   return <div>{JSON.stringify(data)} Home page!!</div>;
 };
