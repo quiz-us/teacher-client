@@ -9,6 +9,7 @@
     "@material-ui/styles": "^4.3.0",
     "@quiz-us/kit": "0.0.8",
     "apollo-boost": "^0.4.3",
+    "apollo-link-context": "^1.0.18",
     "graphql": "^14.4.2",
     "localforage": "^1.7.3",
     "react": "^16.8.6",

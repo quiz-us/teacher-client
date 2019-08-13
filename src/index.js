@@ -8,6 +8,8 @@ import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
+import localforage from 'localforage';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const appCache = new InMemoryCache();
@@ -15,6 +17,21 @@ const appCache = new InMemoryCache();
 const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql'
 });
+
+// set the auth token with every http request:
+const asyncAuthLink = setContext(
+  (_, { headers }) =>
+    new Promise((resolve, reject) => {
+      localforage.getItem('__QUIZUS__').then(token => {
+        resolve({
+          headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : null
+          }
+        });
+      });
+    })
+);
 
 // client side auth was heavily influenced by:
 // https://www.jaygould.co.uk/2018-08-11-react-apollo-global-error-handling/
@@ -33,11 +50,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
           locations
         )}, Path: ${path}`
       );
+      return message;
     });
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-const link = ApolloLink.from([errorLink, httpLink]);
+const link = ApolloLink.from([errorLink, asyncAuthLink, httpLink]);
 
 const client = new ApolloClient({
   link,

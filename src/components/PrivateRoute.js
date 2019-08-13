@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import gql from 'graphql-tag';
-import Auth from '../services/Auth';
 import localforage from 'localforage';
 import { useQuery } from '@apollo/react-hooks';
 import { Route, Redirect } from 'react-router-dom';

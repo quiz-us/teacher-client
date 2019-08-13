@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import useAuthFormStyles from './AuthFormStyles';
 import AuthForm from './AuthForm';
+import localforage from 'localforage';
 import useForm from '../hooks/useForm';
 
 const SIGNUP = gql`
@@ -33,7 +34,7 @@ export default ({ history }) => {
       }
     } = await signUpTeacher({ variables: inputs });
     if (token) {
-      localStorage.setItem('__QUIZUS__', token);
+      await localforage.setItem('__QUIZUS__', token);
       history.push('/');
     }
   };
