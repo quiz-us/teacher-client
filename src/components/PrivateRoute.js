@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import gql from 'graphql-tag';
 import Auth from '../services/Auth';
+import localforage from 'localforage';
+import { useQuery } from '@apollo/react-hooks';
 import { Route, Redirect } from 'react-router-dom';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  useEffect(() => {
-    Auth.isAuthenticated().then(authStatus => {
-      setIsAuthenticated(authStatus);
-      setIsLoading(false);
-    });
-  });
+const GET_AUTH = gql`
+  {
+    loggedIn @client
+  }
+`;
 
-  if (isLoading) {
-    // adding a loader while auth service asynchronously reads from
-    // localforage:
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const [isCheckingForToken, setIsCheckingFortoken] = useState(true);
+  const { data, loading, client } = useQuery(GET_AUTH);
+
+  useEffect(() => {
+    localforage.getItem('__QUIZUS__').then(token => {
+      if (token) {
+        client.writeData({
+          data: { loggedIn: true }
+        });
+      }
+      setIsCheckingFortoken(false);
+    });
+  }, [client]);
+
+  if (isCheckingForToken || loading) {
+    // adding a loader while auth service asynchronously reads from localforage:
     return <div>Loading...</div>;
   }
 
@@ -22,7 +35,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+        data.loggedIn ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   );

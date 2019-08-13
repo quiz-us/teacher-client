@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 
-const standardsQuery = gql`
+const GET_STANDARDS = gql`
   {
     standardsCharts {
       title
@@ -11,6 +11,7 @@ const standardsQuery = gql`
 `;
 
 export default () => {
-  const { data } = useQuery(standardsQuery);
+  const { data } = useQuery(GET_STANDARDS);
+
   return <div>{JSON.stringify(data)} Home page!!</div>;
 };
