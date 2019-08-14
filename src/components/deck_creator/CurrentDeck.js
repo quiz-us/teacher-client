@@ -1,13 +1,21 @@
 import React, { useContext } from 'react';
+import { makeStyles } from '@material-ui/styles';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import Card from './Card';
 
-const CurrentDeck = ({ classes }) => {
+/** @todo: make mobile friendly: https://material-ui.com/components/drawers/#responsive-drawer */
+
+const useStyles = makeStyles({
+  currentDeckContainer: {
+    padding: '15px'
+  }
+});
+
+const CurrentDeck = () => {
   const { currentDeck } = useContext(CurrentDeckContext);
+  const classes = useStyles();
   return (
-    <div
-      className={`${classes.bottomContainer} ${classes.currentDeckContainer}`}
-    >
+    <div className={`${classes.currentDeckContainer}`}>
       <h3>Current Deck</h3>
       {Object.keys(currentDeck).map(cardId => {
         const card = currentDeck[cardId];
