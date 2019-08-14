@@ -5,7 +5,6 @@ import CustomCard from './Card';
 import { CurrentDeckProvider } from './CurrentDeckContext';
 import CurrentDeck from './CurrentDeck';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
@@ -63,7 +62,6 @@ const DeckCreator = ({ onQuery }) => {
 
             <TabPanel className={classes.panel}>
               <Card>
-                <CardHeader title="Question Filter" />
                 {filterOpen && (
                   <CardContent>
                     <QuestionFilter onFilterUpdate={onFilterUpdate} />
