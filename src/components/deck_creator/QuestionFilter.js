@@ -6,7 +6,21 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 import Button from '@material-ui/core/Button';
+
+// get all the standards for current teacher/standards map
+//
+const GET_STANDARDS = gql`
+  {
+    allStandards {
+      title
+      description
+      id
+    }
+  }
+`;
 
 const useStyles = makeStyles({
   submitContainer: {
@@ -17,6 +31,11 @@ const useStyles = makeStyles({
 });
 
 const QuestionFilter = ({ onFilterUpdate }) => {
+  const {
+    data: { allStandards = [] },
+    loading
+  } = useQuery(GET_STANDARDS);
+
   const classes = useStyles();
   const { inputs, handleInputChange } = useForm({
     standard: '',
@@ -31,19 +50,19 @@ const QuestionFilter = ({ onFilterUpdate }) => {
   return (
     <form onSubmit={onSubmit}>
       <FormControl fullWidth>
-        <InputLabel htmlFor="questionType-select">Standards</InputLabel>
+        <InputLabel htmlFor="questionStandard-select">Standards</InputLabel>
         <Select
           value={inputs.standard}
           onChange={handleInputChange}
           inputProps={{
             name: 'standard',
-            id: 'questionType-select'
+            id: 'questionStandard-select'
           }}
         >
-          {['8.5A', '8.5B', '8.8A'].map(type => {
+          {allStandards.map(({ title, description, id }) => {
             return (
-              <MenuItem key={type} value={type}>
-                {type}
+              <MenuItem key={title} value={id}>
+                {`${title}: ${description}`}
               </MenuItem>
             );
           })}
