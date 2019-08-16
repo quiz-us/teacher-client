@@ -35,7 +35,8 @@ export default ({ history }) => {
     } = await logInTeacher({ variables: inputs });
     if (token) {
       await localforage.setItem('__QUIZUS__', token);
-      history.push('/');
+      const { push, location: { state = {} } = {} } = history;
+      push(state.from.pathname || '/');
     }
   };
 
