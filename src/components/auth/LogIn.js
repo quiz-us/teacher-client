@@ -10,7 +10,7 @@ import useForm from '../hooks/useForm';
 
 const LOGIN = gql`
   mutation logInTeacher($email: String!, $password: String!) {
-    signUpTeacher(email: $email, password: $password) {
+    logInTeacher(email: $email, password: $password) {
       id
       email
       token
@@ -30,7 +30,7 @@ export default ({ history }) => {
     e.preventDefault();
     const {
       data: {
-        signUpTeacher: { token }
+        logInTeacher: { token }
       }
     } = await logInTeacher({ variables: inputs });
     if (token) {
@@ -65,7 +65,7 @@ export default ({ history }) => {
             type="submit"
             className={classes.submitButton}
           >
-            Sign Up
+            Log In
           </Button>
         )}
         {error ? (
