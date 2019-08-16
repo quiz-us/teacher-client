@@ -6,9 +6,6 @@ import { CurrentDeckProvider } from './CurrentDeckContext';
 import CurrentDeck from './CurrentDeck';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Button from '@material-ui/core/Button';
 
@@ -38,10 +35,6 @@ const DeckCreator = ({ onQuery }) => {
   const classes = useStyles();
   const [cardsSearch, updateCardsSearch] = useState([]);
   const [currentDeck, setCurrentDeck] = useState({});
-  const [filterOpen, setFilterOpen] = useState(true);
-  const toggleFilterOpen = () => {
-    setFilterOpen(!filterOpen);
-  };
 
   const handleCurrentDeckChange = updatedDeck => {
     setCurrentDeck(updatedDeck);
@@ -62,18 +55,9 @@ const DeckCreator = ({ onQuery }) => {
 
             <TabPanel className={classes.panel}>
               <Card>
-                {filterOpen && (
-                  <CardContent>
-                    <QuestionFilter onFilterUpdate={onFilterUpdate} />
-                  </CardContent>
-                )}
-                <CardActions className={classes.actions}>
-                  <IconButton onClick={toggleFilterOpen}>
-                    <ExpandMoreIcon
-                      className={filterOpen ? classes.expandOpen : ''}
-                    />
-                  </IconButton>
-                </CardActions>
+                <CardContent>
+                  <QuestionFilter onFilterUpdate={onFilterUpdate} />
+                </CardContent>
               </Card>
               <div className={classes.searchResults}>
                 <h3>Search Results</h3>

@@ -22,25 +22,15 @@ const GET_STANDARDS = gql`
   }
 `;
 
-const useStyles = makeStyles({
-  submitContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '10px'
-  }
-});
+const useStyles = makeStyles({});
 
 const QuestionFilter = ({ onFilterUpdate }) => {
-  const {
-    data: { allStandards = [] },
-    loading
-  } = useQuery(GET_STANDARDS);
+  const { data: { allStandards = [] } = {}, loading } = useQuery(GET_STANDARDS);
 
   const classes = useStyles();
   const { inputs, handleInputChange } = useForm({
     standard: '',
-    tag: '',
-    question: ''
+    tag: ''
   });
 
   const onSubmit = e => {
@@ -71,28 +61,13 @@ const QuestionFilter = ({ onFilterUpdate }) => {
       <FormControl fullWidth>
         <TextField
           id="standard-name"
-          label="Tag"
+          label="Key Word(s)"
           value={inputs.tag}
           name="tag"
           onChange={handleInputChange}
           margin="normal"
         />
       </FormControl>
-      <FormControl fullWidth>
-        <TextField
-          id="standard-name"
-          label="Question"
-          value={inputs.question}
-          name="question"
-          onChange={handleInputChange}
-          margin="normal"
-        />
-      </FormControl>
-      <div className={classes.submitContainer}>
-        <Button type="submit" variant="contained" color="secondary">
-          Search
-        </Button>
-      </div>
     </form>
   );
 };
