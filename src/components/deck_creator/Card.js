@@ -26,7 +26,14 @@ const useStyles = makeStyles({
 
 const DeckCard = ({ card, removable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
-  const { id, questionText, standard = '', tags = [], answerText = '' } = card;
+  const {
+    id,
+    questionText,
+    standards = [{}],
+    tags = [],
+    answerText = ''
+  } = card;
+  const [standard] = standards;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
@@ -71,10 +78,10 @@ const DeckCard = ({ card, removable = null }) => {
       <CardHeader
         action={action}
         title={questionText}
-        subheader={`Standard: ${standard}`}
+        subheader={`Standard: ${standard.title}`}
       />
       <CardContent>
-        <div>{`Tags: ${tags.join(', ')}`} </div>
+        <div>{`Tags: ${tags.map(({ name }) => name).join(', ')}`} </div>
         {controls()}
       </CardContent>
       <CardActions className={classes.actions}>

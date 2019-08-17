@@ -30,6 +30,12 @@ const GET_QUESTIONS = gql`
     questions(standardId: $standardId) {
       questionText
       id
+      standards {
+        title
+      }
+      tags {
+        name
+      }
     }
   }
 `;

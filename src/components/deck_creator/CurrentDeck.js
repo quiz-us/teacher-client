@@ -7,7 +7,7 @@ import Card from './Card';
 
 const useStyles = makeStyles({
   currentDeckContainer: {
-    padding: '15px'
+    padding: '25px'
   }
 });
 

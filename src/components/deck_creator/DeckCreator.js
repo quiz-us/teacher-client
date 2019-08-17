@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
   firstContainer: {
     width: '60%',
-    padding: '5px',
+    padding: '25px',
     borderRight: '1px solid #E0E0E0'
   },
   secondContainer: {
