@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 
 const DeckCard = ({ card, removable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
-  const { id, question, standard, tags, answer } = card;
+  const { id, questionText, standard = '', tags = [], answerText = '' } = card;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
@@ -70,7 +70,7 @@ const DeckCard = ({ card, removable = null }) => {
     <Card className={classes.root}>
       <CardHeader
         action={action}
-        title={question}
+        title={questionText}
         subheader={`Standard: ${standard}`}
       />
       <CardContent>
@@ -87,7 +87,7 @@ const DeckCard = ({ card, removable = null }) => {
       </CardActions>
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>{answer}</CardContent>
+        <CardContent>{answerText}</CardContent>
       </Collapse>
     </Card>
   );

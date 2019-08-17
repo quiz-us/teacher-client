@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import QuestionFilter from './QuestionFilter';
-import CustomCard from './Card';
 import { CurrentDeckProvider } from './CurrentDeckContext';
 import CurrentDeck from './CurrentDeck';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Button from '@material-ui/core/Button';
 
@@ -33,16 +30,7 @@ const useStyles = makeStyles({
 
 const DeckCreator = ({ onQuery }) => {
   const classes = useStyles();
-  const [cardsSearch, updateCardsSearch] = useState([]);
-  const [currentDeck, setCurrentDeck] = useState({});
 
-  const handleCurrentDeckChange = updatedDeck => {
-    setCurrentDeck(updatedDeck);
-  };
-  const onFilterUpdate = async inputs => {
-    const { data } = await onQuery(inputs);
-    updateCardsSearch(data);
-  };
   return (
     <CurrentDeckProvider>
       <div className={classes.root}>
@@ -54,24 +42,7 @@ const DeckCreator = ({ onQuery }) => {
             </TabList>
 
             <TabPanel className={classes.panel}>
-              <Card>
-                <CardContent>
-                  <QuestionFilter onFilterUpdate={onFilterUpdate} />
-                </CardContent>
-              </Card>
-              <div className={classes.searchResults}>
-                <h3>Search Results</h3>
-                {cardsSearch.map(card => {
-                  return (
-                    <CustomCard
-                      key={`search-${card.id}`}
-                      card={card}
-                      currentDeck={currentDeck}
-                      handleCurrentDeckChange={handleCurrentDeckChange}
-                    />
-                  );
-                })}
-              </div>
+              <QuestionFilter />
             </TabPanel>
             <TabPanel className={classes.panel}>
               <h2>Question Form Goes here</h2>
