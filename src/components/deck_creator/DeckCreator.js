@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import QuestionFilter from './QuestionFilter';
 import { CurrentDeckProvider } from './CurrentDeckContext';
 import CurrentDeck from './CurrentDeck';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles({
   root: {
