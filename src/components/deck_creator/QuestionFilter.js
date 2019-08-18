@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import useForm from '../hooks/useForm';
 import { makeStyles } from '@material-ui/styles';
 import Select from '@material-ui/core/Select';
@@ -26,8 +27,8 @@ const GET_STANDARDS = gql`
 `;
 
 const GET_QUESTIONS = gql`
-  query getQuestions($standardId: ID!) {
-    questions(standardId: $standardId) {
+  query getQuestions($standardId: ID, $keyWords: String) {
+    questions(standardId: $standardId, keyWords: $keyWords) {
       questionText
       id
       standards {
@@ -46,7 +47,7 @@ const QuestionFilter = () => {
   const classes = useStyles();
   const { inputs, handleInputChange } = useForm({
     standardId: '',
-    tag: ''
+    keyWords: ''
   });
   const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
   const [
@@ -54,9 +55,19 @@ const QuestionFilter = () => {
     { loading, data: { questions } = { questions: [] } }
   ] = useLazyQuery(GET_QUESTIONS);
   console.log('whats questions', questions);
+
+  const [debouncedGetQuestions] = useDebouncedCallback(value => {
+    getQuestions({ variables: { ...inputs, keyWords: value } });
+  }, 1000);
+
   const onStandardChange = e => {
     handleInputChange(e);
-    getQuestions({ variables: { standardId: e.target.value } });
+    getQuestions({ variables: { ...inputs, standardId: e.target.value } });
+  };
+
+  const onKeyWordChange = e => {
+    handleInputChange(e);
+    debouncedGetQuestions(e.target.value);
   };
 
   return (
@@ -86,9 +97,9 @@ const QuestionFilter = () => {
             <TextField
               id="standard-name"
               label="Key Word(s)"
-              value={inputs.tag}
-              name="tag"
-              onChange={handleInputChange}
+              value={inputs.keyWords}
+              name="keyWords"
+              onChange={onKeyWordChange}
               margin="normal"
             />
           </FormControl>

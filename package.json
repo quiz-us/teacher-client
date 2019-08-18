@@ -17,7 +17,8 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "react-tabs": "^3.0.0"
+    "react-tabs": "^3.0.0",
+    "use-debounce": "^3.0.0"
   },
   "scripts": {
     "start": "PORT=8000 react-scripts start",
