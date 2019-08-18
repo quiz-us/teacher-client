@@ -27,8 +27,12 @@ const GET_STANDARDS = gql`
 `;
 
 const GET_QUESTIONS = gql`
-  query getQuestions($standardId: ID, $keyWords: String) {
-    questions(standardId: $standardId, keyWords: $keyWords) {
+  query getQuestions($standardId: ID, $keyWords: String, $emptyQuery: Boolean) {
+    questions(
+      standardId: $standardId
+      keyWords: $keyWords
+      emptyQuery: $emptyQuery
+    ) {
       questionText
       id
       standards {
@@ -56,18 +60,30 @@ const QuestionFilter = () => {
   ] = useLazyQuery(GET_QUESTIONS);
   console.log('whats questions', questions);
 
-  const [debouncedGetQuestions] = useDebouncedCallback(value => {
-    getQuestions({ variables: { ...inputs, keyWords: value } });
+  const [debouncedGetQuestions] = useDebouncedCallback(e => {
+    getQuestions({ variables: filter(e) });
   }, 1000);
+
+  const filter = e => {
+    const newFilter = { ...inputs, [e.target.name]: e.target.value };
+    if (Object.values(newFilter).some(input => input !== '')) {
+      return newFilter;
+    } else {
+      return {
+        ...newFilter,
+        emptyQuery: true
+      };
+    }
+  };
 
   const onStandardChange = e => {
     handleInputChange(e);
-    getQuestions({ variables: { ...inputs, standardId: e.target.value } });
+    getQuestions({ variables: filter(e) });
   };
 
   const onKeyWordChange = e => {
     handleInputChange(e);
-    debouncedGetQuestions(e.target.value);
+    debouncedGetQuestions(e);
   };
 
   return (
@@ -84,6 +100,9 @@ const QuestionFilter = () => {
                 id: 'questionStandard-select'
               }}
             >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
               {allStandards.map(({ title, description, id }) => {
                 return (
                   <MenuItem key={title} value={id}>
