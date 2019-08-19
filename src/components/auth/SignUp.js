@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import useAuthFormStyles from './AuthFormStyles';
 import AuthForm from './AuthForm';
 import localforage from 'localforage';
@@ -20,6 +20,7 @@ const SIGNUP = gql`
 
 export default ({ history }) => {
   const classes = useAuthFormStyles();
+  const client = useApolloClient();
   const [signUpTeacher, { loading, error }] = useMutation(SIGNUP);
   const { inputs, handleInputChange } = useForm({
     email: '',
@@ -35,6 +36,9 @@ export default ({ history }) => {
     } = await signUpTeacher({ variables: inputs });
     if (token) {
       await localforage.setItem('__QUIZUS__', token);
+      client.writeData({
+        data: { loggedIn: true }
+      });
       history.push('/');
     }
   };

@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import gql from 'graphql-tag';
 import useAuthFormStyles from './AuthFormStyles';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import AuthForm from './AuthForm';
 import localforage from 'localforage';
 import useForm from '../hooks/useForm';
@@ -20,6 +20,7 @@ const LOGIN = gql`
 
 export default ({ history }) => {
   const classes = useAuthFormStyles();
+  const client = useApolloClient();
   const [logInTeacher, { loading, error }] = useMutation(LOGIN);
   const { inputs, handleInputChange } = useForm({
     email: '',
@@ -39,6 +40,9 @@ export default ({ history }) => {
         push,
         location: { state = { from: { pathname: '/' } } }
       } = history;
+      client.writeData({
+        data: { loggedIn: true }
+      });
       push(state.from.pathname);
     }
   };
