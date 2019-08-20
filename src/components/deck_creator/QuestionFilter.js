@@ -34,12 +34,19 @@ const GET_QUESTIONS = gql`
       emptyQuery: $emptyQuery
     ) {
       questionText
+      questionNode
       id
       standards {
         title
       }
       tags {
         name
+      }
+
+      questionOptions {
+        optionNode
+        correct
+        id
       }
     }
   }

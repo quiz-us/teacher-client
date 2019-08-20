@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
+import { ReadOnly } from '@quiz-us/kit';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -21,6 +21,14 @@ const useStyles = makeStyles({
   },
   expandOpen: {
     transform: 'rotate(180deg)'
+  },
+  cardHeader: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between'
+  },
+  details: {
+    marginTop: '10px'
   }
 });
 
@@ -28,9 +36,11 @@ const DeckCard = ({ card, removable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   const {
     id,
+    questionNode = '',
     questionText,
     standards = [{}],
     tags = [],
+    questionOptions = [],
     answerText = ''
   } = card;
   const [standard] = standards;
@@ -52,37 +62,44 @@ const DeckCard = ({ card, removable = null }) => {
   };
 
   const controls = () => {
-    if (!removable) {
+    if (removable) {
       return (
-        <FormControlLabel
-          control={
-            <Switch
-              checked={inCurrentDeck}
-              onChange={updateCurrentDeck}
-              color="primary"
-            />
-          }
-          label="In Current Deck"
-        />
+        <IconButton onClick={removeFromCurrentDeck}>
+          <DeleteIcon />
+        </IconButton>
       );
     }
+    return (
+      <FormControlLabel
+        control={
+          <Switch
+            checked={inCurrentDeck}
+            onChange={updateCurrentDeck}
+            color="primary"
+          />
+        }
+        label="In Current Deck"
+      />
+    );
   };
   const inCurrentDeck = currentDeck[id] ? true : false;
-  const action = removable ? (
-    <IconButton onClick={removeFromCurrentDeck}>
-      <DeleteIcon />
-    </IconButton>
-  ) : null;
+
   return (
     <Card className={classes.root}>
-      <CardHeader
-        action={action}
-        title={questionText}
-        subheader={`Standard: ${standard.title}`}
-      />
       <CardContent>
-        <div>{`Tags: ${tags.map(({ name }) => name).join(', ')}`} </div>
-        {controls()}
+        <div className={classes.cardHeader}>
+          <h4>Question</h4>
+          {controls()}
+        </div>
+        <ReadOnly value={JSON.parse(questionNode)} />
+        <div className={classes.details}>
+          <strong>Standard:</strong>
+          {` ${standard.title}`}
+        </div>
+        <div className={classes.details}>
+          <strong>Tags:</strong>
+          {` ${tags.map(({ name }) => name).join(', ')}`}{' '}
+        </div>
       </CardContent>
       <CardActions className={classes.actions}>
         <IconButton
@@ -94,7 +111,17 @@ const DeckCard = ({ card, removable = null }) => {
       </CardActions>
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>{answerText}</CardContent>
+        <CardContent>
+          {questionOptions.map(({ correct, optionNode }) => {
+            console.log(JSON.parse(optionNode));
+            return (
+              <div>
+                <h4>Answer</h4>
+                <ReadOnly value={JSON.parse(optionNode)} />
+              </div>
+            );
+          })}
+        </CardContent>
       </Collapse>
     </Card>
   );
