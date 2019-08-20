@@ -43,11 +43,11 @@ export default function ButtonAppBar() {
       <h3 className={classes.navHeader}>Quiz Us</h3>
       <Divider />
       <List>
-        <ListItem button>
-          <Link className={classes.link} to="/deck-creator">
+        <Link className={classes.link} to="/deck-creator">
+          <ListItem button>
             <ListItemText primary={'Deck Creator'} />
-          </Link>
-        </ListItem>
+          </ListItem>
+        </Link>
       </List>
     </div>
   );

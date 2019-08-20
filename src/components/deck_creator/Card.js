@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
+import { ReadOnly } from '@quiz-us/kit';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -9,6 +9,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import { makeStyles } from '@material-ui/styles';
 import { CurrentDeckContext } from './CurrentDeckContext';
 
@@ -21,17 +23,62 @@ const useStyles = makeStyles({
   },
   expandOpen: {
     transform: 'rotate(180deg)'
+  },
+  cardHeader: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between'
+  },
+  readOnly: {
+    width: '100%'
+  },
+  details: {
+    marginTop: '15px'
+  },
+  answerChoiceRow: {
+    display: 'flex',
+    marginTop: '10px'
+  },
+  correctnessIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: '5px'
   }
 });
+
+const Answers = ({ questionOptions, classes }) => {
+  return (
+    <div>
+      {questionOptions.map(({ correct, optionNode, id }) => {
+        return (
+          <div className={classes.answerChoiceRow} key={`answerChoice-${id}`}>
+            <span className={classes.correctnessIcon}>
+              {correct ? (
+                <CheckIcon title="Correct Answer" />
+              ) : (
+                <ClearIcon title="Incorrect Answer" />
+              )}
+            </span>
+
+            <div className={classes.readOnly}>
+              <ReadOnly value={JSON.parse(optionNode)} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 const DeckCard = ({ card, removable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   const {
     id,
-    questionText,
+    questionType,
+    questionNode = '',
     standards = [{}],
     tags = [],
-    answerText = ''
+    questionOptions = []
   } = card;
   const [standard] = standards;
   const classes = useStyles();
@@ -52,37 +99,48 @@ const DeckCard = ({ card, removable = null }) => {
   };
 
   const controls = () => {
-    if (!removable) {
+    if (removable) {
       return (
-        <FormControlLabel
-          control={
-            <Switch
-              checked={inCurrentDeck}
-              onChange={updateCurrentDeck}
-              color="primary"
-            />
-          }
-          label="In Current Deck"
-        />
+        <IconButton onClick={removeFromCurrentDeck}>
+          <DeleteIcon />
+        </IconButton>
       );
     }
+    return (
+      <FormControlLabel
+        control={
+          <Switch
+            checked={inCurrentDeck}
+            onChange={updateCurrentDeck}
+            color="primary"
+          />
+        }
+        label="In Current Deck"
+      />
+    );
   };
   const inCurrentDeck = currentDeck[id] ? true : false;
-  const action = removable ? (
-    <IconButton onClick={removeFromCurrentDeck}>
-      <DeleteIcon />
-    </IconButton>
-  ) : null;
+
   return (
     <Card className={classes.root}>
-      <CardHeader
-        action={action}
-        title={questionText}
-        subheader={`Standard: ${standard.title}`}
-      />
       <CardContent>
-        <div>{`Tags: ${tags.map(({ name }) => name).join(', ')}`} </div>
-        {controls()}
+        <div className={classes.cardHeader}>
+          <h4>Question</h4>
+          {controls()}
+        </div>
+        <ReadOnly value={JSON.parse(questionNode)} />
+        <div className={classes.details}>
+          <strong>Standard:</strong>
+          {` ${standard.title}`}
+        </div>
+        <div className={classes.details}>
+          <strong>Type:</strong>
+          {` ${questionType}`}
+        </div>
+        <div className={classes.details}>
+          <strong>Tags:</strong>
+          {` ${tags.map(({ name }) => name).join(', ')}`}{' '}
+        </div>
       </CardContent>
       <CardActions className={classes.actions}>
         <IconButton
@@ -94,7 +152,10 @@ const DeckCard = ({ card, removable = null }) => {
       </CardActions>
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>{answerText}</CardContent>
+        <CardContent>
+          <h4>Answer</h4>
+          <Answers classes={classes} questionOptions={questionOptions} />
+        </CardContent>
       </Collapse>
     </Card>
   );
