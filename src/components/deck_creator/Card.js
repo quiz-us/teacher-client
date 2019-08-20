@@ -46,31 +46,23 @@ const useStyles = makeStyles({
   }
 });
 
-const Answer = ({ answerChoice, classes }) => {
-  return (
-    <div className={classes.readOnly}>
-      <ReadOnly value={JSON.parse(answerChoice.optionNode)} />
-    </div>
-  );
-};
-
-const Answers = ({ questionOptions, questionType, classes }) => {
-  if (questionType === 'Free Response') {
-    return <Answer answerChoice={questionOptions[0]} />;
-  }
+const Answers = ({ questionOptions, classes }) => {
   return (
     <div>
-      {questionOptions.map(answerChoice => {
+      {questionOptions.map(({ correct, optionNode, id }) => {
         return (
-          <div className={classes.answerChoiceRow}>
+          <div className={classes.answerChoiceRow} key={`answerChoice-${id}`}>
             <span className={classes.correctnessIcon}>
-              {answerChoice.correct ? (
+              {correct ? (
                 <CheckIcon title="Correct Answer" />
               ) : (
                 <ClearIcon title="Incorrect Answer" />
               )}
             </span>
-            <Answer answerChoice={answerChoice} classes={classes} />
+
+            <div className={classes.readOnly}>
+              <ReadOnly value={JSON.parse(optionNode)} />
+            </div>
           </div>
         );
       })}
@@ -162,11 +154,7 @@ const DeckCard = ({ card, removable = null }) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <h4>Answer</h4>
-          <Answers
-            classes={classes}
-            questionOptions={questionOptions}
-            questionType={questionType}
-          />
+          <Answers classes={classes} questionOptions={questionOptions} />
         </CardContent>
       </Collapse>
     </Card>

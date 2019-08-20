@@ -53,7 +53,13 @@ const GET_QUESTIONS = gql`
   }
 `;
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  resultsContainer: {
+    overflow: 'scroll',
+    height: '60vh',
+    padding: '10px'
+  }
+});
 
 const QuestionFilter = () => {
   const classes = useStyles();
@@ -134,13 +140,17 @@ const QuestionFilter = () => {
       </Card>
       <div className={classes.searchResults}>
         <h3>Search Results</h3>
-        {loading ? (
-          <div>Loading results...</div>
-        ) : (
-          questions.map(question => {
-            return <CustomCard key={`search-${question.id}`} card={question} />;
-          })
-        )}
+        <div className={classes.resultsContainer}>
+          {loading ? (
+            <div>Loading results...</div>
+          ) : (
+            questions.map(question => {
+              return (
+                <CustomCard key={`search-${question.id}`} card={question} />
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );
