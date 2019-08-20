@@ -1,5 +1,8 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
+import Plain from "slate-plain-serializer";
+import empty from "is-empty";
+
 import { makeStyles } from "@material-ui/styles";
 import Card from "@material-ui/core/Card";
 import FormControl from "@material-ui/core/FormControl";
@@ -10,12 +13,12 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import MenuItem from "@material-ui/core/MenuItem";
+
 import TagsForm from "./TagsForm";
 import { QuestionFormContext } from "./QuestionFormContext";
 import QuestionAndAnswers from "./QuestionAndAnswers";
-import decamelize from "../../util/decamelize";
-import Plain from "slate-plain-serializer";
-import empty from "is-empty";
+import decamelize from "../../../util/decamelize";
+
 
 const useStyles = makeStyles({
   form: {
@@ -185,7 +188,7 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
                   key={standard.id}
                   value={standard.id}
                 >
-                  {standard.name}
+                  {standard.title}:{standard.description}
                 </MenuItem>
               );
             })}
@@ -222,8 +225,9 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
 Form.propTypes = {
   standards: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired
+      description: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired
     })
   ),
   questionTypes: PropTypes.arrayOf(PropTypes.string.isRequired),

@@ -1,5 +1,5 @@
 // using example from: https://material-ui.com/components/autocomplete/#downshift
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import Downshift from "downshift";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,6 +8,8 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Chip from "@material-ui/core/Chip";
 import { QuestionFormContext } from "./QuestionFormContext";
+import { useApolloClient, useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
 function renderInput(inputProps) {
   const { InputProps, classes, ref, ...other } = inputProps;
@@ -42,14 +44,14 @@ function renderSuggestion(suggestionProps) {
   return (
     <MenuItem
       {...itemProps}
-      key={suggestion.label}
+      key={suggestion.name}
       selected={isHighlighted}
       component="div"
       style={{
         fontWeight: isSelected ? 500 : 400
       }}
     >
-      {suggestion.label}
+      {suggestion.name}
     </MenuItem>
   );
 }
@@ -60,25 +62,45 @@ renderSuggestion.propTypes = {
   selectedItem: PropTypes.string,
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired
 };
+const TAG_SEARCH = gql`
+  query tagSearch($string: String){
+    tagSearch(string: $string) {
+      name
+    }
+  }
+`;
 
 function DownshiftMultiple(props) {
+  // const client = useApolloClient();
   const { classes, fetchTags } = props;
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const { state, dispatch } = useContext(QuestionFormContext);
   const { tags } = state;
+  const { data, loading, error } = useQuery(TAG_SEARCH, {
+    variables: { string: inputValue }
+  });
 
-  function getSuggestions(input) {
-    const inputValue = input.trim().toLowerCase();
-    fetchTags(inputValue).then(tags => {
-      setSuggestions(tags);
-    });
-  }
+  // function getSuggestions(input) {
+  //   const inputValue = input.trim().toLowerCase();
+  //   console.log(input)
+  //   console.log(data)
+  //   // fetchTags(inputValue).then(tags => {
+  //   //   setSuggestions(tags);
+  //   // });
+  // }
+  useEffect(() => {
+    // console.log("inputValue", inputValue);
+    // console.log(data)
+    setSuggestions(data.tagSearch)
+  }, [inputValue, data])
 
   function handleInputChange(event) {
     const input = event.target.value;
-    setInputValue(input);
-    getSuggestions(input);
+    // console.log("handleinputchanrgr", input)
+    setInputValue(input.trim().toLowerCase());
+    
+    // getSuggestions(input);
   }
 
   function updateTags(updatedTags) {
@@ -160,14 +182,16 @@ function DownshiftMultiple(props) {
 
             {isOpen ? (
               <Paper className={classes.paper} square>
-                {suggestions.map((suggestion, index) =>
-                  renderSuggestion({
+                {suggestions.map((suggestion, index) => {
+                  console.log("suggestion", suggestion)
+                  return renderSuggestion({
                     suggestion,
                     index,
-                    itemProps: getItemProps({ item: suggestion.label }),
+                    itemProps: getItemProps({ item: suggestion.name }),
                     highlightedIndex,
                     selectedItem: selectedItem2
                   })
+                }
                 )}
               </Paper>
             ) : null}
@@ -214,20 +238,21 @@ const useStyles = makeStyles(theme => ({
 
 const TagForm = props => {
   const classes = useStyles();
-  const { updateTags, fetchTags } = props;
+  // const { updateTags, fetchTags } = props;
+  // const { updateTags } = props;
   return (
     <div className={classes.root}>
       <DownshiftMultiple
         classes={classes}
-        updateTags={updateTags}
-        fetchTags={fetchTags}
+        // updateTags={updateTags}
+        // fetchTags={fetchTags}
       />
     </div>
   );
 };
 
 TagForm.propTypes = {
-  fetchTags: PropTypes.func.isRequired
+  // fetchTags: PropTypes.func.isRequired
 };
 
 export default TagForm;

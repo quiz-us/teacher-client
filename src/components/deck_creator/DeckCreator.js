@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import gql from "graphql-tag";
+
 import QuestionFilter from './QuestionFilter';
 import { CurrentDeckProvider } from './CurrentDeckContext';
 import CurrentDeck from './CurrentDeck';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import QuestionForm from './QuestionForm';
+import { useQuery, useApolloClient } from "@apollo/react-hooks";
+
+const GET_STANDARDS = gql`
+  {
+    allStandards {
+      title
+      description
+      id
+    }
+  }
+`;
+
+const GET_TAGS = gql`
+  {
+    tags {
+      id
+      name
+    }
+  }
+`;
+
+
 
 const useStyles = makeStyles({
   root: {
@@ -27,8 +52,19 @@ const useStyles = makeStyles({
   }
 });
 
-const DeckCreator = () => {
+const questionTypes = ["Free Response", "Multiple Choice"];
+
+const onSubmit = formData => {
+  console.log(JSON.stringify(formData, 2));
+  // alert(JSON.stringify(formData, 2));
+};
+
+const DeckCreator = ({ onQuery }) => {
   const classes = useStyles();
+  const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
+  const { data: { allTags = [] } = {} } = useQuery(GET_TAGS);
+
+
 
   return (
     <CurrentDeckProvider>
@@ -44,7 +80,12 @@ const DeckCreator = () => {
               <QuestionFilter />
             </TabPanel>
             <TabPanel className={classes.panel}>
-              <h2>Question Form Goes here</h2>
+              <QuestionForm
+                standards={allStandards}
+                questionTypes={questionTypes}
+                onSubmit={onSubmit}
+                // fetchTags={() => allTags}
+              />
             </TabPanel>
           </Tabs>
         </div>

@@ -99,7 +99,7 @@ const QuestionFilter = () => {
     handleInputChange(e);
     debouncedGetQuestions(e);
   };
-
+  console.log("allStandards", allStandards);
   return (
     <div>
       <Card>
