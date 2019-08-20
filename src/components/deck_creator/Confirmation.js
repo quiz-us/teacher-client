@@ -42,16 +42,26 @@ export default function AlertDialog({ open, setOpen }) {
   const [deckName, setDeckName] = useState('');
   const [deckDescription, setDeckDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [createDeck, { loading, data }] = useMutation(CREATE_DECK);
+  const [createDeck, { loading, data, error = {} }] = useMutation(CREATE_DECK);
   console.log('DECK DATA', data);
+
+  // MUTATION ERROR HANDLING:
+  const { graphQLErrors = [], message = undefined } = error;
+  let mutationError = message;
+  if (graphQLErrors.length) {
+    mutationError = graphQLErrors[0].message;
+  }
+
   const currentDeckArr = Object.keys(currentDeck);
   const handleClose = () => setOpen(false);
 
   const handleSubmit = () => {
+    setErrorMessage('');
     if (currentDeckArr.length && deckName) {
+      const questionIds = Object.keys(currentDeck);
       createDeck({
         variables: {
-          questionIds: Object.keys(currentDeck).map(({ id }) => id),
+          questionIds,
           name: deckName,
           description: deckDescription
         }
@@ -92,8 +102,10 @@ export default function AlertDialog({ open, setOpen }) {
       </DialogContent>
       <DialogActions>
         {loading && <span>Creating deck...</span>}
-        {errorMessage.length > 0 && (
-          <span className={classes.errorMessage}>{errorMessage}</span>
+        {(errorMessage.length > 0 || mutationError) && (
+          <span className={classes.errorMessage}>
+            {errorMessage || mutationError}
+          </span>
         )}
 
         <Button onClick={handleClose} color="secondary">
