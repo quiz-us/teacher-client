@@ -9,6 +9,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import { makeStyles } from '@material-ui/styles';
 import { CurrentDeckContext } from './CurrentDeckContext';
 
@@ -27,21 +29,64 @@ const useStyles = makeStyles({
     width: '100%',
     justifyContent: 'space-between'
   },
+  readOnly: {
+    width: '100%'
+  },
   details: {
+    marginTop: '15px'
+  },
+  answerChoiceRow: {
+    display: 'flex',
     marginTop: '10px'
+  },
+  correctnessIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: '5px'
   }
 });
+
+const Answer = ({ answerChoice, classes }) => {
+  return (
+    <div className={classes.readOnly}>
+      <ReadOnly value={JSON.parse(answerChoice.optionNode)} />
+    </div>
+  );
+};
+
+const Answers = ({ questionOptions, questionType, classes }) => {
+  if (questionType === 'Free Response') {
+    return <Answer answerChoice={questionOptions[0]} />;
+  }
+  return (
+    <div>
+      {questionOptions.map(answerChoice => {
+        return (
+          <div className={classes.answerChoiceRow}>
+            <span className={classes.correctnessIcon}>
+              {answerChoice.correct ? (
+                <CheckIcon title="Correct Answer" />
+              ) : (
+                <ClearIcon title="Incorrect Answer" />
+              )}
+            </span>
+            <Answer answerChoice={answerChoice} classes={classes} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 const DeckCard = ({ card, removable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   const {
     id,
+    questionType,
     questionNode = '',
-    questionText,
     standards = [{}],
     tags = [],
-    questionOptions = [],
-    answerText = ''
+    questionOptions = []
   } = card;
   const [standard] = standards;
   const classes = useStyles();
@@ -97,6 +142,10 @@ const DeckCard = ({ card, removable = null }) => {
           {` ${standard.title}`}
         </div>
         <div className={classes.details}>
+          <strong>Type:</strong>
+          {` ${questionType}`}
+        </div>
+        <div className={classes.details}>
           <strong>Tags:</strong>
           {` ${tags.map(({ name }) => name).join(', ')}`}{' '}
         </div>
@@ -112,15 +161,12 @@ const DeckCard = ({ card, removable = null }) => {
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {questionOptions.map(({ correct, optionNode }) => {
-            console.log(JSON.parse(optionNode));
-            return (
-              <div>
-                <h4>Answer</h4>
-                <ReadOnly value={JSON.parse(optionNode)} />
-              </div>
-            );
-          })}
+          <h4>Answer</h4>
+          <Answers
+            classes={classes}
+            questionOptions={questionOptions}
+            questionType={questionType}
+          />
         </CardContent>
       </Collapse>
     </Card>

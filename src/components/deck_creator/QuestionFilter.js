@@ -34,6 +34,7 @@ const GET_QUESTIONS = gql`
       emptyQuery: $emptyQuery
     ) {
       questionText
+      questionType
       questionNode
       id
       standards {
