@@ -17,7 +17,7 @@ jest.mock('slate-plain-serializer', () => {
 
 // mock QuestionAndAnswers component because the RichTextEditor
 // it renders depends on window functions that don't exist in test context:
-jest.mock('./QuestionAndAnswers.js', () => () => {
+jest.mock('../components/QuestionAndAnswers.js', () => () => {
   function handleChange(event) {}
   return <input onChange={handleChange} data-testid="question-rich-editor" />;
 });
