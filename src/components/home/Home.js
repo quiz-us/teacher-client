@@ -30,7 +30,10 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
-  const { data: { decks } = {} } = useQuery(GET_DECKS);
+  const { loading, data: { decks } = {} } = useQuery(GET_DECKS);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className={classes.root}>
       <h3>Your Decks:</h3>
