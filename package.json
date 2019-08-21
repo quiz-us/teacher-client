@@ -10,6 +10,7 @@
     "@quiz-us/kit": "0.0.12",
     "apollo-boost": "^0.4.3",
     "apollo-link-context": "^1.0.18",
+    "crypto": "^1.0.1",
     "graphql": "^14.4.2",
     "localforage": "^1.7.3",
     "react": "^16.8.6",
@@ -42,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^9.1.3",
     "react-test-renderer": "^16.8.6"
   }
 }
