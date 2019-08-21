@@ -44,7 +44,10 @@ const useStyles = makeStyles({
 
 const DeckCreator = ({ match = { params: {} } }) => {
   const classes = useStyles();
-  const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
+  const {
+    loading: standardsLoading,
+    data: { allStandards = [] } = {}
+  } = useQuery(GET_STANDARDS);
 
   return (
     <CurrentDeckProvider>
@@ -57,10 +60,16 @@ const DeckCreator = ({ match = { params: {} } }) => {
             </TabList>
 
             <TabPanel className={classes.panel}>
-              <QuestionForm standards={allStandards} />
+              <QuestionForm
+                standardsLoading={standardsLoading}
+                allStandards={allStandards}
+              />
             </TabPanel>
             <TabPanel className={classes.panel}>
-              <QuestionFilter />
+              <QuestionFilter
+                standardsLoading={standardsLoading}
+                allStandards={allStandards}
+              />
             </TabPanel>
           </Tabs>
         </div>

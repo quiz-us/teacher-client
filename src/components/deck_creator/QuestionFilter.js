@@ -14,18 +14,6 @@ import Card from '@material-ui/core/Card';
 import CustomCard from './Card';
 import CardContent from '@material-ui/core/CardContent';
 
-// get all the standards for current teacher/standards map
-//
-const GET_STANDARDS = gql`
-  {
-    allStandards {
-      title
-      description
-      id
-    }
-  }
-`;
-
 const GET_QUESTIONS = gql`
   query getQuestions($standardId: ID, $keyWords: String, $emptyQuery: Boolean) {
     questions(
@@ -61,13 +49,12 @@ const useStyles = makeStyles({
   }
 });
 
-const QuestionFilter = () => {
+const QuestionFilter = ({ allStandards }) => {
   const classes = useStyles();
   const { inputs, handleInputChange } = useForm({
     standardId: '',
     keyWords: ''
   });
-  const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
   const [
     getQuestions,
     { loading, data: { questions } = { questions: [] } }

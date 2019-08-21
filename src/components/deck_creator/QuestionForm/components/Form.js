@@ -98,7 +98,7 @@ const CREATE_QUESTION = gql`
 
 const questionTypes = ['Free Response', 'Multiple Choice'];
 
-const Form = ({ standards, fetchTags }) => {
+const Form = ({ allStandards, fetchTags, standardsLoading }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
 
@@ -252,7 +252,8 @@ const Form = ({ standards, fetchTags }) => {
               id: 'standard-select'
             }}
           >
-            {standards.map(standard => {
+            {standardsLoading && <div>Loading...</div>}
+            {allStandards.map(standard => {
               return (
                 <MenuItem
                   className={classes.menuItem}
@@ -294,7 +295,7 @@ const Form = ({ standards, fetchTags }) => {
 };
 
 Form.propTypes = {
-  standards: PropTypes.arrayOf(
+  allStandards: PropTypes.arrayOf(
     PropTypes.shape({
       description: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
