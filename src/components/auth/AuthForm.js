@@ -11,7 +11,10 @@ const customizedTemplate = {
     headertext: 'Sign Up',
     LinkComponent: props => (
       <div {...props}>
-        Already have an account? Log in <Link to="/login">here</Link>
+        Already have an account? Log in{' '}
+        <Link className="link" to="/login">
+          here
+        </Link>
       </div>
     )
   },
@@ -19,7 +22,10 @@ const customizedTemplate = {
     headertext: 'Log In',
     LinkComponent: props => (
       <div {...props}>
-        New to Quiz Us? Sign up <Link to="/signup">here</Link>
+        New to Quiz Us? Sign up{' '}
+        <Link className="link" to="/signup">
+          here
+        </Link>
       </div>
     )
   }
