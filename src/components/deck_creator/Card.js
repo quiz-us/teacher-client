@@ -8,7 +8,6 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import { makeStyles } from '@material-ui/styles';
@@ -87,10 +86,8 @@ const DeckCard = ({ card, removable = null }) => {
   const updateCurrentDeck = () => {
     if (currentDeck[id]) {
       dispatch({ type: 'removeFromCurrent', id });
-      // ({ [id]: _, ...updatedCurrentDeck } = currentDeck);
     } else {
       dispatch({ type: 'addToCurrent', card, id });
-      // updatedCurrentDeck = Object.assign(currentDeck, { [id]: card });
     }
   };
 
@@ -102,7 +99,7 @@ const DeckCard = ({ card, removable = null }) => {
     if (removable) {
       return (
         <IconButton onClick={removeFromCurrentDeck}>
-          <DeleteIcon />
+          <ClearIcon />
         </IconButton>
       );
     }

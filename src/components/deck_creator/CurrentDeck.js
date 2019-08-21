@@ -2,6 +2,10 @@ import React, { useContext, useState } from 'react';
 import Confirmation from './Confirmation';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
 
@@ -16,19 +20,72 @@ const useStyles = makeStyles({
     justifyContent: 'space-between'
   },
   submitButton: {
-    height: '50px'
+    height: '40px'
+  },
+  headerLeft: {
+    display: 'flex'
   }
 });
 
-const CurrentDeck = () => {
-  const { currentDeck } = useContext(CurrentDeckContext);
+const GET_DECK = gql`
+  query getDeck($id: ID!) {
+    deck(id: $id) {
+      name
+      description
+      id
+      questions {
+        id
+        questionType
+        standards {
+          title
+        }
+        questionNode
+        tags {
+          name
+        }
+        questionOptions {
+          optionNode
+          correct
+          id
+        }
+      }
+    }
+  }
+`;
+
+// if a CurrentDeck has a deckId, then it means that the current deck is being
+// edited. If it does not, it means it's being created:
+const CurrentDeck = ({ deckId }) => {
+  const { currentDeck, dispatch } = useContext(CurrentDeckContext);
+  // if a current deck already exists (ie. when editing a deck):
+  const { data = {} } = useQuery(GET_DECK, {
+    variables: { id: deckId },
+    fetchPolicy: 'network-only',
+    skip: deckId === undefined,
+    onCompleted: ({ deck: { questions } }) => {
+      dispatch({ type: 'receiveCurrent', questions });
+    },
+    onError: error => {
+      console.error(error);
+    }
+  });
+
+  const isUpdate = data.deck !== undefined;
+
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const currentDeckArr = Object.keys(currentDeck);
   return (
     <div className={classes.currentDeckContainer}>
       <div className={classes.currentDeckHeader}>
-        <h3>Current Deck</h3>
+        <div className={classes.headerLeft}>
+          <h3>{isUpdate ? data.deck.name : 'Current Deck'}</h3>
+          {isUpdate && (
+            <IconButton onClick={e => console.log(e)}>
+              <DeleteIcon />
+            </IconButton>
+          )}
+        </div>
         {currentDeckArr.length > 0 && (
           <Button
             color="primary"
@@ -36,12 +93,12 @@ const CurrentDeck = () => {
             onClick={() => setOpen(true)}
             className={classes.submitButton}
           >
-            Create Deck
+            {isUpdate ? 'Update Deck' : 'Create Deck'}
           </Button>
         )}
       </div>
       <CardsContainer />
-      <Confirmation open={open} setOpen={setOpen} />
+      <Confirmation open={open} setOpen={setOpen} deck={data.deck} />
     </div>
   );
 };

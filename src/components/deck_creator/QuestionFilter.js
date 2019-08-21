@@ -72,7 +72,6 @@ const QuestionFilter = () => {
     getQuestions,
     { loading, data: { questions } = { questions: [] } }
   ] = useLazyQuery(GET_QUESTIONS);
-  console.log('whats questions', questions);
 
   const [debouncedGetQuestions] = useDebouncedCallback(e => {
     getQuestions({ variables: filter(e) });

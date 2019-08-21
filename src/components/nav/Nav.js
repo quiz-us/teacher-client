@@ -22,15 +22,14 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1
   },
+  white: {
+    color: 'white'
+  },
   list: {
     width: 250
   },
   navHeader: {
     padding: '10px 20px'
-  },
-  link: {
-    color: 'black',
-    textDecoration: 'none'
   }
 }));
 
@@ -40,10 +39,12 @@ export default function ButtonAppBar() {
 
   const sideNav = () => (
     <div className={classes.list} onClick={closeNav} onKeyDown={closeNav}>
-      <h3 className={classes.navHeader}>Quiz Us</h3>
+      <h3 className={classes.navHeader}>
+        <Link to="/">Quiz Us</Link>
+      </h3>
       <Divider />
       <List>
-        <Link className={classes.link} to="/deck-creator">
+        <Link to="/deck-creator">
           <ListItem button>
             <ListItemText primary={'Deck Creator'} />
           </ListItem>
@@ -78,7 +79,9 @@ export default function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Quiz Us
+            <Link className={classes.white} to="/">
+              Quiz Us
+            </Link>
           </Typography>
         </Toolbar>
         <Drawer open={navOpen} onClose={closeNav}>

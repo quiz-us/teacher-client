@@ -1,14 +1,14 @@
-import React from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import React from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
-import { makeStyles } from "@material-ui/styles";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { makeStyles } from '@material-ui/styles';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import { CurrentDeckProvider } from "./CurrentDeckContext";
-import QuestionFilter from "./QuestionFilter";
-import CurrentDeck from "./CurrentDeck";
-import QuestionForm from "./QuestionForm";
+import { CurrentDeckProvider } from './CurrentDeckContext';
+import QuestionFilter from './QuestionFilter';
+import CurrentDeck from './CurrentDeck';
+import QuestionForm from './QuestionForm';
 
 const GET_STANDARDS = gql`
   {
@@ -22,23 +22,23 @@ const GET_STANDARDS = gql`
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    width: "100%",
-    height: "100vh"
+    display: 'flex',
+    width: '100%',
+    height: '100vh'
   },
   firstContainer: {
-    width: "60%",
-    padding: "25px",
-    borderRight: "1px solid #E0E0E0"
+    width: '60%',
+    padding: '25px',
+    borderRight: '1px solid #E0E0E0'
   },
   secondContainer: {
-    width: "40%"
+    width: '40%'
   },
   searchResults: {
-    padding: "15px"
+    padding: '15px'
   },
   panel: {
-    padding: "10px"
+    padding: '10px'
   }
 });
 
@@ -85,22 +85,22 @@ const CREATE_QUESTION = gql`
   }
 `;
 
-const questionTypes = ["Free Response", "Multiple Choice"];
+const questionTypes = ['Free Response', 'Multiple Choice'];
 
-const DeckCreator = ({ onQuery }) => {
+const DeckCreator = ({ match = { params: {} } }) => {
   const classes = useStyles();
   const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
   const [create_question, { data }] = useMutation(CREATE_QUESTION);
 
-  const onSubmit = formData => {    
+  const onSubmit = formData => {
     create_question({
       variables: {
-        questionType: formData["questionType"],
-        standardId: formData["standardId"],
-        tags: formData["tags"],
-        questionNode: JSON.stringify(formData["question"], 2),
-        questionPlaintext: formData["questionText"],
-        questionOptions: formData["answers"].map(answer =>
+        questionType: formData['questionType'],
+        standardId: formData['standardId'],
+        tags: formData['tags'],
+        questionNode: JSON.stringify(formData['question'], 2),
+        questionPlaintext: formData['questionText'],
+        questionOptions: formData['answers'].map(answer =>
           JSON.stringify(answer, 2)
         )
       }
@@ -130,7 +130,7 @@ const DeckCreator = ({ onQuery }) => {
           </Tabs>
         </div>
         <div className={classes.secondContainer}>
-          <CurrentDeck classes={classes} />
+          <CurrentDeck classes={classes} deckId={match.params.id} />
         </div>
       </div>
     </CurrentDeckProvider>
