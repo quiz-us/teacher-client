@@ -4,6 +4,8 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
 
@@ -18,7 +20,10 @@ const useStyles = makeStyles({
     justifyContent: 'space-between'
   },
   submitButton: {
-    height: '50px'
+    height: '40px'
+  },
+  headerLeft: {
+    display: 'flex'
   }
 });
 
@@ -73,7 +78,14 @@ const CurrentDeck = ({ deckId }) => {
   return (
     <div className={classes.currentDeckContainer}>
       <div className={classes.currentDeckHeader}>
-        <h3>{isUpdate ? data.deck.name : 'Current Deck'}</h3>
+        <div className={classes.headerLeft}>
+          <h3>{isUpdate ? data.deck.name : 'Current Deck'}</h3>
+          {isUpdate && (
+            <IconButton onClick={e => console.log(e)}>
+              <DeleteIcon />
+            </IconButton>
+          )}
+        </div>
         {currentDeckArr.length > 0 && (
           <Button
             color="primary"
