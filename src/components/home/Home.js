@@ -25,6 +25,10 @@ const useStyles = makeStyles({
   deckContainer: {
     display: 'flex',
     flexWrap: 'wrap'
+  },
+  link: {
+    color: 'blue',
+    textDecoration: 'underline'
   }
 });
 
@@ -44,7 +48,10 @@ const Home = () => {
           ))
         ) : (
           <div>
-            You currently have no decks. Go <Link to="/deck-creator">here</Link>{' '}
+            You currently have no decks. Go{' '}
+            <Link className={classes.link} to="/deck-creator">
+              here
+            </Link>{' '}
             to create your first deck!
           </div>
         )}

@@ -1,9 +1,24 @@
 import React from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+
 import { makeStyles } from '@material-ui/styles';
-import QuestionFilter from './QuestionFilter';
-import { CurrentDeckProvider } from './CurrentDeckContext';
-import CurrentDeck from './CurrentDeck';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
+import { CurrentDeckProvider } from './CurrentDeckContext';
+import QuestionFilter from './QuestionFilter';
+import CurrentDeck from './CurrentDeck';
+import QuestionForm from './QuestionForm';
+
+const GET_STANDARDS = gql`
+  {
+    allStandards {
+      title
+      description
+      id
+    }
+  }
+`;
 
 const useStyles = makeStyles({
   root: {
@@ -27,8 +42,70 @@ const useStyles = makeStyles({
   }
 });
 
+const CREATE_QUESTION = gql`
+  mutation createQuestion(
+    $questionType: String!
+    $standardId: ID
+    $tags: [String!]
+    $questionNode: String!
+    $questionPlaintext: String!
+    $questionOptions: [String!]
+  ) {
+    createQuestion(
+      questionType: $questionType
+      standardId: $standardId
+      tags: $tags
+      questionNode: $questionNode
+      questionPlaintext: $questionPlaintext
+      questionOptions: $questionOptions
+    ) {
+      id
+      questionNode
+      questionOptions {
+        id
+        question {
+          id
+        }
+        questionId
+        correct
+        optionNode
+        optionText
+      }
+      questionText
+      taggings {
+        id
+        questionId
+        tagId
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+`;
+
+const questionTypes = ['Free Response', 'Multiple Choice'];
+
 const DeckCreator = ({ match = { params: {} } }) => {
   const classes = useStyles();
+  const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
+  const [create_question, { data }] = useMutation(CREATE_QUESTION);
+
+  const onSubmit = formData => {
+    create_question({
+      variables: {
+        questionType: formData['questionType'],
+        standardId: formData['standardId'],
+        tags: formData['tags'],
+        questionNode: JSON.stringify(formData['question'], 2),
+        questionPlaintext: formData['questionText'],
+        questionOptions: formData['answers'].map(answer =>
+          JSON.stringify(answer, 2)
+        )
+      }
+    });
+  };
 
   return (
     <CurrentDeckProvider>
@@ -44,7 +121,11 @@ const DeckCreator = ({ match = { params: {} } }) => {
               <QuestionFilter />
             </TabPanel>
             <TabPanel className={classes.panel}>
-              <h2>Question Form Goes here</h2>
+              <QuestionForm
+                standards={allStandards}
+                questionTypes={questionTypes}
+                onSubmit={onSubmit}
+              />
             </TabPanel>
           </Tabs>
         </div>

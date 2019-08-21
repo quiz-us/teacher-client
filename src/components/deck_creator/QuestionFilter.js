@@ -98,7 +98,6 @@ const QuestionFilter = () => {
     handleInputChange(e);
     debouncedGetQuestions(e);
   };
-
   return (
     <div>
       <Card>
