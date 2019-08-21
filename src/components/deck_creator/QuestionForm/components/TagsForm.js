@@ -1,18 +1,18 @@
 // using example from: https://material-ui.com/components/autocomplete/#downshift
-import React, { useState, useContext, useEffect } from "react";
-import PropTypes from "prop-types";
-import Downshift from "downshift";
+import React, { useState, useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import Downshift from 'downshift';
 
-import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import MenuItem from "@material-ui/core/MenuItem";
-import Chip from "@material-ui/core/Chip";
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import Chip from '@material-ui/core/Chip';
 
-import { QuestionFormContext } from "./QuestionFormContext";
+import { QuestionFormContext } from './QuestionFormContext';
 
 const TAG_SEARCH = gql`
   query tagSearch($string: String) {
@@ -28,10 +28,10 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     flexGrow: 1,
-    position: "relative"
+    position: 'relative'
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     zIndex: 1,
     marginTop: theme.spacing(1),
     left: 0,
@@ -41,10 +41,10 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(0.5, 0.25)
   },
   inputRoot: {
-    flexWrap: "wrap"
+    flexWrap: 'wrap'
   },
   inputInput: {
-    width: "auto",
+    width: 'auto',
     flexGrow: 1
   },
   divider: {
@@ -59,7 +59,7 @@ function renderInput(inputProps) {
     <TextField
       InputProps={{
         inputRef: ref,
-        "data-testid": "tags-form",
+        'data-testid': 'tags-form',
         classes: {
           root: classes.inputRoot,
           input: classes.inputInput
@@ -77,11 +77,10 @@ function renderSuggestion(suggestionProps) {
     index,
     itemProps,
     highlightedIndex,
-    selectedItem
+    tags
   } = suggestionProps;
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
-
+  const isSelected = (tags || '').indexOf(suggestion.label) > -1;
   return (
     <MenuItem
       {...itemProps}
@@ -105,27 +104,18 @@ renderSuggestion.propTypes = {
 };
 
 function DownshiftMultiple(props) {
-  // const client = useApolloClient();
-  const { classes, fetchTags } = props;
-  const [inputValue, setInputValue] = useState("");
+  const { classes } = props;
+  const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const { state, dispatch } = useContext(QuestionFormContext);
   const { tags } = state;
-  const { data, loading, error } = useQuery(TAG_SEARCH, {
+  const { data } = useQuery(TAG_SEARCH, {
     variables: { string: inputValue }
   });
 
-  // function getSuggestions(input) {
-  //   const inputValue = input.trim().toLowerCase();
-  //   console.log(input)
-  //   console.log(data)
-  //   // fetchTags(inputValue).then(tags => {
-  //   //   setSuggestions(tags);
-  //   // });
-  // }
   useEffect(() => {
-    setSuggestions(data.tagSearch)
-  }, [inputValue, data])
+    setSuggestions(data.tagSearch);
+  }, [inputValue, data]);
 
   function handleInputChange(event) {
     const input = event.target.value;
@@ -134,8 +124,8 @@ function DownshiftMultiple(props) {
 
   function updateTags(updatedTags) {
     dispatch({
-      type: "update",
-      name: "tags",
+      type: 'update',
+      name: 'tags',
       value: updatedTags
     });
   }
@@ -145,12 +135,12 @@ function DownshiftMultiple(props) {
     if (newSelectedItem.indexOf(item) === -1) {
       newSelectedItem = [...newSelectedItem, item];
     }
-    setInputValue("");
+    setInputValue('');
     updateTags(newSelectedItem);
   }
 
   function handleKeyDown(event) {
-    if (tags.length && !inputValue.length && event.key === "Backspace") {
+    if (tags.length && !inputValue.length && event.key === 'Backspace') {
       updateTags(tags.slice(0, tags.length - 1));
     }
   }
@@ -166,19 +156,17 @@ function DownshiftMultiple(props) {
       id="downshift-multiple"
       inputValue={inputValue}
       onChange={handleChange}
-      selectedItem={tags}
     >
       {({
         getInputProps,
         getItemProps,
         getLabelProps,
         isOpen,
-        selectedItem: selectedItem2,
         highlightedIndex
       }) => {
         const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
           onKeyDown: handleKeyDown,
-          placeholder: "Add one or more tag(s)"
+          placeholder: 'Add one or more tag(s)'
         });
 
         return (
@@ -186,7 +174,7 @@ function DownshiftMultiple(props) {
             {renderInput({
               fullWidth: true,
               classes,
-              label: "Tags",
+              label: 'Tags',
               InputLabelProps: getLabelProps(),
               InputProps: {
                 startAdornment: tags.map(item => (
@@ -217,10 +205,19 @@ function DownshiftMultiple(props) {
                     index,
                     itemProps: getItemProps({ item: suggestion.name }),
                     highlightedIndex,
-                    selectedItem: selectedItem2
-                  })
-                }
-                )}
+                    tags
+                  });
+                })}
+                {!suggestions.some(
+                  suggestion => suggestion.name === inputValue
+                ) &&
+                  renderSuggestion({
+                    suggestion: { name: inputValue, label: inputValue },
+                    index: suggestions.length,
+                    itemProps: getItemProps({ item: inputValue }),
+                    highlightedIndex,
+                    tags
+                  })}
               </Paper>
             ) : null}
           </div>
