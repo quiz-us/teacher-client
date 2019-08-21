@@ -42,7 +42,7 @@ const Home = () => {
     <div className={classes.root}>
       <h3>Your Decks:</h3>
       <div className={classes.deckContainer}>
-        {decks ? (
+        {decks && decks.length ? (
           decks.map(deck => (
             <DeckDisplay deck={deck} key={`deckKey-${deck.id}`} />
           ))
