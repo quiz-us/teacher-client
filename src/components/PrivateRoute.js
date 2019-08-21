@@ -26,8 +26,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }, [client]);
 
   if (isCheckingForToken || loading) {
-    // adding a loader while auth service asynchronously reads from localforage:
-    return <div>Loading...</div>;
+    // render nothing while auth service asynchronously reads from localforage:
+    return null;
   }
 
   return (

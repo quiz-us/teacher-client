@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   }
 });
 
-const DeckCreator = ({ onQuery }) => {
+const DeckCreator = () => {
   const classes = useStyles();
 
   return (
