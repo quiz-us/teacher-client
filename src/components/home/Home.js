@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import DeckDisplay from './DeckDisplay';
+import DecksContainer from '../decks/DecksContainer';
 import PrivateRoute from '../PrivateRoute';
 import DeckCreator from '../deck_creator/DeckCreator';
 
@@ -53,6 +54,7 @@ export default () => {
   return (
     <div>
       <PrivateRoute exact path="/" component={Home} />
+      <PrivateRoute path="/decks" component={DecksContainer} />
       <PrivateRoute exact path="/deck-creator" component={DeckCreator} />
     </div>
   );

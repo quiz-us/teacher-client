@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -20,7 +21,7 @@ const styles = theme => ({
   }
 });
 
-const DeckDisplay = ({ deck: { name, description }, classes }) => {
+const DeckDisplay = ({ deck: { name, description, id }, classes }) => {
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -36,9 +37,11 @@ const DeckDisplay = ({ deck: { name, description }, classes }) => {
         <Button size="small" color="primary">
           Assign
         </Button>
-        <Button size="small" color="primary">
-          Edit
-        </Button>
+        <Link to={`/decks/${id}/edit`}>
+          <Button size="small" color="primary">
+            Edit
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );

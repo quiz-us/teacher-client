@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -37,14 +38,22 @@ const useStyles = makeStyles({
   }
 });
 
-export default function AlertDialog({ open, setOpen }) {
+export default function AlertDialog({ open, setOpen, history }) {
   const classes = useStyles();
   const { currentDeck } = useContext(CurrentDeckContext);
   const [deckName, setDeckName] = useState('');
   const [deckDescription, setDeckDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [createDeck, { loading, data, error }] = useMutation(CREATE_DECK);
-  console.log('DECK DATA', data);
+  const [createDeck, { loading, data = {}, error }] = useMutation(CREATE_DECK);
+  if (data.createDeck) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/'
+        }}
+      />
+    );
+  }
 
   // MUTATION ERROR HANDLING:
   const mutationError = parseError(error);
