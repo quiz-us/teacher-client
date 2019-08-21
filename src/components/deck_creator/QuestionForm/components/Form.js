@@ -1,74 +1,144 @@
-import React, { useState, useContext } from "react";
-import PropTypes from "prop-types";
-import Plain from "slate-plain-serializer";
-import empty from "is-empty";
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import Plain from 'slate-plain-serializer';
+import empty from 'is-empty';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
-import { makeStyles } from "@material-ui/styles";
-import Card from "@material-ui/core/Card";
-import FormControl from "@material-ui/core/FormControl";
-import Button from "@material-ui/core/Button";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import MenuItem from "@material-ui/core/MenuItem";
+import { makeStyles } from '@material-ui/styles';
+import Card from '@material-ui/core/Card';
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
 
-import TagsForm from "./TagsForm";
-import { QuestionFormContext } from "./QuestionFormContext";
-import QuestionAndAnswers from "./QuestionAndAnswers";
-import decamelize from "../../../util/decamelize";
-
+import TagsForm from './TagsForm';
+import { QuestionFormContext } from './QuestionFormContext';
+import { CurrentDeckContext } from '../../CurrentDeckContext';
+import QuestionAndAnswers from './QuestionAndAnswers';
+import decamelize from '../../../util/decamelize';
 
 const useStyles = makeStyles({
   form: {
-    width: "90%",
-    margin: "20px auto",
-    display: "flex",
-    flexDirection: "column"
+    width: '90%',
+    margin: '20px auto',
+    display: 'flex',
+    flexDirection: 'column'
   },
   formControl: {
     // width: '40%',
-    marginBottom: "20px"
+    marginBottom: '20px'
   },
   wideFormControl: {
     // width: '90%'
   },
   questionAnswerContainer: {
-    display: "flex",
-    flexDirection: "column"
+    display: 'flex',
+    flexDirection: 'column'
   },
   submitButton: {
-    width: "40%",
-    margin: "0 auto"
+    width: '40%',
+    margin: '0 auto'
   }
 });
 
 const useSelectStyles = makeStyles({
   root: {
-    padding: "10px"
+    padding: '10px'
   },
   select: {
-    "&:focus": {
-      backgroundColor: "transparent"
+    '&:focus': {
+      backgroundColor: 'transparent'
     }
   }
 });
 
-const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
+const CREATE_QUESTION = gql`
+  mutation createQuestion(
+    $questionType: String!
+    $standardId: ID
+    $tags: [String!]
+    $questionNode: String!
+    $questionPlaintext: String!
+    $questionOptions: [String!]
+  ) {
+    createQuestion(
+      questionType: $questionType
+      standardId: $standardId
+      tags: $tags
+      questionNode: $questionNode
+      questionPlaintext: $questionPlaintext
+      questionOptions: $questionOptions
+    ) {
+      id
+      questionNode
+      questionType
+      questionOptions {
+        id
+        question {
+          id
+        }
+        questionId
+        correct
+        optionNode
+        optionText
+      }
+      questionText
+      tags {
+        id
+        name
+      }
+    }
+  }
+`;
+
+const questionTypes = ['Free Response', 'Multiple Choice'];
+
+const Form = ({ standards, fetchTags }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
+  const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
+
+  const [create_question] = useMutation(CREATE_QUESTION, {
+    onCompleted: ({ createQuestion }) => {
+      currentDeckDispatch({
+        type: 'addToCurrent',
+        card: createQuestion,
+        id: createQuestion.id
+      });
+    }
+  });
+
+  const onSubmit = formData => {
+    create_question({
+      variables: {
+        questionType: formData['questionType'],
+        standardId: formData['standardId'],
+        tags: formData['tags'],
+        questionNode: JSON.stringify(formData['question'], 2),
+        questionPlaintext: formData['questionText'],
+        questionOptions: formData['answers'].map(answer =>
+          JSON.stringify(answer, 2)
+        )
+      }
+    });
+  };
+
   const { questionType, standardId, answers } = state;
 
   const classes = useStyles();
   const selectClasses = useSelectStyles();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const closeErrorMessage = () => setErrorMessage("");
+  const closeErrorMessage = () => setErrorMessage('');
 
   const handleInputChange = e => {
     dispatch({
-      type: "update",
+      type: 'update',
       name: e.target.name,
       value: e.target.value
     });
@@ -77,14 +147,14 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
   const handleQuestionTypeChange = e => {
     const { value } = e.target;
 
-    if (value === "Free Response" && answers.length > 1) {
+    if (value === 'Free Response' && answers.length > 1) {
       if (
         window.confirm(
-          "Changing to a Free Response question will clear your answer choices. Are you sure you want to continue?"
+          'Changing to a Free Response question will clear your answer choices. Are you sure you want to continue?'
         )
       ) {
         handleInputChange(e);
-        dispatch({ type: "resetAnswerChoices" });
+        dispatch({ type: 'resetAnswerChoices' });
       }
     } else {
       handleInputChange(e);
@@ -92,15 +162,15 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
   };
 
   const validateAnswers = answers => {
-    if (questionType === "Multiple Choice" && answers.length <= 1) {
-      return "Multiple Choice questions should have more than 1 answer choice!";
+    if (questionType === 'Multiple Choice' && answers.length <= 1) {
+      return 'Multiple Choice questions should have more than 1 answer choice!';
     }
     for (let i = 0; i < answers.length; i += 1) {
       const answer = answers[i].value;
       const answerText = Plain.serialize(answer);
 
       if (empty(answerText)) {
-        return "Please make sure there are no empty answer(s)!";
+        return 'Please make sure there are no empty answer(s)!';
       }
     }
     return null;
@@ -111,9 +181,9 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
     for (let i = 0; i < inputKeys.length; i += 1) {
       const inputKey = inputKeys[i];
       let inputVal = state[inputKey];
-      if (inputKey === "question") {
+      if (inputKey === 'question') {
         inputVal = Plain.serialize(inputVal);
-      } else if (inputKey === "answers") {
+      } else if (inputKey === 'answers') {
         const error = validateAnswers(inputVal);
         if (error) {
           setErrorMessage(error);
@@ -157,8 +227,8 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
             classes={selectClasses}
             className={classes.select}
             inputProps={{
-              name: "questionType",
-              id: "questionType-select"
+              name: 'questionType',
+              id: 'questionType-select'
             }}
           >
             {questionTypes.map(type => {
@@ -178,8 +248,8 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
             classes={selectClasses}
             className={classes.select}
             inputProps={{
-              name: "standardId",
-              id: "standard-select"
+              name: 'standardId',
+              id: 'standard-select'
             }}
           >
             {standards.map(standard => {
@@ -211,7 +281,7 @@ const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
           Submit
         </Button>
       </form>
-      <Dialog open={errorMessage !== ""} onClose={closeErrorMessage}>
+      <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
         <DialogTitle>{errorMessage}</DialogTitle>
         <DialogActions>
           <Button onClick={closeErrorMessage} color="primary" autoFocus>
@@ -230,9 +300,7 @@ Form.propTypes = {
       title: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired
     })
-  ),
-  questionTypes: PropTypes.arrayOf(PropTypes.string.isRequired),
-  onSubmit: PropTypes.func.isRequired,
+  )
 };
 
 export default Form;
