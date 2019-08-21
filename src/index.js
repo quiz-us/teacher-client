@@ -15,8 +15,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const appCache = new InMemoryCache();
 
+let server = 'http://localhost:3000/graphql';
+if (process.env.NODE_ENV === 'production') {
+  server = 'https://quizus.herokuapp.com/graphql';
+}
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql'
+  uri: server
 });
 
 // set the auth token with every http request:
