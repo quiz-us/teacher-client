@@ -8,7 +8,6 @@ import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
 import { useLazyQuery } from '@apollo/react-hooks';
 import Card from '@material-ui/core/Card';
 import CustomCard from './Card';

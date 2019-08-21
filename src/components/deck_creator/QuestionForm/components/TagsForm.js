@@ -156,6 +156,7 @@ function DownshiftMultiple(props) {
       id="downshift-multiple"
       inputValue={inputValue}
       onChange={handleChange}
+      defaultHighlightedIndex={0}
     >
       {({
         getInputProps,

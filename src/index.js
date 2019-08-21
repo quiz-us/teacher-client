@@ -57,7 +57,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       );
       return message;
     });
-  if (networkError) console.error(`[Network error]: ${networkError}`);
+  if (networkError) {
+    alert(
+      `[Something bad happened. Please contact us about this error]: ${networkError}`
+    );
+    console.error(`[Network error]: ${networkError}`);
+  }
 });
 
 const link = ApolloLink.from([errorLink, asyncAuthLink, httpLink]);
