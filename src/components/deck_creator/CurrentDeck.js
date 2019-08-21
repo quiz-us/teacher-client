@@ -48,11 +48,14 @@ const GET_DECK = gql`
   }
 `;
 
+// if a CurrentDeck has a deckId, then it means that the current deck is being
+// edited. If it does not, it means it's being created:
 const CurrentDeck = ({ deckId }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   // if a current deck already exists (ie. when editing a deck):
-  useQuery(GET_DECK, {
+  const { data = {} } = useQuery(GET_DECK, {
     variables: { id: deckId },
+    fetchPolicy: 'network-only',
     skip: deckId === undefined,
     onCompleted: ({ deck: { questions } }) => {
       dispatch({ type: 'receiveCurrent', questions });
@@ -62,13 +65,15 @@ const CurrentDeck = ({ deckId }) => {
     }
   });
 
+  const isUpdate = data.deck !== undefined;
+
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const currentDeckArr = Object.keys(currentDeck);
   return (
     <div className={classes.currentDeckContainer}>
       <div className={classes.currentDeckHeader}>
-        <h3>Current Deck</h3>
+        <h3>{isUpdate ? data.deck.name : 'Current Deck'}</h3>
         {currentDeckArr.length > 0 && (
           <Button
             color="primary"
@@ -76,12 +81,12 @@ const CurrentDeck = ({ deckId }) => {
             onClick={() => setOpen(true)}
             className={classes.submitButton}
           >
-            Create Deck
+            {isUpdate ? 'Update Deck' : 'Create Deck'}
           </Button>
         )}
       </div>
       <CardsContainer />
-      <Confirmation open={open} setOpen={setOpen} />
+      <Confirmation open={open} setOpen={setOpen} deck={data.deck} />
     </div>
   );
 };

@@ -50,14 +50,14 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
           }
         });
       }
-      console.log(
+      console.error(
         `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
           locations
         )}, Path: ${path}`
       );
       return message;
     });
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) console.error(`[Network error]: ${networkError}`);
 });
 
 const link = ApolloLink.from([errorLink, asyncAuthLink, httpLink]);
