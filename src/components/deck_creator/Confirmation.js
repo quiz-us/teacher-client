@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
+import parseError from '../../util/parseError';
 
 const CREATE_DECK = gql`
   mutation createDeck(
@@ -42,15 +43,11 @@ export default function AlertDialog({ open, setOpen }) {
   const [deckName, setDeckName] = useState('');
   const [deckDescription, setDeckDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [createDeck, { loading, data, error = {} }] = useMutation(CREATE_DECK);
+  const [createDeck, { loading, data, error }] = useMutation(CREATE_DECK);
   console.log('DECK DATA', data);
 
   // MUTATION ERROR HANDLING:
-  const { graphQLErrors = [], message = undefined } = error;
-  let mutationError = message;
-  if (graphQLErrors.length) {
-    mutationError = graphQLErrors[0].message;
-  }
+  const mutationError = parseError(error);
 
   const currentDeckArr = Object.keys(currentDeck);
   const handleClose = () => setOpen(false);

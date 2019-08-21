@@ -7,6 +7,7 @@ import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import AuthForm from './AuthForm';
 import localforage from 'localforage';
 import useForm from '../hooks/useForm';
+import parseError from '../../util/parseError';
 
 const LOGIN = gql`
   mutation logInTeacher($email: String!, $password: String!) {
@@ -26,6 +27,8 @@ export default ({ history }) => {
     email: '',
     password: ''
   });
+
+  const mutationError = parseError(error);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -76,9 +79,7 @@ export default ({ history }) => {
             Log In
           </Button>
         )}
-        {error ? (
-          <div className={classes.error}>{error.graphQLErrors[0].message}</div>
-        ) : null}
+        {error ? <div className={classes.error}>{mutationError}</div> : null}
       </form>
     </AuthForm>
   );

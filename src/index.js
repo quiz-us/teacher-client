@@ -17,7 +17,7 @@ const appCache = new InMemoryCache();
 
 let server = 'http://localhost:3000/graphql';
 if (process.env.NODE_ENV === 'production') {
-  server = 'https://quizus.herokuapp.com/graphql';
+  server = 'https://quiz-us.herokuapp.com/graphql';
 }
 const httpLink = createHttpLink({
   uri: server
