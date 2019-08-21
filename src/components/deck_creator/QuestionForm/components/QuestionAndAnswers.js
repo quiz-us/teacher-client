@@ -7,7 +7,8 @@ import PropTypes from "prop-types";
 import FormControl from "@material-ui/core/FormControl";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import { RichTextEditor } from "../../index";
+import { RichTextEditor } from "@quiz-us/kit";
+
 import { QuestionFormContext } from "./QuestionFormContext";
 // import { RED } from "../../theme/colors";
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
   deleteButton: {
     right: 0,
     position: "absolute",
-    color: 'red'
+    color: "red"
   }
 });
 
@@ -120,11 +121,11 @@ const QuestionAndAnswers = ({ classes }) => {
                     <DeleteIcon />
                   </IconButton>
                 </div>
-                {/* <RichTextEditor
+                <RichTextEditor
                   initialValue={value}
                   updateParentState={updateAllAnswers(i)}
                   key={answerId} // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
-                /> */}
+                />
               </div>
             );
           })}
@@ -139,15 +140,15 @@ const QuestionAndAnswers = ({ classes }) => {
         </React.Fragment>
       );
     }
-    // return answers.map(({ value, answerId }, i) => {
-    //   return (
-    //     <RichTextEditor
-    //       key={answerId}
-    //       initialValue={value}
-    //       updateParentState={updateAllAnswers(i)}
-    //     />
-    //   );
-    // });
+    return answers.map(({ value, answerId }, i) => {
+      return (
+        <RichTextEditor
+          key={answerId}
+          initialValue={value}
+          updateParentState={updateAllAnswers(i)}
+        />
+      );
+    });
   };
   return (
     <div className={classes.questionAnswerContainer}>
@@ -155,11 +156,11 @@ const QuestionAndAnswers = ({ classes }) => {
         className={`${classes.formControl} ${classes.wideFormControl}`}
       >
         <h3>Question: </h3>
-        {/* <RichTextEditor
+        <RichTextEditor
           updateParentState={value =>
             dispatch({ type: "update", name: "question", value })
           }
-        /> */}
+        />
       </FormControl>
       <FormControl
         className={`${classes.formControl} ${classes.wideFormControl}`}

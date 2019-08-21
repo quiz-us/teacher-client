@@ -2,14 +2,55 @@
 import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import Downshift from "downshift";
+
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Chip from "@material-ui/core/Chip";
+
 import { QuestionFormContext } from "./QuestionFormContext";
-import { useApolloClient, useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+
+const TAG_SEARCH = gql`
+  query tagSearch($string: String) {
+    tagSearch(string: $string) {
+      name
+    }
+  }
+`;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1
+  },
+  container: {
+    flexGrow: 1,
+    position: "relative"
+  },
+  paper: {
+    position: "absolute",
+    zIndex: 1,
+    marginTop: theme.spacing(1),
+    left: 0,
+    right: 0
+  },
+  chip: {
+    margin: theme.spacing(0.5, 0.25)
+  },
+  inputRoot: {
+    flexWrap: "wrap"
+  },
+  inputInput: {
+    width: "auto",
+    flexGrow: 1
+  },
+  divider: {
+    height: theme.spacing(2)
+  }
+}));
 
 function renderInput(inputProps) {
   const { InputProps, classes, ref, ...other } = inputProps;
@@ -62,13 +103,6 @@ renderSuggestion.propTypes = {
   selectedItem: PropTypes.string,
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired
 };
-const TAG_SEARCH = gql`
-  query tagSearch($string: String){
-    tagSearch(string: $string) {
-      name
-    }
-  }
-`;
 
 function DownshiftMultiple(props) {
   // const client = useApolloClient();
@@ -90,17 +124,12 @@ function DownshiftMultiple(props) {
   //   // });
   // }
   useEffect(() => {
-    // console.log("inputValue", inputValue);
-    // console.log(data)
     setSuggestions(data.tagSearch)
   }, [inputValue, data])
 
   function handleInputChange(event) {
     const input = event.target.value;
-    // console.log("handleinputchanrgr", input)
     setInputValue(input.trim().toLowerCase());
-    
-    // getSuggestions(input);
   }
 
   function updateTags(updatedTags) {
@@ -183,7 +212,6 @@ function DownshiftMultiple(props) {
             {isOpen ? (
               <Paper className={classes.paper} square>
                 {suggestions.map((suggestion, index) => {
-                  console.log("suggestion", suggestion)
                   return renderSuggestion({
                     suggestion,
                     index,
@@ -201,40 +229,9 @@ function DownshiftMultiple(props) {
     </Downshift>
   );
 }
-
 DownshiftMultiple.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  container: {
-    flexGrow: 1,
-    position: "relative"
-  },
-  paper: {
-    position: "absolute",
-    zIndex: 1,
-    marginTop: theme.spacing(1),
-    left: 0,
-    right: 0
-  },
-  chip: {
-    margin: theme.spacing(0.5, 0.25)
-  },
-  inputRoot: {
-    flexWrap: "wrap"
-  },
-  inputInput: {
-    width: "auto",
-    flexGrow: 1
-  },
-  divider: {
-    height: theme.spacing(2)
-  }
-}));
 
 const TagForm = props => {
   const classes = useStyles();

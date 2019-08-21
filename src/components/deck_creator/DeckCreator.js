@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import React from "react";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
-import QuestionFilter from './QuestionFilter';
-import { CurrentDeckProvider } from './CurrentDeckContext';
-import CurrentDeck from './CurrentDeck';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import QuestionForm from './QuestionForm';
-import { useQuery, useApolloClient } from "@apollo/react-hooks";
+import { makeStyles } from "@material-ui/styles";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+
+import { CurrentDeckProvider } from "./CurrentDeckContext";
+import QuestionFilter from "./QuestionFilter";
+import CurrentDeck from "./CurrentDeck";
+import QuestionForm from "./QuestionForm";
 
 const GET_STANDARDS = gql`
   {
@@ -19,52 +20,92 @@ const GET_STANDARDS = gql`
   }
 `;
 
-const GET_TAGS = gql`
-  {
-    tags {
+const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    width: "100%",
+    height: "100vh"
+  },
+  firstContainer: {
+    width: "60%",
+    padding: "25px",
+    borderRight: "1px solid #E0E0E0"
+  },
+  secondContainer: {
+    width: "40%"
+  },
+  searchResults: {
+    padding: "15px"
+  },
+  panel: {
+    padding: "10px"
+  }
+});
+
+const CREATE_QUESTION = gql`
+  mutation createQuestion(
+    $questionType: String!
+    $standardId: ID
+    $tags: [String!]
+    $questionNode: String!
+    $questionPlaintext: String!
+    $questionOptions: [String!]
+  ) {
+    createQuestion(
+      questionType: $questionType
+      standardId: $standardId
+      tags: $tags
+      questionNode: $questionNode
+      questionPlaintext: $questionPlaintext
+      questionOptions: $questionOptions
+    ) {
       id
-      name
+      questionNode
+      questionOptions {
+        id
+        question {
+          id
+        }
+        questionId
+        correct
+        optionNode
+        optionText
+      }
+      questionText
+      taggings {
+        id
+        questionId
+        tagId
+      }
+      tags {
+        id
+        name
+      }
     }
   }
 `;
 
-
-
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    width: '100%',
-    height: '100vh'
-  },
-  firstContainer: {
-    width: '60%',
-    padding: '25px',
-    borderRight: '1px solid #E0E0E0'
-  },
-  secondContainer: {
-    width: '40%'
-  },
-  searchResults: {
-    padding: '15px'
-  },
-  panel: {
-    padding: '10px'
-  }
-});
-
 const questionTypes = ["Free Response", "Multiple Choice"];
-
-const onSubmit = formData => {
-  console.log(JSON.stringify(formData, 2));
-  // alert(JSON.stringify(formData, 2));
-};
 
 const DeckCreator = ({ onQuery }) => {
   const classes = useStyles();
   const { data: { allStandards = [] } = {} } = useQuery(GET_STANDARDS);
-  const { data: { allTags = [] } = {} } = useQuery(GET_TAGS);
+  const [create_question, { data }] = useMutation(CREATE_QUESTION);
 
-
+  const onSubmit = formData => {    
+    create_question({
+      variables: {
+        questionType: formData["questionType"],
+        standardId: formData["standardId"],
+        tags: formData["tags"],
+        questionNode: JSON.stringify(formData["question"], 2),
+        questionPlaintext: formData["questionText"],
+        questionOptions: formData["answers"].map(answer =>
+          JSON.stringify(answer, 2)
+        )
+      }
+    });
+  };
 
   return (
     <CurrentDeckProvider>
@@ -84,7 +125,6 @@ const DeckCreator = ({ onQuery }) => {
                 standards={allStandards}
                 questionTypes={questionTypes}
                 onSubmit={onSubmit}
-                // fetchTags={() => allTags}
               />
             </TabPanel>
           </Tabs>

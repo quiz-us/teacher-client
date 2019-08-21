@@ -58,6 +58,7 @@ const useSelectStyles = makeStyles({
 const Form = ({ standards, questionTypes, onSubmit, fetchTags }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { questionType, standardId, answers } = state;
+
   const classes = useStyles();
   const selectClasses = useSelectStyles();
 
@@ -232,7 +233,6 @@ Form.propTypes = {
   ),
   questionTypes: PropTypes.arrayOf(PropTypes.string.isRequired),
   onSubmit: PropTypes.func.isRequired,
-  fetchTags: PropTypes.func.isRequired
 };
 
 export default Form;

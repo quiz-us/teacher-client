@@ -30,7 +30,7 @@ let reducer = (state, action) => {
   }
 };
 const initialState = {
-  questionType: "",
+  questionType: "Multiple Choice",
   standardId: "",
   tags: [],
   question: {},
