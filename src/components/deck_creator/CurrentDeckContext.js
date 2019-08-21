@@ -1,10 +1,16 @@
 import React, { useReducer } from 'react';
 
 let reducer = (currentDeck, action) => {
-  const { type, card, id } = action;
+  const { type, card, id, questions } = action;
   switch (type) {
     case 'addToCurrent':
       return { ...currentDeck, [id]: card };
+    case 'receiveCurrent':
+      const receivedDeck = {};
+      questions.forEach(question => {
+        receivedDeck[question.id] = question;
+      });
+      return receivedDeck;
     case 'removeFromCurrent':
       const { [id]: _, ...updatedCurrentDeck } = currentDeck;
       return updatedCurrentDeck;

@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   }
 });
 
-const DeckCreator = () => {
+const DeckCreator = ({ match = { params: {} } }) => {
   const classes = useStyles();
 
   return (
@@ -49,7 +49,7 @@ const DeckCreator = () => {
           </Tabs>
         </div>
         <div className={classes.secondContainer}>
-          <CurrentDeck classes={classes} />
+          <CurrentDeck classes={classes} deckId={match.params.id} />
         </div>
       </div>
     </CurrentDeckProvider>

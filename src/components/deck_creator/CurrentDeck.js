@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import Confirmation from './Confirmation';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
 
@@ -20,8 +22,46 @@ const useStyles = makeStyles({
   }
 });
 
-const CurrentDeck = () => {
-  const { currentDeck } = useContext(CurrentDeckContext);
+const GET_DECK = gql`
+  query getDeck($id: ID!) {
+    deck(id: $id) {
+      name
+      description
+      id
+      questions {
+        id
+        questionType
+        standards {
+          title
+        }
+        questionNode
+        tags {
+          name
+        }
+        questionOptions {
+          optionNode
+          correct
+          id
+        }
+      }
+    }
+  }
+`;
+
+const CurrentDeck = ({ deckId }) => {
+  const { currentDeck, dispatch } = useContext(CurrentDeckContext);
+  // if a current deck already exists (ie. when editing a deck):
+  useQuery(GET_DECK, {
+    variables: { id: deckId },
+    skip: deckId === undefined,
+    onCompleted: ({ deck: { questions } }) => {
+      dispatch({ type: 'receiveCurrent', questions });
+    },
+    onError: error => {
+      console.error(error);
+    }
+  });
+
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const currentDeckArr = Object.keys(currentDeck);

@@ -87,10 +87,8 @@ const DeckCard = ({ card, removable = null }) => {
   const updateCurrentDeck = () => {
     if (currentDeck[id]) {
       dispatch({ type: 'removeFromCurrent', id });
-      // ({ [id]: _, ...updatedCurrentDeck } = currentDeck);
     } else {
       dispatch({ type: 'addToCurrent', card, id });
-      // updatedCurrentDeck = Object.assign(currentDeck, { [id]: card });
     }
   };
 
