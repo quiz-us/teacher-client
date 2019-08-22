@@ -18,7 +18,9 @@ const useStyles = makeStyles({
     marginBottom: '20px'
   },
   actions: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 0,
+    height: '15px'
   },
   expandOpen: {
     transform: 'rotate(180deg)'
