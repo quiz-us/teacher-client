@@ -9,20 +9,24 @@ const defaultAnswer = (isCorrect = false) => ({
   answerId: generateRandomId()
 });
 
-const initialState = {
+const generateInitialState = () => ({
   questionType: 'Multiple Choice',
   standardId: '',
   tags: [],
   question: {},
   answers: [defaultAnswer(true)]
-};
+});
+
+const initialState = generateInitialState();
 
 let reducer = (state, action) => {
   const { type, name, value } = action;
   switch (type) {
     case 'resetForm':
       return {
-        ...initialState,
+        // would need to regenerate instead of using existing because
+        // answer's random key needs to be regenerated:
+        ...generateInitialState(),
         questionType: state.questionType,
         standardId: state.standardId
       };
