@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { RichTextEditor } from '@quiz-us/kit';
+import { RichTextEditor } from '../../../editor';
 
 import { QuestionFormContext } from './QuestionFormContext';
 // import { RED } from "../../theme/colors";

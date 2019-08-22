@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Card from '@material-ui/core/Card';
-import { ReadOnly } from '@quiz-us/kit';
+import { ReadOnly } from '../editor';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';

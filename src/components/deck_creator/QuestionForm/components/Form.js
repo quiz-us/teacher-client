@@ -17,7 +17,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import TagsForm from './TagsForm';
-import { QuestionFormContext } from './QuestionFormContext';
+import { QuestionFormContext, generateRandomId } from './QuestionFormContext';
 import { CurrentDeckContext } from '../../CurrentDeckContext';
 import QuestionAndAnswers from './QuestionAndAnswers';
 import decamelize from '../../../util/decamelize';
@@ -112,6 +112,10 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         card: createQuestion,
         id: createQuestion.id
       });
+      dispatch({
+        type: 'resetForm'
+      });
+      setQuestionAnswerId(generateRandomId());
     }
   });
 
@@ -136,6 +140,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
   const selectClasses = useSelectStyles();
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [questionAnswerId, setQuestionAnswerId] = useState(generateRandomId());
 
   const closeErrorMessage = () => setErrorMessage('');
 
@@ -274,7 +279,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         >
           <TagsForm fetchTags={fetchTags} />
         </FormControl>
-        <QuestionAndAnswers classes={classes} />
+        <QuestionAndAnswers classes={classes} key={questionAnswerId} />
         <Button
           className={classes.submitButton}
           type="submit"

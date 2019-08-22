@@ -1,26 +1,40 @@
-import React, { useReducer } from "react";
-import crypto from "crypto";
+import React, { useReducer } from 'react';
+import crypto from 'crypto';
 
-const generateAnswerId = () => crypto.randomBytes(20).toString("hex");
+const generateRandomId = () => crypto.randomBytes(20).toString('hex');
 
 const defaultAnswer = (isCorrect = false) => ({
   value: undefined,
   isCorrect,
-  answerId: generateAnswerId()
+  answerId: generateRandomId()
 });
+
+const initialState = {
+  questionType: 'Multiple Choice',
+  standardId: '',
+  tags: [],
+  question: {},
+  answers: [defaultAnswer(true)]
+};
 
 let reducer = (state, action) => {
   const { type, name, value } = action;
   switch (type) {
-    case "update":
+    case 'resetForm':
+      return {
+        ...initialState,
+        questionType: state.questionType,
+        standardId: state.standardId
+      };
+    case 'update':
       return { ...state, [name]: value };
-    case "addAnswerChoice":
+    case 'addAnswerChoice':
       return {
         ...state,
 
         answers: [...state.answers, defaultAnswer(false)]
       };
-    case "resetAnswerChoices":
+    case 'resetAnswerChoices':
       return {
         ...state,
         answers: [defaultAnswer(true)]
@@ -29,13 +43,7 @@ let reducer = (state, action) => {
       return;
   }
 };
-const initialState = {
-  questionType: "Multiple Choice",
-  standardId: "",
-  tags: [],
-  question: {},
-  answers: [defaultAnswer(true)]
-};
+
 const QuestionFormContext = React.createContext(initialState);
 
 function QuestionFormProvider({ children }) {
@@ -46,4 +54,4 @@ function QuestionFormProvider({ children }) {
     </QuestionFormContext.Provider>
   );
 }
-export { QuestionFormContext, QuestionFormProvider };
+export { QuestionFormContext, QuestionFormProvider, generateRandomId };
