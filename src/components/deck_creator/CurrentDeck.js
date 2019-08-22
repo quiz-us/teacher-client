@@ -23,7 +23,8 @@ const useStyles = makeStyles({
     height: '40px'
   },
   headerLeft: {
-    display: 'flex'
+    display: 'flex',
+    maxWidth: '60%'
   }
 });
 
@@ -86,7 +87,7 @@ const CurrentDeck = ({ deckId }) => {
             </IconButton>
           )}
         </div>
-        {currentDeckArr.length > 0 && (
+        {(isUpdate || currentDeckArr.length) > 0 && (
           <Button
             color="primary"
             variant="contained"
