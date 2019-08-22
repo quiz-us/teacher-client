@@ -1,34 +1,32 @@
-import React, { useContext } from "react";
-import { makeStyles } from "@material-ui/styles";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import PropTypes from "prop-types";
-import FormControl from "@material-ui/core/FormControl";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { RichTextEditor } from "@quiz-us/kit";
+import React, { useContext } from 'react';
+import { makeStyles } from '@material-ui/styles';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PropTypes from 'prop-types';
+import FormControl from '@material-ui/core/FormControl';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { RichTextEditor } from '@quiz-us/kit';
 
-import { QuestionFormContext } from "./QuestionFormContext";
+import { QuestionFormContext } from './QuestionFormContext';
 // import { RED } from "../../theme/colors";
 
-const ALPHABET = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 
 const useStyles = makeStyles({
   addButton: {
-    width: "35px",
-    margin: "10px auto"
+    margin: '20px auto'
   },
   mcControls: {
-    position: "relative"
+    position: 'relative'
   },
   correctCheckbox: {
-    marginLeft: "10px"
+    marginLeft: '10px'
   },
   deleteButton: {
     right: 0,
-    position: "absolute",
-    color: "red"
+    position: 'absolute'
   }
 });
 
@@ -40,8 +38,8 @@ const QuestionAndAnswers = ({ classes }) => {
 
   const updateAnswers = updated => {
     dispatch({
-      type: "update",
-      name: "answers",
+      type: 'update',
+      name: 'answers',
       value: updated
     });
   };
@@ -56,7 +54,7 @@ const QuestionAndAnswers = ({ classes }) => {
 
   const addAnswerChoice = e => {
     dispatch({
-      type: "addAnswerChoice"
+      type: 'addAnswerChoice'
     });
   };
 
@@ -88,7 +86,7 @@ const QuestionAndAnswers = ({ classes }) => {
   };
 
   const answer = () => {
-    if (questionType === "Multiple Choice") {
+    if (questionType === 'Multiple Choice') {
       return (
         <React.Fragment>
           {answers.map(({ value, answerId, isCorrect }, i) => {
@@ -129,14 +127,14 @@ const QuestionAndAnswers = ({ classes }) => {
               </div>
             );
           })}
-          <IconButton
+          <Button
+            className={componentClasses.addButton}
+            variant="contained"
             color="secondary"
             onClick={addAnswerChoice}
-            title="add answer"
-            className={componentClasses.addButton}
           >
-            <AddCircleIcon />
-          </IconButton>
+            Add Answer Choice
+          </Button>
         </React.Fragment>
       );
     }
@@ -158,7 +156,7 @@ const QuestionAndAnswers = ({ classes }) => {
         <h3>Question: </h3>
         <RichTextEditor
           updateParentState={value =>
-            dispatch({ type: "update", name: "question", value })
+            dispatch({ type: 'update', name: 'question', value })
           }
         />
       </FormControl>
