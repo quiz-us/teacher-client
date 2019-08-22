@@ -126,7 +126,7 @@ function DownshiftMultiple(props) {
     if (input && !isOpen) {
       setIsOpen(true);
     }
-    setInputValue(input.trim().toLowerCase());
+    setInputValue(input);
   }
 
   function updateTags(updatedTags) {
@@ -138,9 +138,10 @@ function DownshiftMultiple(props) {
   }
 
   function handleChange(item) {
+    const parsedItem = item.trim().toLowerCase();
     let newSelectedItem = [...tags];
-    if (newSelectedItem.indexOf(item) === -1) {
-      newSelectedItem = [...newSelectedItem, item];
+    if (newSelectedItem.indexOf(parsedItem) === -1) {
+      newSelectedItem = [...newSelectedItem, parsedItem];
     }
     setInputValue('');
     setIsOpen(false);
