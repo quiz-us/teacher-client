@@ -125,7 +125,7 @@ export default function Confirmation({ open, setOpen, deck = {} }) {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="md">
       <DialogTitle>{isUpdate ? 'Update Deck' : 'Create Deck'}</DialogTitle>
       <DialogContent>
         <TextField

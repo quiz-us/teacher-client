@@ -111,15 +111,21 @@ function DownshiftMultiple(props) {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { tags } = state;
   const { data } = useQuery(TAG_SEARCH, {
-    variables: { string: inputValue }
+    variables: { string: inputValue },
+    skip: inputValue === '' // don't query for tags in the beginning with empty string
   });
 
   useEffect(() => {
-    setSuggestions(data.tagSearch);
+    if (data && data.tagSearch) {
+      setSuggestions(data.tagSearch);
+    }
   }, [inputValue, data]);
 
   function handleInputChange(event) {
     const input = event.target.value;
+    if (input && !isOpen) {
+      setIsOpen(true);
+    }
     setInputValue(input.trim().toLowerCase());
   }
 
@@ -137,6 +143,7 @@ function DownshiftMultiple(props) {
       newSelectedItem = [...newSelectedItem, item];
     }
     setInputValue('');
+    setIsOpen(false);
     updateTags(newSelectedItem);
   }
 
@@ -211,9 +218,10 @@ function DownshiftMultiple(props) {
                     tags
                   });
                 })}
-                {!suggestions.some(
-                  suggestion => suggestion.name === inputValue
-                ) &&
+                {inputValue &&
+                  !suggestions.some(
+                    suggestion => suggestion.name === inputValue
+                  ) &&
                   renderSuggestion({
                     suggestion: { name: inputValue, label: inputValue },
                     index: suggestions.length,
