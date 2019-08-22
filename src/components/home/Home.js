@@ -34,7 +34,9 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
-  const { loading, data: { decks } = {} } = useQuery(GET_DECKS);
+  const { loading, data: { decks } = {} } = useQuery(GET_DECKS, {
+    fetchPolicy: 'network-only'
+  });
   if (loading) {
     return <div>Loading...</div>;
   }
