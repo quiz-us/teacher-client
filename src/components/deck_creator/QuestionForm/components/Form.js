@@ -77,6 +77,9 @@ const CREATE_QUESTION = gql`
       id
       questionNode
       questionType
+      standards {
+        title
+      }
       questionOptions {
         id
         question {
