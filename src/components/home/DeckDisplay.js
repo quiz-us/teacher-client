@@ -34,9 +34,6 @@ const DeckDisplay = ({ deck: { name, description, id }, classes }) => {
       </CardContent>
 
       <CardActions>
-        <Button size="small" color="primary">
-          Assign
-        </Button>
         <Link to={`/decks/${id}/edit`}>
           <Button size="small" color="primary">
             Edit

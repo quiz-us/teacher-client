@@ -24,7 +24,9 @@ const useStyles = makeStyles({
   },
   deckContainer: {
     display: 'flex',
-    flexWrap: 'wrap'
+    margin: '0 auto',
+    flexWrap: 'wrap',
+    width: '85%'
   },
   link: {
     color: 'blue',
@@ -42,7 +44,6 @@ const Home = () => {
   }
   return (
     <div className={classes.root}>
-      <h3>Your Decks:</h3>
       <div className={classes.deckContainer}>
         {decks && decks.length ? (
           decks.map(deck => (
