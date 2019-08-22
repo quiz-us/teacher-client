@@ -6,7 +6,7 @@ import Card from './Card';
 const useStyles = makeStyles({
   cardsContainer: {
     overflow: 'scroll',
-    height: '75vh',
+    height: '80vh',
     padding: '10px'
   }
 });

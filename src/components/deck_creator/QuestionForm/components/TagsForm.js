@@ -107,6 +107,7 @@ function DownshiftMultiple(props) {
   const { classes } = props;
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const { state, dispatch } = useContext(QuestionFormContext);
   const { tags } = state;
   const { data } = useQuery(TAG_SEARCH, {
@@ -158,13 +159,7 @@ function DownshiftMultiple(props) {
       onChange={handleChange}
       defaultHighlightedIndex={0}
     >
-      {({
-        getInputProps,
-        getItemProps,
-        getLabelProps,
-        isOpen,
-        highlightedIndex
-      }) => {
+      {({ getInputProps, getItemProps, getLabelProps, highlightedIndex }) => {
         const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
           onKeyDown: handleKeyDown,
           placeholder: 'Add one or more tag(s)'
@@ -188,12 +183,19 @@ function DownshiftMultiple(props) {
                     onDelete={handleDelete(item)}
                   />
                 )),
-                onBlur,
+                onBlur: () => {
+                  setIsOpen(false);
+                  if (inputValue) {
+                    handleChange(inputValue);
+                  }
+                },
                 onChange: event => {
                   handleInputChange(event);
                   onChange(event);
                 },
-                onFocus
+                onFocus: () => {
+                  setIsOpen(true);
+                }
               },
               inputProps
             })}
