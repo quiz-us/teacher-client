@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
   deckContainer: {
     display: 'flex',
-    margin: '0 auto',
+    margin: '20px auto',
     flexWrap: 'wrap',
     width: '85%'
   },

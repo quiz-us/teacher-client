@@ -42,7 +42,7 @@ const useStyles = makeStyles({
   }
 });
 
-const DeckCreator = ({ match = { params: {} } }) => {
+const DeckCreator = ({ match = { params: {} }, history }) => {
   const classes = useStyles();
   const {
     loading: standardsLoading,
@@ -74,7 +74,11 @@ const DeckCreator = ({ match = { params: {} } }) => {
           </Tabs>
         </div>
         <div className={classes.secondContainer}>
-          <CurrentDeck classes={classes} deckId={match.params.id} />
+          <CurrentDeck
+            classes={classes}
+            deckId={match.params.id}
+            history={history}
+          />
         </div>
       </div>
     </CurrentDeckProvider>

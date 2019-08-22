@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import Confirmation from './Confirmation';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
@@ -54,9 +55,17 @@ const GET_DECK = gql`
   }
 `;
 
+const DELETE_DECK = gql`
+  mutation deleteDeck($deckId: ID!) {
+    deleteDeck(deckId: $deckId) {
+      name
+    }
+  }
+`;
+
 // if a CurrentDeck has a deckId, then it means that the current deck is being
 // edited. If it does not, it means it's being created:
-const CurrentDeck = ({ deckId }) => {
+const CurrentDeck = ({ deckId, history }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   // if a current deck already exists (ie. when editing a deck):
   const { data = {} } = useQuery(GET_DECK, {
@@ -71,6 +80,12 @@ const CurrentDeck = ({ deckId }) => {
     }
   });
 
+  const [deleteDeck] = useMutation(DELETE_DECK, {
+    onCompleted: () => {
+      history.push('/');
+    }
+  });
+
   const isUpdate = data.deck !== undefined;
 
   const [open, setOpen] = useState(false);
@@ -82,7 +97,17 @@ const CurrentDeck = ({ deckId }) => {
         <div className={classes.headerLeft}>
           <h3>{isUpdate ? data.deck.name : 'Current Deck'}</h3>
           {isUpdate && (
-            <IconButton onClick={e => console.log(e)}>
+            <IconButton
+              onClick={e => {
+                if (
+                  window.confirm(
+                    'Are you sure you want to delete this deck? This cannot be undone.'
+                  )
+                ) {
+                  deleteDeck({ variables: { deckId } });
+                }
+              }}
+            >
               <DeleteIcon />
             </IconButton>
           )}
