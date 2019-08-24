@@ -4,6 +4,7 @@ export const GET_PERIODS = gql`
   query getPeriods {
     periods {
       name
+      id
     }
   }
 `;

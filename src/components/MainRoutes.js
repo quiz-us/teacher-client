@@ -19,7 +19,7 @@ export default () => {
     <div className={classes.root}>
       <Route exact path="/" component={Home} />
       <Route path="/decks" component={DecksContainer} />
-      <Route exact path="/class-manager" component={ClassManager} />
+      <Route path="/class-manager" component={ClassManager} />
       <Route exact path="/deck-creator" component={DeckCreator} />
     </div>
   );

@@ -7,7 +7,10 @@ import Divider from '@material-ui/core/Divider';
 import ClassCreator from './ClassCreator';
 import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
+import { Route } from 'react-router-dom';
 import { GET_PERIODS } from '../queries/Period';
+import { Link } from 'react-router-dom';
+import ClassShow from './ClassShow';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,21 +18,20 @@ const useStyles = makeStyles(theme => ({
   },
   list: {
     backgroundColor: theme.palette.background.paper
-  },
-  listText: {
-    textAlign: 'center'
   }
 }));
 
-const Period = ({ name, classes }) => {
+const Period = ({ name, id }) => {
   return (
-    <ListItem button>
-      <ListItemText primary={name} className={classes.listText} />
-    </ListItem>
+    <Link to={`/class-manager/${id}`}>
+      <ListItem button>
+        <ListItemText primary={name} />
+      </ListItem>
+    </Link>
   );
 };
 
-export default function SwitchListSecondary() {
+const ClassManager = () => {
   const { data, loading } = useQuery(GET_PERIODS);
   const { periods } = data;
   const classes = useStyles();
@@ -45,10 +47,11 @@ export default function SwitchListSecondary() {
       {numClasses ? (
         <List className={classes.list}>
           {periods.map((period, i) => {
+            const { name, id } = period;
             const isNotLastListedClass = numClasses - 1 !== i;
             return (
-              <React.Fragment key={`${period.name}-i`}>
-                <Period name={period.name} classes={classes} />
+              <React.Fragment key={`${name}-${id}`}>
+                <Period id={id} name={name} />
                 {isNotLastListedClass && <Divider />}
               </React.Fragment>
             );
@@ -61,4 +64,11 @@ export default function SwitchListSecondary() {
       <ClassCreator />
     </div>
   );
-}
+};
+
+export default ({ match }) => (
+  <React.Fragment>
+    <Route exact path="/class-manager" component={ClassManager} />
+    <Route exact path={`${match.path}/:id`} component={ClassShow} />
+  </React.Fragment>
+);
