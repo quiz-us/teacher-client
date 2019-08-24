@@ -9,6 +9,7 @@ import teal from '@material-ui/core/colors/teal';
 import amber from '@material-ui/core/colors/amber';
 import PrivateRoute from './components/PrivateRoute';
 import MainRoutes from './components/MainRoutes';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const theme = createMuiTheme({
   palette: {
@@ -21,6 +22,7 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Nav />
         <Switch>
           <Route exact path="/login" component={LogIn} />

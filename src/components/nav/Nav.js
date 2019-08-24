@@ -16,9 +16,6 @@ import BuildIcon from '@material-ui/icons/Build';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -80,28 +77,26 @@ export default function ButtonAppBar() {
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            onClick={openNav}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            <Link className={classes.white} to="/">
-              Quiz Us
-            </Link>
-          </Typography>
-        </Toolbar>
-        <Drawer open={navOpen} onClose={closeNav}>
-          {sideNav()}
-        </Drawer>
-      </AppBar>
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+          onClick={openNav}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" className={classes.title}>
+          <Link className={classes.white} to="/">
+            Quiz Us
+          </Link>
+        </Typography>
+      </Toolbar>
+      <Drawer open={navOpen} onClose={closeNav}>
+        {sideNav()}
+      </Drawer>
+    </AppBar>
   );
 }
