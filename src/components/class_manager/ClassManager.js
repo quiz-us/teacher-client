@@ -9,12 +9,13 @@ const ClassManager = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <div></div>
+      Nothing here yet!
+      {/* <div></div>
       <ul>
         <li>Existing class 1</li>
         <li>Existing class 2</li>
       </ul>
-      <ClassCreator />
+      <ClassCreator /> */}
     </div>
   );
 };
