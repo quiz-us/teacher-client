@@ -5,18 +5,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import ClassCreator from './ClassCreator';
-
-const dummyClasses = [
-  {
-    name: 'Period 1'
-  },
-  {
-    name: 'Period 2'
-  },
-  {
-    name: 'Period 3'
-  }
-];
+import { useQuery } from '@apollo/react-hooks';
+import GlobalLoader from '../app/GlobalLoader';
+import { GET_PERIODS } from '../queries/Period';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,17 +27,24 @@ const Period = ({ name }) => {
 };
 
 export default function SwitchListSecondary() {
+  const { data, loading } = useQuery(GET_PERIODS);
+  const { periods } = data;
   const classes = useStyles();
-  const numClasses = dummyClasses.length;
+  const numClasses = periods ? periods.length : 0;
+
+  if (loading) {
+    return <GlobalLoader />;
+  }
+
   return (
     <div className={classes.root}>
       <h3>Your Classes</h3>
       {numClasses ? (
         <List className={classes.list}>
-          {dummyClasses.map((period, i) => {
+          {periods.map((period, i) => {
             const isNotLastListedClass = numClasses - 1 !== i;
             return (
-              <React.Fragment>
+              <React.Fragment key={`${period.name}-i`}>
                 <Period name={period.name} />
                 {isNotLastListedClass && <Divider />}
               </React.Fragment>

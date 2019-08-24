@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import InputBase from '@material-ui/core/InputBase';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
-import Divider from '@material-ui/core/Divider';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { useMutation } from '@apollo/react-hooks';
+import { GET_PERIODS, CREATE_PERIOD } from '../queries/Period';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,22 +16,47 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     display: 'flex'
-  },
-  createButton: {}
+  }
 }));
 
 const Form = ({ classes }) => {
+  const [periodName, setPeriodName] = useState('');
+  const [createPeriod, { loading }] = useMutation(CREATE_PERIOD, {
+    onCompleted: data => {
+      setPeriodName('');
+    },
+    refetchQueries: [
+      {
+        query: GET_PERIODS
+      }
+    ],
+    onError: err => console.error(err)
+  });
+  const handleSubmit = e => {
+    e.preventDefault();
+    createPeriod({ variables: { name: periodName } });
+  };
   return (
-    <form className={classes.form}>
+    <form className={classes.form} onSubmit={handleSubmit}>
       <TextField
         label="Class Name"
         type="text"
+        value={periodName}
+        onChange={e => setPeriodName(e.target.value)}
         InputProps={{
           endAdornment: (
             <React.Fragment>
-              <IconButton color="primary" aria-label="Create Class">
-                <AddCircleIcon />
-              </IconButton>
+              {loading ? (
+                <CircularProgress size={20} />
+              ) : (
+                <IconButton
+                  type="submit"
+                  color="primary"
+                  aria-label="Create Class"
+                >
+                  <AddCircleIcon />
+                </IconButton>
+              )}
             </React.Fragment>
           )
         }}
@@ -48,7 +74,6 @@ const ClassCreator = () => {
         <Form classes={classes} />
       ) : (
         <Button
-          className={classes.createButton}
           color="secondary"
           variant="contained"
           onClick={() => setActivated(true)}
