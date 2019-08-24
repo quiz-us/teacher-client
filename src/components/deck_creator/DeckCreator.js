@@ -22,9 +22,7 @@ const GET_STANDARDS = gql`
 
 const useStyles = makeStyles({
   root: {
-    display: 'flex',
-    width: '100%',
-    height: '100vh'
+    display: 'flex'
   },
   firstContainer: {
     width: '60%',

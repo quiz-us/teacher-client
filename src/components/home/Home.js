@@ -4,10 +4,6 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import DeckDisplay from './DeckDisplay';
-import DecksContainer from '../decks/DecksContainer';
-import PrivateRoute from '../PrivateRoute';
-import DeckCreator from '../deck_creator/DeckCreator';
-import ClassManager from '../class_manager/ClassManager';
 
 const GET_DECKS = gql`
   {
@@ -64,13 +60,4 @@ const Home = () => {
   );
 };
 
-export default () => {
-  return (
-    <div>
-      <PrivateRoute exact path="/" component={Home} />
-      <PrivateRoute path="/decks" component={DecksContainer} />
-      <PrivateRoute exact path="/class-manager" component={ClassManager} />
-      <PrivateRoute exact path="/deck-creator" component={DeckCreator} />
-    </div>
-  );
-};
+export default Home;
