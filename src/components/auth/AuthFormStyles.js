@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 
-export default makeStyles({
+export default makeStyles(theme => ({
   root: {
     height: '100%',
     display: 'flex',
@@ -9,6 +9,12 @@ export default makeStyles({
   },
   formContainer: {
     width: '30%',
+    [theme.breakpoints.down('md')]: {
+      width: '50%'
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '85%'
+    },
     height: 'max-content',
     padding: '30px',
     display: 'flex',
@@ -36,4 +42,4 @@ export default makeStyles({
   error: {
     color: 'red'
   }
-});
+}));
