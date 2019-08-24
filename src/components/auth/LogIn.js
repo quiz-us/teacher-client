@@ -56,6 +56,7 @@ export default ({ history }) => {
         <TextField
           label="Email"
           type="email"
+          className={classes.field}
           value={inputs.email}
           name="email"
           onChange={handleInputChange}
@@ -63,6 +64,7 @@ export default ({ history }) => {
         <TextField
           label="Password"
           type="password"
+          className={classes.field}
           value={inputs.password}
           name="password"
           onChange={handleInputChange}

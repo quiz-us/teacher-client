@@ -10,7 +10,10 @@ import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuIcon from '@material-ui/icons/Menu';
+import BuildIcon from '@material-ui/icons/Build';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +49,18 @@ export default function ButtonAppBar() {
       <List>
         <Link to="/deck-creator">
           <ListItem button>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
             <ListItemText primary={'Deck Creator'} />
+          </ListItem>
+        </Link>
+        <Link to="/class-manager">
+          <ListItem button>
+            <ListItemIcon>
+              <FormatListBulletedIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Class Manager'} />
           </ListItem>
         </Link>
       </List>

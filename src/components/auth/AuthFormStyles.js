@@ -9,7 +9,7 @@ export default makeStyles({
   },
   formContainer: {
     width: '30%',
-    height: '60%',
+    height: 'max-content',
     padding: '30px',
     display: 'flex',
     flexDirection: 'column',
@@ -17,14 +17,19 @@ export default makeStyles({
   },
   form: {
     display: 'flex',
-    height: '60%',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  field: {
+    marginBottom: '25px'
   },
   header: {
     textAlign: 'center'
   },
-  submitButton: {},
+  submitButton: {
+    marginBottom: '10px',
+    marginTop: '25px'
+  },
   helpText: {
     textAlign: 'center'
   },

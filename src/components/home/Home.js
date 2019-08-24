@@ -7,6 +7,7 @@ import DeckDisplay from './DeckDisplay';
 import DecksContainer from '../decks/DecksContainer';
 import PrivateRoute from '../PrivateRoute';
 import DeckCreator from '../deck_creator/DeckCreator';
+import ClassManager from '../class_manager/ClassManager';
 
 const GET_DECKS = gql`
   {
@@ -68,6 +69,7 @@ export default () => {
     <div>
       <PrivateRoute exact path="/" component={Home} />
       <PrivateRoute path="/decks" component={DecksContainer} />
+      <PrivateRoute exact path="/class-manager" component={ClassManager} />
       <PrivateRoute exact path="/deck-creator" component={DeckCreator} />
     </div>
   );
