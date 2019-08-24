@@ -15,13 +15,16 @@ const useStyles = makeStyles(theme => ({
   },
   list: {
     backgroundColor: theme.palette.background.paper
+  },
+  listText: {
+    textAlign: 'center'
   }
 }));
 
-const Period = ({ name }) => {
+const Period = ({ name, classes }) => {
   return (
     <ListItem button>
-      <ListItemText primary={name} />
+      <ListItemText primary={name} className={classes.listText} />
     </ListItem>
   );
 };
@@ -45,7 +48,7 @@ export default function SwitchListSecondary() {
             const isNotLastListedClass = numClasses - 1 !== i;
             return (
               <React.Fragment key={`${period.name}-i`}>
-                <Period name={period.name} />
+                <Period name={period.name} classes={classes} />
                 {isNotLastListedClass && <Divider />}
               </React.Fragment>
             );
