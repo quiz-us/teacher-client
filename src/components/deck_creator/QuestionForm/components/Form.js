@@ -115,6 +115,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       dispatch({
         type: 'resetForm'
       });
+      window.scrollTo(0, 0);
       setQuestionAnswerId(generateRandomId());
     }
   });

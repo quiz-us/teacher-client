@@ -20,14 +20,16 @@ const GET_STANDARDS = gql`
   }
 `;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex'
+    width: '100%'
   },
   firstContainer: {
-    width: '60%',
+    width: '70%',
     padding: '25px',
-    borderRight: '1px solid #E0E0E0'
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    }
   },
   secondContainer: {
     width: '40%'
@@ -38,7 +40,7 @@ const useStyles = makeStyles({
   panel: {
     padding: '10px'
   }
-});
+}));
 
 const DeckCreator = ({ match = { params: {} }, history }) => {
   const classes = useStyles();
@@ -50,34 +52,30 @@ const DeckCreator = ({ match = { params: {} }, history }) => {
   return (
     <CurrentDeckProvider>
       <div className={classes.root}>
-        <div className={classes.firstContainer}>
-          <Tabs>
-            <TabList>
-              <Tab>Create Question</Tab>
-              <Tab>Search Questions</Tab>
-            </TabList>
+        <Tabs className={classes.firstContainer}>
+          <TabList>
+            <Tab>Create Question</Tab>
+            <Tab>Search Questions</Tab>
+          </TabList>
 
-            <TabPanel className={classes.panel}>
-              <QuestionForm
-                standardsLoading={standardsLoading}
-                allStandards={allStandards}
-              />
-            </TabPanel>
-            <TabPanel className={classes.panel}>
-              <QuestionFilter
-                standardsLoading={standardsLoading}
-                allStandards={allStandards}
-              />
-            </TabPanel>
-          </Tabs>
-        </div>
-        <div className={classes.secondContainer}>
-          <CurrentDeck
-            classes={classes}
-            deckId={match.params.id}
-            history={history}
-          />
-        </div>
+          <TabPanel className={classes.panel}>
+            <QuestionForm
+              standardsLoading={standardsLoading}
+              allStandards={allStandards}
+            />
+          </TabPanel>
+          <TabPanel className={classes.panel}>
+            <QuestionFilter
+              standardsLoading={standardsLoading}
+              allStandards={allStandards}
+            />
+          </TabPanel>
+        </Tabs>
+        <CurrentDeck
+          classes={classes}
+          deckId={match.params.id}
+          history={history}
+        />
       </div>
     </CurrentDeckProvider>
   );
