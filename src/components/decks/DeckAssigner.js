@@ -18,6 +18,7 @@ import { GET_PERIODS } from '../queries/Period';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { DatePicker } from '@material-ui/pickers';
 import { CREATE_ASSIGNMENTS } from '../queries/Assignment';
+import DialogActions from '@material-ui/core/DialogActions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,14 +36,15 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
   const { name: deckName, id: deckId } = selectedDeck;
 
   const [selectedDate, handleDateChange] = useState(new Date());
+  const [success, setSuccess] = useState(false);
   const [instructions, setInstructions] = useState('');
   const [selectedPeriods, setSelectedPeriods] = useState({});
   const { data, loading } = useQuery(GET_PERIODS);
   const [createPeriod, { loading: createLoading }] = useMutation(
     CREATE_ASSIGNMENTS,
     {
-      onCompleted: data => {
-        console.log(data);
+      onCompleted: () => {
+        setSuccess(true);
       },
       onError: err => console.error(err)
     }
@@ -85,76 +87,87 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
       <DialogTitle>
         Assign <strong>{`${deckName}`}</strong>
       </DialogTitle>
-      <DialogContent>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <DatePicker
-            required
-            className={classes.field}
-            autoOk
-            label="Due Date"
-            clearable
-            value={selectedDate}
-            onChange={handleDateChange}
-          />
-          <FormLabel required className={classes.label} component="legend">
-            Classes To Assign To
-          </FormLabel>
-          {periods.length ? (
-            <Paper className={`${classes.paper} ${classes.field}`}>
-              <List dense component="div" role="list">
-                {periods.map(({ name, id }) => {
-                  const labelId = `list-item-${name}-label`;
-                  return (
-                    <ListItem
-                      key={name}
-                      role="listitem"
-                      button
-                      onClick={toggleSelected(id)}
-                    >
-                      <ListItemIcon>
-                        <Checkbox
-                          checked={selectedPeriods[id] === true}
-                          tabIndex={-1}
-                          disableRipple
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </ListItemIcon>
-                      <ListItemText id={labelId} primary={name} />
-                    </ListItem>
-                  );
-                })}
-                <ListItem />
-              </List>
-            </Paper>
-          ) : (
-            <div>
-              You currently have no classes! Go to your{' '}
-              <Link className="link" to="/class-manager">
-                Class Manager
-              </Link>{' '}
-              to create one!
-            </div>
-          )}
-
-          <TextField
-            className={classes.field}
-            label="Instructions"
-            name="instructions"
-            type="text"
-            multiline
-            fullWidth
-            value={instructions}
-            onChange={e => setInstructions(e.target.value)}
-          />
-          {createLoading ? (
-            <CircularProgress />
-          ) : (
-            <Button variant="contained" color="primary" type="submit">
-              Assign
+      {success ? (
+        <React.Fragment>
+          <DialogContent>Assignments Created!</DialogContent>
+          <DialogActions>
+            <Button color="primary" variant="contained" onClick={closeAssigner}>
+              Close
             </Button>
-          )}
-        </form>
-      </DialogContent>
+          </DialogActions>
+        </React.Fragment>
+      ) : (
+        <DialogContent>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <DatePicker
+              required
+              className={classes.field}
+              autoOk
+              label="Due Date"
+              clearable
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+            <FormLabel required className={classes.label} component="legend">
+              Classes To Assign To
+            </FormLabel>
+            {periods.length ? (
+              <Paper className={`${classes.paper} ${classes.field}`}>
+                <List dense component="div" role="list">
+                  {periods.map(({ name, id }) => {
+                    const labelId = `list-item-${name}-label`;
+                    return (
+                      <ListItem
+                        key={name}
+                        role="listitem"
+                        button
+                        onClick={toggleSelected(id)}
+                      >
+                        <ListItemIcon>
+                          <Checkbox
+                            checked={selectedPeriods[id] === true}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': labelId }}
+                          />
+                        </ListItemIcon>
+                        <ListItemText id={labelId} primary={name} />
+                      </ListItem>
+                    );
+                  })}
+                  <ListItem />
+                </List>
+              </Paper>
+            ) : (
+              <div>
+                You currently have no classes! Go to your{' '}
+                <Link className="link" to="/class-manager">
+                  Class Manager
+                </Link>{' '}
+                to create one!
+              </div>
+            )}
+
+            <TextField
+              className={classes.field}
+              label="Instructions"
+              name="instructions"
+              type="text"
+              multiline
+              fullWidth
+              value={instructions}
+              onChange={e => setInstructions(e.target.value)}
+            />
+            {createLoading ? (
+              <CircularProgress />
+            ) : (
+              <Button variant="contained" color="primary" type="submit">
+                Assign
+              </Button>
+            )}
+          </form>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };
