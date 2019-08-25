@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import DeckDisplay from './DeckDisplay';
-
+import DeckAssigner from '../decks/DeckAssigner';
 
 const GET_DECKS = gql`
   {
@@ -34,19 +34,36 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
-
+  const [open, setOpen] = useState(false);
+  const [selectedDeck, setSelectedDeck] = useState({});
   const { loading, data: { decks } = {} } = useQuery(GET_DECKS, {
     fetchPolicy: 'network-only'
   });
   if (loading) {
     return <div>Loading...</div>;
   }
+  const openAssigner = deck => {
+    return () => {
+      setOpen(true);
+      setSelectedDeck(deck);
+    };
+  };
+
+  const closeAssigner = () => {
+    setOpen(false);
+    setSelectedDeck({});
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.deckContainer}>
         {decks && decks.length ? (
           decks.map(deck => (
-            <DeckDisplay deck={deck} key={`deckKey-${deck.id}`} />
+            <DeckDisplay
+              openAssigner={openAssigner(deck)}
+              deck={deck}
+              key={`deckKey-${deck.id}`}
+            />
           ))
         ) : (
           <div>
@@ -58,7 +75,11 @@ const Home = () => {
           </div>
         )}
       </div>
-  
+      <DeckAssigner
+        open={open}
+        closeAssigner={closeAssigner}
+        selectedDeck={selectedDeck}
+      />
     </div>
   );
 };

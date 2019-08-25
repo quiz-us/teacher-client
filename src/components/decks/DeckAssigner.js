@@ -30,7 +30,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DeckAssigner = ({ open, setOpen, deckId, deckName }) => {
+const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
+  const { name: deckName } = selectedDeck;
+
   const [selectedDate, handleDateChange] = useState(new Date());
   const [instructions, setInstructions] = useState('');
   const [selectedPeriods, setSelectedPeriods] = useState({});
@@ -56,7 +58,7 @@ const DeckAssigner = ({ open, setOpen, deckId, deckName }) => {
       maxWidth="md"
       className={classes.root}
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={closeAssigner}
     >
       <DialogTitle>
         Assign <strong>{`${deckName}`}</strong>
@@ -69,7 +71,6 @@ const DeckAssigner = ({ open, setOpen, deckId, deckName }) => {
             autoOk
             label="Due Date"
             clearable
-            disableFuture
             value={selectedDate}
             onChange={handleDateChange}
           />
@@ -120,7 +121,6 @@ const DeckAssigner = ({ open, setOpen, deckId, deckName }) => {
             type="text"
             multiline
             fullWidth
-            required
             value={instructions}
             onChange={e => setInstructions(e.target.value)}
           />
