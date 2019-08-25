@@ -12,11 +12,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import { GET_PERIODS } from '../queries/Period';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { DatePicker } from '@material-ui/pickers';
-import GlobalLoader from '../app/GlobalLoader';
+import { CREATE_ASSIGNMENTS } from '../queries/Assignment';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,15 +32,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
-  const { name: deckName } = selectedDeck;
+  const { name: deckName, id: deckId } = selectedDeck;
 
   const [selectedDate, handleDateChange] = useState(new Date());
   const [instructions, setInstructions] = useState('');
   const [selectedPeriods, setSelectedPeriods] = useState({});
   const { data, loading } = useQuery(GET_PERIODS);
+  const [createPeriod, { loading: createLoading }] = useMutation(
+    CREATE_ASSIGNMENTS,
+    {
+      onCompleted: data => {
+        console.log(data);
+      },
+      onError: err => console.error(err)
+    }
+  );
   const classes = useStyles();
   if (loading) {
-    return <GlobalLoader />;
+    return null;
   }
 
   const toggleSelected = periodId => {
@@ -49,6 +59,18 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
         [periodId]: !selectedPeriods[periodId]
       });
     };
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    createPeriod({
+      variables: {
+        instructions: instructions,
+        due: selectedDate,
+        deckId,
+        periodIds: Object.keys(selectedPeriods)
+      }
+    });
   };
 
   const { periods = [] } = data;
@@ -64,7 +86,7 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
         Assign <strong>{`${deckName}`}</strong>
       </DialogTitle>
       <DialogContent>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <DatePicker
             required
             className={classes.field}
@@ -124,10 +146,13 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
             value={instructions}
             onChange={e => setInstructions(e.target.value)}
           />
-
-          <Button variant="contained" color="primary" type="submit">
-            Assign
-          </Button>
+          {createLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button variant="contained" color="primary" type="submit">
+              Assign
+            </Button>
+          )}
         </form>
       </DialogContent>
     </Dialog>

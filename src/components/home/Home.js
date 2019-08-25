@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import DeckDisplay from './DeckDisplay';
 import DeckAssigner from '../decks/DeckAssigner';
+import GlobalLoader from '../app/GlobalLoader';
 
 const GET_DECKS = gql`
   {
@@ -40,7 +41,7 @@ const Home = () => {
     fetchPolicy: 'network-only'
   });
   if (loading) {
-    return <div>Loading...</div>;
+    return <GlobalLoader />;
   }
   const openAssigner = deck => {
     return () => {
