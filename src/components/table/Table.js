@@ -60,7 +60,7 @@ function ReactTable({ columns, data }) {
               if (i === 0) {
                 content = 'No data yet!';
               }
-              return <TableCell>{content}</TableCell>;
+              return <TableCell key={`tcell-${i}`}>{content}</TableCell>;
             })}
           </TableRow>
         )}

@@ -4,6 +4,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import useForm from '../hooks/useForm';
+import { useMutation } from '@apollo/react-hooks';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { ENROLL_STUDENT, GET_STUDENTS } from '../queries/Student';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,27 +41,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Form = ({ classes }) => {
-  const { inputs, handleInputChange } = useForm({
+const Form = ({ classes, periodId }) => {
+  const { inputs, handleInputChange, resetForm } = useForm({
     firstName: '',
     lastName: '',
     email: ''
   });
   const { firstName, lastName, email } = inputs;
-  // const [createPeriod, { loading }] = useMutation(CREATE_PERIOD, {
-  //   onCompleted: data => {
-  //     setPeriodName('');
-  //   },
-  //   refetchQueries: [
-  //     {
-  //       query: GET_PERIODS
-  //     }
-  //   ],
-  //   onError: err => console.error(err)
-  // });
+  const [enrollStudent, { loading }] = useMutation(ENROLL_STUDENT, {
+    onCompleted: data => {
+      resetForm();
+    },
+    refetchQueries: [
+      {
+        query: GET_STUDENTS,
+        variables: { periodId }
+      }
+    ],
+    onError: err => console.error(err)
+  });
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(inputs);
+    enrollStudent({ variables: { ...inputs, periodId } });
   };
   return (
     <Card className={classes.formContainer}>
@@ -91,26 +95,30 @@ const Form = ({ classes }) => {
           value={email}
           onChange={handleInputChange}
         />
-        <Button
-          className={classes.createButton}
-          type="submit"
-          color="secondary"
-          variant="contained"
-        >
-          Create
-        </Button>
+        {loading ? (
+          <CircularProgress size={20} />
+        ) : (
+          <Button
+            className={classes.createButton}
+            type="submit"
+            color="secondary"
+            variant="contained"
+          >
+            Create
+          </Button>
+        )}
       </form>
     </Card>
   );
 };
 
-const ClassCreator = () => {
+const ClassCreator = ({ periodId }) => {
   const classes = useStyles();
   const [activated, setActivated] = useState(false);
   return (
     <div className={classes.root}>
       {activated ? (
-        <Form classes={classes} />
+        <Form classes={classes} periodId={periodId} />
       ) : (
         <Button
           color="secondary"

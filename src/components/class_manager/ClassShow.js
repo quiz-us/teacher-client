@@ -41,7 +41,7 @@ const ClassShow = ({ match }) => {
     <div className={classes.root}>
       <h3>Your Students</h3>
       <Table className={classes.table} columns={columns} data={students} />
-      <StudentCreator />
+      <StudentCreator periodId={params.id} />
     </div>
   );
 };

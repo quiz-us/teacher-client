@@ -11,7 +11,9 @@ const useForm = (defaultFormState, cb) => {
       [event.target.name]: event.target.value
     }));
   };
+  const resetForm = () => setInputs(defaultFormState);
   return {
+    resetForm,
     handleInputChange,
     inputs
   };
