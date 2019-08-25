@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import DeckDisplay from './DeckDisplay';
 
+
 const GET_DECKS = gql`
   {
     decks {
@@ -33,6 +34,7 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
+
   const { loading, data: { decks } = {} } = useQuery(GET_DECKS, {
     fetchPolicy: 'network-only'
   });
@@ -56,6 +58,7 @@ const Home = () => {
           </div>
         )}
       </div>
+  
     </div>
   );
 };
