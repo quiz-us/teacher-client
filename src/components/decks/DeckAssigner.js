@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
 import Paper from '@material-ui/core/Paper';
@@ -75,32 +76,42 @@ const DeckAssigner = ({ open, setOpen, deckId, deckName }) => {
           <FormLabel required className={classes.label} component="legend">
             Classes To Assign To
           </FormLabel>
-          <Paper className={`${classes.paper} ${classes.field}`}>
-            <List dense component="div" role="list">
-              {periods.map(({ name, id }) => {
-                const labelId = `list-item-${name}-label`;
-                return (
-                  <ListItem
-                    key={name}
-                    role="listitem"
-                    button
-                    onClick={toggleSelected(id)}
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        checked={selectedPeriods[id] === true}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ 'aria-labelledby': labelId }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText id={labelId} primary={name} />
-                  </ListItem>
-                );
-              })}
-              <ListItem />
-            </List>
-          </Paper>
+          {periods.length ? (
+            <Paper className={`${classes.paper} ${classes.field}`}>
+              <List dense component="div" role="list">
+                {periods.map(({ name, id }) => {
+                  const labelId = `list-item-${name}-label`;
+                  return (
+                    <ListItem
+                      key={name}
+                      role="listitem"
+                      button
+                      onClick={toggleSelected(id)}
+                    >
+                      <ListItemIcon>
+                        <Checkbox
+                          checked={selectedPeriods[id] === true}
+                          tabIndex={-1}
+                          disableRipple
+                          inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText id={labelId} primary={name} />
+                    </ListItem>
+                  );
+                })}
+                <ListItem />
+              </List>
+            </Paper>
+          ) : (
+            <div>
+              You currently have no classes! Go to your{' '}
+              <Link className="link" to="/class-manager">
+                Class Manager
+              </Link>{' '}
+              to create one!
+            </div>
+          )}
 
           <TextField
             className={classes.field}
