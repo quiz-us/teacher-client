@@ -14,6 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuIcon from '@material-ui/icons/Menu';
 import BuildIcon from '@material-ui/icons/Build';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import { ReactComponent as Logo } from '../../assets/quizus.svg';
+import { ReactComponent as SidebarLogo } from '../../assets/quizus-sidebar.svg';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -30,6 +32,9 @@ const useStyles = makeStyles(theme => ({
   },
   navHeader: {
     padding: '10px 20px'
+  },
+  logo: {
+    width: 150
   }
 }));
 
@@ -40,7 +45,9 @@ export default function ButtonAppBar() {
   const sideNav = () => (
     <div className={classes.list} onClick={closeNav} onKeyDown={closeNav}>
       <h3 className={classes.navHeader}>
-        <Link to="/">Quiz Us</Link>
+        <Link to="/">
+          <SidebarLogo className={classes.logo} />
+        </Link>
       </h3>
       <Divider />
       <List>
@@ -89,8 +96,8 @@ export default function ButtonAppBar() {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" className={classes.title}>
-          <Link className={classes.white} to="/">
-            Quiz Us
+          <Link to="/">
+            <Logo className={classes.logo} />
           </Link>
         </Typography>
       </Toolbar>
