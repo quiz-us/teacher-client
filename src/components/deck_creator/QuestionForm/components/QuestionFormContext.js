@@ -17,16 +17,17 @@ const generateInitialState = () => ({
   answers: [defaultAnswer(true)]
 });
 
-const initialState = generateInitialState();
+let initialState = generateInitialState();
 
 let reducer = (state, action) => {
   const { type, name, value } = action;
   switch (type) {
     case 'resetForm':
+      initialState = generateInitialState();
       return {
         // would need to regenerate instead of using existing because
         // answer's random key needs to be regenerated:
-        ...generateInitialState(),
+        ...initialState,
         questionType: state.questionType,
         standardId: state.standardId
       };
