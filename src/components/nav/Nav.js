@@ -19,10 +19,13 @@ import { ReactComponent as SidebarLogo } from '../../assets/quizus-sidebar.svg';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down('md')]: {
+      marginRight: theme.spacing(1)
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginRight: 0
+    }
   },
   white: {
     color: 'white'
@@ -31,10 +34,21 @@ const useStyles = makeStyles(theme => ({
     width: 250
   },
   navHeader: {
-    padding: '10px 20px'
+    padding: '20px 20px'
   },
   logo: {
-    width: 150
+    width: 120,
+    top: '3px',
+    [theme.breakpoints.down('sm')]: {
+      width: 100
+    },
+    position: 'relative'
+  },
+  sideBarLogo: {
+    width: 130,
+    [theme.breakpoints.down('sm')]: {
+      width: 120
+    }
   }
 }));
 
@@ -44,11 +58,11 @@ export default function ButtonAppBar() {
 
   const sideNav = () => (
     <div className={classes.list} onClick={closeNav} onKeyDown={closeNav}>
-      <h3 className={classes.navHeader}>
+      <div className={classes.navHeader}>
         <Link to="/">
-          <SidebarLogo className={classes.logo} />
+          <SidebarLogo className={classes.sideBarLogo} />
         </Link>
-      </h3>
+      </div>
       <Divider />
       <List>
         <Link to="/deck-creator">
@@ -95,11 +109,9 @@ export default function ButtonAppBar() {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          <Link to="/">
-            <Logo className={classes.logo} />
-          </Link>
-        </Typography>
+        <Link to="/">
+          <Logo className={classes.logo} />
+        </Link>
       </Toolbar>
       <Drawer open={navOpen} onClose={closeNav}>
         {sideNav()}
