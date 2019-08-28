@@ -8,6 +8,9 @@ const useStyles = makeStyles({
     overflow: 'scroll',
     height: '85vh',
     padding: '10px'
+  },
+  noCards: {
+    padding: '40px 20px'
   }
 });
 
@@ -17,10 +20,17 @@ export default () => {
   const currentDeckArr = Object.keys(currentDeck);
   return (
     <div className={classes.cardsContainer}>
-      {currentDeckArr.map(cardId => {
-        const card = currentDeck[cardId];
-        return <Card removable key={`current-deck-${card.id}`} card={card} />;
-      })}
+      {currentDeckArr.length ? (
+        currentDeckArr.map(cardId => {
+          const card = currentDeck[cardId];
+          return <Card removable key={`current-deck-${card.id}`} card={card} />;
+        })
+      ) : (
+        <div className={classes.noCards}>
+          No cards in this deck yet. Create a question or search for existing
+          ones to add to this deck!
+        </div>
+      )}
     </div>
   );
 };
