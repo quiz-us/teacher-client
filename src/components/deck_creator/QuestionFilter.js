@@ -22,7 +22,7 @@ const GET_QUESTIONS = gql`
     ) {
       questionText
       questionType
-      questionNode
+      richText
       id
       standards {
         title
@@ -32,7 +32,7 @@ const GET_QUESTIONS = gql`
       }
 
       questionOptions {
-        optionNode
+        richText
         correct
         id
       }

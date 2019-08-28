@@ -62,7 +62,7 @@ const CREATE_QUESTION = gql`
     $questionType: String!
     $standardId: ID
     $tags: [String!]
-    $questionNode: String!
+    $richText: String!
     $questionPlaintext: String!
     $questionOptions: [String!]
   ) {
@@ -70,12 +70,12 @@ const CREATE_QUESTION = gql`
       questionType: $questionType
       standardId: $standardId
       tags: $tags
-      questionNode: $questionNode
+      richText: $richText
       questionPlaintext: $questionPlaintext
       questionOptions: $questionOptions
     ) {
       id
-      questionNode
+      richText
       questionType
       standards {
         title
@@ -87,7 +87,7 @@ const CREATE_QUESTION = gql`
         }
         questionId
         correct
-        optionNode
+        richText
         optionText
       }
       questionText
@@ -126,7 +126,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         questionType: formData['questionType'],
         standardId: formData['standardId'],
         tags: formData['tags'],
-        questionNode: JSON.stringify(formData['question'], 2),
+        richText: JSON.stringify(formData['question'], 2),
         questionPlaintext: formData['questionText'],
         questionOptions: formData['answers'].map(answer =>
           JSON.stringify(answer, 2)

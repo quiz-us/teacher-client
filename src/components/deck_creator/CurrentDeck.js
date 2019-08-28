@@ -66,12 +66,12 @@ const GET_DECK = gql`
         standards {
           title
         }
-        questionNode
+        richText
         tags {
           name
         }
         questionOptions {
-          optionNode
+          richText
           correct
           id
         }

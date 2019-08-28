@@ -50,7 +50,7 @@ const useStyles = makeStyles({
 const Answers = ({ questionOptions, classes }) => {
   return (
     <div>
-      {questionOptions.map(({ correct, optionNode, id }) => {
+      {questionOptions.map(({ correct, richText, id }) => {
         return (
           <div className={classes.answerChoiceRow} key={`answerChoice-${id}`}>
             <span className={classes.correctnessIcon}>
@@ -62,7 +62,7 @@ const Answers = ({ questionOptions, classes }) => {
             </span>
 
             <div className={classes.readOnly}>
-              <ReadOnly value={JSON.parse(optionNode)} />
+              <ReadOnly value={JSON.parse(richText)} />
             </div>
           </div>
         );
@@ -76,7 +76,7 @@ const DeckCard = ({ card, removable = null }) => {
   const {
     id,
     questionType,
-    questionNode = '',
+    richText = '',
     standards = [{}],
     tags = [],
     questionOptions = []
@@ -127,7 +127,7 @@ const DeckCard = ({ card, removable = null }) => {
           <h4>Question</h4>
           {controls()}
         </div>
-        <ReadOnly value={JSON.parse(questionNode)} />
+        <ReadOnly value={JSON.parse(richText)} />
         <div className={classes.details}>
           <strong>Standard:</strong>
           {` ${standard.title}`}
