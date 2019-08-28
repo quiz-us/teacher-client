@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     padding: '10px'
   },
   noCards: {
-    padding: '40px 20px'
+    margin: '40px 20px'
   }
 });
 

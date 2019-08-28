@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   firstContainer: {
     width: '70%',
     padding: '25px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       width: '100%'
     }
   },
