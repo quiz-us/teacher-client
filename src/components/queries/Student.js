@@ -7,6 +7,7 @@ export const GET_STUDENTS = gql`
       lastName
       email
       id
+      qrCode
     }
   }
 `;

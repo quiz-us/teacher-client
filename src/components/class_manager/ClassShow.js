@@ -5,6 +5,7 @@ import GlobalLoader from '../app/GlobalLoader';
 import { GET_STUDENTS } from '../queries/Student';
 import StudentCreator from './StudentCreator';
 import Table from '../table/Table';
+import QRCode from 'qrcode.react';
 
 const columns = [
   {
@@ -18,6 +19,17 @@ const columns = [
   {
     Header: 'Email',
     accessor: 'email'
+  },
+  {
+    Header: 'QR LogIn',
+    accessor: 'qrCode',
+    Cell: ({ cell: { value } }) => {
+      return (
+        <div>
+          <QRCode value={value} />
+        </div>
+      );
+    }
   }
 ];
 
