@@ -15,8 +15,6 @@ import Hidden from '@material-ui/core/Hidden';
 import Badge from '@material-ui/core/Badge';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 
-/** @todo: make mobile friendly: https://material-ui.com/components/drawers/#responsive-drawer */
-
 const useStyles = makeStyles(theme => ({
   currentDeckContainer: {
     width: '40%'
