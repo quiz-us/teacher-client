@@ -1,6 +1,7 @@
 import React from 'react';
 import GlobalLoader from '../app/GlobalLoader';
 import { GET_STUDENTS } from '../queries/Student';
+import { GET_PERIOD } from '../queries/Period';
 import QRCode from 'qrcode.react';
 import { makeStyles } from '@material-ui/styles';
 import { useQuery } from '@apollo/react-hooks';
@@ -21,10 +22,13 @@ const useStyles = makeStyles({
   badge: {
     border: '1px dashed black',
     width: '30%',
-    padding: '80px 10px 20px 10px',
+    padding: '85px 10px 20px 10px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  downloadContainer: {
+    marginTop: '20px'
   }
 });
 
@@ -34,20 +38,35 @@ const BadgeIndex = ({ match }) => {
   const { data, loading } = useQuery(GET_STUDENTS, {
     variables: { periodId: params.id }
   });
-  if (loading) {
+  const { data: classData, loading: classLoading } = useQuery(GET_PERIOD, {
+    variables: { periodId: params.id }
+  });
+  if (loading || classLoading) {
     return <GlobalLoader />;
   }
 
   const downloadPdf = () => {
+    window.scrollTo(0, 0);
     html2canvas(document.querySelector('#badges'), {}).then(canvas => {
-      let doc;
-      if (canvas.width > canvas.height) {
-        doc = new jsPDF('l', 'mm', [canvas.width, canvas.height]);
-      } else {
-        doc = new jsPDF('p', 'mm', [canvas.height, canvas.width]);
+      // https://stackoverflow.com/a/35816550
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      let doc = new jsPDF('p', 'mm');
+      let position = 0;
+
+      doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        doc.addPage();
+        doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
       }
-      doc.addImage(canvas, 'PNG', 0, 0);
-      doc.save('qr-badges.pdf');
+      doc.save(`${classData.period.name}-badges.pdf`);
     });
   };
 
@@ -56,8 +75,8 @@ const BadgeIndex = ({ match }) => {
       <Link className="link" to={`/class-manager/${params.id}`}>
         Back to Class
       </Link>
-      <div>
-        <Button variant="contained" color="primary" onClick={downloadPdf}>
+      <div className={classes.downloadContainer}>
+        <Button variant="contained" color="secondary" onClick={downloadPdf}>
           Download PDF
         </Button>
       </div>
@@ -65,7 +84,7 @@ const BadgeIndex = ({ match }) => {
       <div className={classes.badgeIndex} id="badges">
         {data.students.map(({ firstName, lastName, qrCode }) => {
           return (
-            <div className={classes.badge}>
+            <div className={classes.badge} key={qrCode}>
               <div>
                 <QRCode value={qrCode} />
               </div>
