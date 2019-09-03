@@ -6,6 +6,7 @@ import { GET_STUDENTS } from '../queries/Student';
 import StudentCreator from './StudentCreator';
 import Table from '../table/Table';
 import QRCode from 'qrcode.react';
+import { Link } from 'react-router-dom';
 
 const columns = [
   {
@@ -45,13 +46,19 @@ const ClassShow = ({ match }) => {
     variables: { periodId: params.id }
   });
   const { students } = data;
-  console.log('STUDENT', students);
+
   if (loading) {
     return <GlobalLoader />;
   }
   return (
     <div className={classes.root}>
-      <h3>Your Students</h3>
+      <h3>
+        Your Students (
+        <Link className="link" to={`${match.url}/badges`}>
+          QR Badges
+        </Link>
+        )
+      </h3>
       <Table className={classes.table} columns={columns} data={students} />
       <StudentCreator periodId={params.id} />
     </div>
