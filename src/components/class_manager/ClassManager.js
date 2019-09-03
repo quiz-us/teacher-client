@@ -70,7 +70,7 @@ const ClassManager = () => {
 export default ({ match }) => (
   <React.Fragment>
     <Route exact path="/class-manager" component={ClassManager} />
-    <Route exact path={`${match.path}/:id`} component={ClassShow} />
+    <Route path={`${match.path}/:id`} component={ClassShow} />
     <Route exact path={`${match.path}/:id/badges`} component={BadgeIndex} />
   </React.Fragment>
 );
