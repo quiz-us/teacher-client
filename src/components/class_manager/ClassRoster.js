@@ -5,7 +5,6 @@ import GlobalLoader from '../app/GlobalLoader';
 import { GET_STUDENTS } from '../queries/Student';
 import StudentCreator from './StudentCreator';
 import Table from '../table/Table';
-import QRCode from 'qrcode.react';
 import { Link } from 'react-router-dom';
 
 const columns = [

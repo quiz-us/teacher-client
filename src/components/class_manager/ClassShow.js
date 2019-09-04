@@ -1,31 +1,56 @@
 import React from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
+import { GET_PERIOD } from '../queries/Period';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
 import ClassAssignments from './ClassAssignments';
+import { useQuery } from '@apollo/react-hooks';
+import GlobalLoader from '../app/GlobalLoader';
+
+const defaultIndex = location => {
+  const tabIndex = {
+    assignments: 1
+  };
+  const routeComponents = location.pathname.split('/');
+  const lastI = routeComponents.length - 1;
+  const routeEnd = routeComponents[lastI];
+  return tabIndex[routeEnd] || 0;
+};
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: '20px'
+    margin: '25px 40px'
   },
   panel: {
     padding: '10px'
   }
 }));
 
-const ClassShow = ({ match }) => {
+const ClassShow = ({ match, location, history }) => {
+  const { params } = match;
   const classes = useStyles();
+  const { data: classData, loading: classLoading } = useQuery(GET_PERIOD, {
+    variables: { periodId: params.id }
+  });
+  if (classLoading) {
+    return <GlobalLoader />;
+  }
+
+  const navigate = path => {
+    return () => {
+      history.push(path);
+    };
+  };
+
   return (
     <div className={classes.root}>
-      <Tabs>
+      <h1>{classData.period.name}</h1>
+      <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
-          <Tab>
-            <Link to={`${match.url}`}>Roster</Link>
-          </Tab>
-          <Tab>
-            <Link to={`${match.url}/assignments`}>Assignments</Link>
-          </Tab>
+          {/* NOTE: not using Link because UX is not ideal with Tab:*/}
+          <Tab onClick={navigate(match.url)}>Roster</Tab>
+          <Tab onClick={navigate(`${match.url}/assignments`)}>Assignments</Tab>
         </TabList>
 
         <TabPanel className={classes.panel}>

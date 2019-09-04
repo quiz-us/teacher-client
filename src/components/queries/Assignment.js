@@ -25,3 +25,17 @@ export const CREATE_ASSIGNMENTS = gql`
     }
   }
 `;
+
+export const GET_CLASS_ASSIGNMENTS = gql`
+  query getClassASsignments($periodId: ID!) {
+    periodAssignments(periodId: $periodId) {
+      id
+      instructions
+      due
+      deck {
+        name
+        description
+      }
+    }
+  }
+`;
