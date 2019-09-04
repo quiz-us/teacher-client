@@ -9,13 +9,12 @@ import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
 
 const defaultIndex = location => {
-  const tabIndex = {
-    assignments: 1
-  };
   const routeComponents = location.pathname.split('/');
-  const lastI = routeComponents.length - 1;
-  const routeEnd = routeComponents[lastI];
-  return tabIndex[routeEnd] || 0;
+  let tabIndex = 0;
+  if (routeComponents.some(component => component === 'assignments')) {
+    tabIndex = 1;
+  }
+  return tabIndex;
 };
 
 const useStyles = makeStyles(theme => ({
