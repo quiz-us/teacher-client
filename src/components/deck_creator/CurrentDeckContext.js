@@ -14,6 +14,8 @@ let reducer = (currentDeck, action) => {
     case 'removeFromCurrent':
       const { [id]: _, ...updatedCurrentDeck } = currentDeck;
       return updatedCurrentDeck;
+    // case 'removeQuestion': 
+    //   console.log("currentDeckContext: action", action)
     default:
       return;
   }

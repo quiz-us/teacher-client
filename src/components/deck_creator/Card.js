@@ -1,17 +1,32 @@
 import React, { useState, useContext } from 'react';
+import gql from 'graphql-tag';
+
 import Card from '@material-ui/core/Card';
-import { ReadOnly } from '../editor';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/styles';
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
-import { makeStyles } from '@material-ui/styles';
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+
+import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
+import { useMutation } from "@apollo/react-hooks";
+
+const DELETE_QUESTION = gql`
+  mutation deleteQuestion($questionId: ID!){
+    deleteQuestion(questionId: $questionId){
+      id
+    } 
+  }
+`;
 
 const useStyles = makeStyles({
   root: {
@@ -84,6 +99,14 @@ const DeckCard = ({ card, removable = null }) => {
   const [standard] = standards;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
+
+  const [deleteQuestion] = useMutation(DELETE_QUESTION, {
+    onCompleted: ({ deleteQuestion: { id }}) => {
+      dispatch({ type: "removeFromCurrent", id });
+    }
+  });
+
+
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
   const updateCurrentDeck = () => {
     if (currentDeck[id]) {
@@ -96,6 +119,14 @@ const DeckCard = ({ card, removable = null }) => {
   const removeFromCurrentDeck = () => {
     dispatch({ type: 'removeFromCurrent', id });
   };
+
+  const handleDeleteDb = id => {
+    deleteQuestion({
+      variables: {
+        questionId: id
+      }
+    })
+  }
 
   const controls = () => {
     if (removable) {
@@ -127,7 +158,10 @@ const DeckCard = ({ card, removable = null }) => {
           <h4>Question</h4>
           {controls()}
         </div>
+        <CreateIcon onClick={() => alert("delete")} />
+        <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
         <ReadOnly value={JSON.parse(richText)} />
+
         <div className={classes.details}>
           <strong>Standard:</strong>
           {` ${standard.title}`}
@@ -138,7 +172,7 @@ const DeckCard = ({ card, removable = null }) => {
         </div>
         <div className={classes.details}>
           <strong>Tags:</strong>
-          {` ${tags.map(({ name }) => name).join(', ')}`}{' '}
+          {` ${tags.map(({ name }) => name).join(", ")}`}{" "}
         </div>
       </CardContent>
       <CardActions className={classes.actions}>
@@ -146,7 +180,7 @@ const DeckCard = ({ card, removable = null }) => {
           onClick={() => setExpanded(!expanded)}
           aria-label={actionText}
         >
-          <ExpandMoreIcon className={expanded ? classes.expandOpen : ''} />
+          <ExpandMoreIcon className={expanded ? classes.expandOpen : ""} />
         </IconButton>
       </CardActions>
 
