@@ -5,6 +5,7 @@ import { GET_PERIOD } from '../queries/Period';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
 import ClassAssignments from './ClassAssignments';
+import ClassMastery from './mastery/ClassMastery';
 import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
 
@@ -13,6 +14,8 @@ const defaultIndex = location => {
   let tabIndex = 0;
   if (routeComponents.some(component => component === 'assignments')) {
     tabIndex = 1;
+  } else if (routeComponents.some(component => component === 'mastery')) {
+    tabIndex = 2;
   }
   return tabIndex;
 };
@@ -50,6 +53,7 @@ const ClassShow = ({ match, location, history }) => {
           {/* NOTE: not using Link because UX is not ideal with Tab:*/}
           <Tab onClick={navigate(match.url)}>Roster</Tab>
           <Tab onClick={navigate(`${match.url}/assignments`)}>Assignments</Tab>
+          <Tab onClick={navigate(`${match.url}/mastery`)}>Mastery Data</Tab>
         </TabList>
 
         <TabPanel className={classes.panel}>
@@ -60,6 +64,9 @@ const ClassShow = ({ match, location, history }) => {
             path={`${match.path}/assignments`}
             component={ClassAssignments}
           />
+        </TabPanel>
+        <TabPanel className={classes.panel}>
+          <Route path={`${match.path}/mastery`} component={ClassMastery} />
         </TabPanel>
       </Tabs>
     </div>

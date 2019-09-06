@@ -26,3 +26,15 @@ export const CREATE_PERIOD = gql`
     }
   }
 `;
+
+export const GET_PERIOD_MASTERY = gql`
+  query getPeriodMastery($periodId: ID!) {
+    periodStandardsMastery(periodId: $periodId) {
+      standard {
+        title
+        id
+      }
+      studentPerformance
+    }
+  }
+`;
