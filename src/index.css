@@ -29,3 +29,8 @@ a {
   color: blue;
   text-decoration: underline;
 }
+
+.results-table td:nth-child(2) {
+  position: sticky;
+  position: -webkit-sticky;
+}

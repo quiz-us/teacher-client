@@ -121,7 +121,7 @@ const AssignmentResults = ({ match }) => {
     top: 0
   });
   return (
-    <div>
+    <div className="results-table">
       <MaterialTable
         icons={tableIcons}
         columns={columns}
