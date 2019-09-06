@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useQuery } from '@apollo/react-hooks';
+import { prefix } from 'inline-style-prefixer';
 import {
   GET_ASSIGNMENT_RESULTS,
   GET_ASSIGNMENT
@@ -15,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   expandedContainer: {
     margin: '20px',
     overflow: 'scroll',
-    height: '150px',
+    height: '180px',
     padding: '20px'
   },
   expandedRow: {
@@ -27,22 +28,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const generateColumns = data => {
+  const cellStyle = prefix({
+    backgroundColor: '#039be5',
+    color: '#FFF',
+    position: 'sticky',
+    left: 0
+  });
+  const headerStyle = prefix({
+    backgroundColor: '#039be5',
+    position: 'sticky',
+    left: 0,
+    zIndex: 11
+  });
   const columns = [
     {
       title: 'Student',
       field: 'fullname',
-      cellStyle: {
-        backgroundColor: '#039be5',
-        color: '#FFF',
-        position: 'sticky',
-        left: 0
-      },
-      headerStyle: {
-        backgroundColor: '#039be5',
-        position: 'sticky',
-        left: 0,
-        zIndex: 11
-      }
+      cellStyle,
+      headerStyle
     }
   ];
   if (!data.teacherAssignment) {
@@ -111,6 +114,12 @@ const AssignmentResults = ({ match }) => {
   }
   const { teacherAssignment = { deck: {} } } = assignmentData;
   const name = teacherAssignment.deck.name || '';
+  const headerStyle = prefix({
+    backgroundColor: '#01579b',
+    color: '#FFF',
+    position: 'sticky',
+    top: 0
+  });
   return (
     <div>
       <MaterialTable
@@ -134,7 +143,6 @@ const AssignmentResults = ({ match }) => {
                   selfGrade,
                   questionId
                 } = question;
-                console.log(question);
                 let result;
                 if (questionType === 'Free Response') {
                   result = selfGrade;
@@ -156,12 +164,7 @@ const AssignmentResults = ({ match }) => {
           );
         }}
         options={{
-          headerStyle: {
-            backgroundColor: '#01579b',
-            color: '#FFF',
-            position: 'sticky',
-            top: 0
-          },
+          headerStyle,
           search: false,
           sorting: false
         }}

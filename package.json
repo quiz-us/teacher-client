@@ -16,6 +16,7 @@
     "graphql": "^14.4.2",
     "html2canvas": "^1.0.0-rc.3",
     "immutable": "^4.0.0-rc.12",
+    "inline-style-prefixer": "^5.1.0",
     "is-empty": "^1.2.0",
     "jspdf": "^1.5.3",
     "localforage": "^1.7.3",
