@@ -39,3 +39,26 @@ export const GET_CLASS_ASSIGNMENTS = gql`
     }
   }
 `;
+
+export const GET_ASSIGNMENT_RESULTS = gql`
+  query getAssignmentsResults($assignmentId: ID!) {
+    assignmentResults(assignmentId: $assignmentId) {
+      fullname
+      answer
+    }
+  }
+`;
+
+export const GET_ASSIGNMENT = gql`
+  query getAssignment($assignmentId: ID!) {
+    teacherAssignment(assignmentId: $assignmentId) {
+      deck {
+        name
+        questions {
+          id
+          questionText
+        }
+      }
+    }
+  }
+`;

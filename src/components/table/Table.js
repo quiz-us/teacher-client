@@ -10,6 +10,10 @@ import TableRow from '@material-ui/core/TableRow';
 const useStyles = makeStyles({
   noData: {
     padding: '20px'
+  },
+  tableContainer: {
+    width: '100%',
+    overflow: 'scroll'
   }
 });
 
@@ -25,47 +29,49 @@ function ReactTable({ columns, data }) {
 
   // Render the UI for your table
   return (
-    <Table {...getTableProps()} size="small">
-      <TableHead>
-        {headerGroups.map(headerGroup => (
-          <TableRow {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <TableCell {...column.getHeaderProps()}>
-                {column.render('Header')}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableHead>
-      <TableBody>
-        {rows.length ? (
-          rows.map(
-            (row, i) =>
-              prepareRow(row) || (
-                <TableRow {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return (
-                      <TableCell {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              )
-          )
-        ) : (
-          <TableRow className={classes.noData}>
-            {[...Array(numColumns)].map((_, i) => {
-              let content = '';
-              if (i === 0) {
-                content = 'No data yet!';
-              }
-              return <TableCell key={`tcell-${i}`}>{content}</TableCell>;
-            })}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className={classes.tableContainer}>
+      <Table {...getTableProps()} className={classes.table}>
+        <TableHead>
+          {headerGroups.map(headerGroup => (
+            <TableRow {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <TableCell {...column.getHeaderProps()}>
+                  {column.render('Header')}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody>
+          {rows.length ? (
+            rows.map(
+              (row, i) =>
+                prepareRow(row) || (
+                  <TableRow {...row.getRowProps()}>
+                    {row.cells.map(cell => {
+                      return (
+                        <TableCell {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                )
+            )
+          ) : (
+            <TableRow className={classes.noData}>
+              {[...Array(numColumns)].map((_, i) => {
+                let content = '';
+                if (i === 0) {
+                  content = 'No data yet!';
+                }
+                return <TableCell key={`tcell-${i}`}>{content}</TableCell>;
+              })}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
