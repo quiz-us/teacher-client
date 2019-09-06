@@ -43,7 +43,7 @@ export default ({ children, type }) => {
       <Card className={classes.formContainer}>
         <Header className={classes.header} headertext={headertext} />
         {children}
-        <LinkComponent className={classes.helpText} />
+        {/* <LinkComponent className={classes.helpText} /> */}
       </Card>
     </div>
   );

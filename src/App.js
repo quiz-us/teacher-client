@@ -29,7 +29,7 @@ function App() {
           <Nav />
           <Switch>
             <Route exact path="/login" component={LogIn} />
-            <Route exact path="/signup" component={SignUp} />
+            {/* <Route exact path="/signup" component={SignUp} /> */}
             <PrivateRoute path="/" component={MainRoutes} />
           </Switch>
         </MuiPickersUtilsProvider>
