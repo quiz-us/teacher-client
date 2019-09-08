@@ -8,6 +8,7 @@ import ClassAssignments from './ClassAssignments';
 import ClassMastery from './mastery/ClassMastery';
 import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
+import BadgeIndex from './BadgeIndex';
 
 const defaultIndex = location => {
   const routeComponents = location.pathname.split('/');
@@ -38,7 +39,6 @@ const ClassShow = ({ match, location, history }) => {
   if (classLoading) {
     return <GlobalLoader />;
   }
-
   const navigate = path => {
     return () => {
       history.push(path);
@@ -58,6 +58,7 @@ const ClassShow = ({ match, location, history }) => {
 
         <TabPanel className={classes.panel}>
           <Route exact path={`${match.path}`} component={ClassRoster} />
+          <Route exact path={`${match.path}/badges`} component={BadgeIndex} />
         </TabPanel>
         <TabPanel className={classes.panel}>
           <Route

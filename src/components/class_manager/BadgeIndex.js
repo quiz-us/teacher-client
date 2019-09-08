@@ -17,11 +17,13 @@ const useStyles = makeStyles({
   badgeIndex: {
     margin: '20px',
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    justifyContent: 'center'
   },
   badge: {
     border: '1px dashed black',
-    width: '30%',
+    height: '302px', // height that prevents badges from being cut off in pdf format
+    width: '33.33%',
     padding: '85px 10px 20px 10px',
     display: 'flex',
     flexDirection: 'column',

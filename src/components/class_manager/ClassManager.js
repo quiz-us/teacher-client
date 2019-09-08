@@ -11,7 +11,6 @@ import { Route } from 'react-router-dom';
 import { GET_PERIODS } from '../queries/Period';
 import { Link } from 'react-router-dom';
 import ClassShow from './ClassShow';
-import BadgeIndex from './BadgeIndex';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,6 +70,5 @@ export default ({ match }) => (
   <React.Fragment>
     <Route exact path="/class-manager" component={ClassManager} />
     <Route path={`${match.path}/:id`} component={ClassShow} />
-    <Route exact path={`${match.path}/:id/badges`} component={BadgeIndex} />
   </React.Fragment>
 );
