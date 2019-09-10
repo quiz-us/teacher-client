@@ -12,9 +12,11 @@ import jsPDF from 'jspdf';
 
 const useStyles = makeStyles({
   root: {
-    margin: '20px'
+    margin: '20px',
+    overflow: 'scroll'
   },
   badgeIndex: {
+    width: '1070px',
     margin: '20px',
     display: 'flex',
     flexWrap: 'wrap',
