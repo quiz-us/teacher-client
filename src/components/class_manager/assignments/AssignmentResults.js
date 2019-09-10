@@ -80,7 +80,9 @@ const generateData = data => {
     data.assignmentResults.forEach(({ fullname, answer }) => {
       const parsedAnswers = {};
       JSON.parse(answer).forEach(answer => {
-        parsedAnswers[answer.questionId] = answer;
+        if (!parsedAnswers[answer.questionId]) {
+          parsedAnswers[answer.questionId] = answer;
+        }
       });
       parsedData.push({
         fullname,
