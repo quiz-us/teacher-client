@@ -102,27 +102,21 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
-  const updateCache = (cache, { deleteQuestion: { id } }) => {
-    //how to key into the cache without readQuery
+  const removeQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
     const { questions } = cache.readQuery({
       query: GET_QUESTIONS,
       variables: {
         standardId: inputs.standardId,
         keyWords: inputs.keyWords
-        //emptyQuery? i assume we dont need it because we arent debouncing
       }
     });
     const updatedQuestions = questions.filter(question => question.id !== id);
-    // const immutableAssignment = Map(questions);
-    // // needs to be a deep clone in order to trigger parent UI update:
-    // const updatedAssignment = immutableAssignment.toObject();
-    // updatedAssignment.responses = updatedResponses;
+
     cache.writeQuery({
       query: GET_QUESTIONS,
       variables: {
         standardId: inputs.standardId,
         keyWords: inputs.keyWords
-        //emptyQuery? i assume we dont need it because we arent debouncing
       },
       data: { questions: updatedQuestions }
     });
@@ -132,8 +126,8 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
     onCompleted: ({ deleteQuestion: { id } }) => {
       dispatch({ type: 'removeFromCurrent', id });
     },
-    update: (cache, res) => {
-      updateCache(cache, res.data);
+    update: (cache, res) => { //needed to remove deleted question from search results
+      removeQuestionFromCache(cache, res.data);
     },
     onError: err => console.error(err)
   });
@@ -152,6 +146,9 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   };
 
   const handleDeleteDb = id => {
+    const confirmMessage = () => window.confirm('Are you sure you want to delete this question permanently?');
+    if (!confirmMessage()) return null;
+
     deleteQuestion({
       variables: {
         questionId: id
