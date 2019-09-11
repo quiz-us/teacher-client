@@ -14,17 +14,19 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import CreateIcon from '@material-ui/icons/Create';
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from '@apollo/react-hooks';
+
+import { GET_QUESTIONS } from './QuestionFilter';
 
 const DELETE_QUESTION = gql`
-  mutation deleteQuestion($questionId: ID!){
-    deleteQuestion(questionId: $questionId){
+  mutation deleteQuestion($questionId: ID!) {
+    deleteQuestion(questionId: $questionId) {
       id
-    } 
+    }
   }
 `;
 
@@ -70,9 +72,9 @@ const Answers = ({ questionOptions, classes }) => {
           <div className={classes.answerChoiceRow} key={`answerChoice-${id}`}>
             <span className={classes.correctnessIcon}>
               {correct ? (
-                <CheckIcon title="Correct Answer" />
+                <CheckIcon title='Correct Answer' />
               ) : (
-                <ClearIcon title="Incorrect Answer" />
+                <ClearIcon title='Incorrect Answer' />
               )}
             </span>
 
@@ -86,7 +88,7 @@ const Answers = ({ questionOptions, classes }) => {
   );
 };
 
-const DeckCard = ({ card, removable = null }) => {
+const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   const {
     id,
@@ -100,12 +102,41 @@ const DeckCard = ({ card, removable = null }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
-  const [deleteQuestion] = useMutation(DELETE_QUESTION, {
-    onCompleted: ({ deleteQuestion: { id }}) => {
-      dispatch({ type: "removeFromCurrent", id });
-    }
-  });
+  const updateCache = (cache, { deleteQuestion: { id } }) => {
+    //how to key into the cache without readQuery
+    const { questions } = cache.readQuery({
+      query: GET_QUESTIONS,
+      variables: {
+        standardId: inputs.standardId,
+        keyWords: inputs.keyWords
+        //emptyQuery? i assume we dont need it because we arent debouncing
+      }
+    });
+    const updatedQuestions = questions.filter(question => question.id !== id);
+    // const immutableAssignment = Map(questions);
+    // // needs to be a deep clone in order to trigger parent UI update:
+    // const updatedAssignment = immutableAssignment.toObject();
+    // updatedAssignment.responses = updatedResponses;
+    cache.writeQuery({
+      query: GET_QUESTIONS,
+      variables: {
+        standardId: inputs.standardId,
+        keyWords: inputs.keyWords
+        //emptyQuery? i assume we dont need it because we arent debouncing
+      },
+      data: { questions: updatedQuestions }
+    });
+  };
 
+  const [deleteQuestion] = useMutation(DELETE_QUESTION, {
+    onCompleted: ({ deleteQuestion: { id } }) => {
+      dispatch({ type: 'removeFromCurrent', id });
+    },
+    update: (cache, res) => {
+      updateCache(cache, res.data);
+    },
+    onError: err => console.error(err)
+  });
 
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
   const updateCurrentDeck = () => {
@@ -125,8 +156,8 @@ const DeckCard = ({ card, removable = null }) => {
       variables: {
         questionId: id
       }
-    })
-  }
+    });
+  };
 
   const controls = () => {
     if (removable) {
@@ -142,10 +173,10 @@ const DeckCard = ({ card, removable = null }) => {
           <Switch
             checked={inCurrentDeck}
             onChange={updateCurrentDeck}
-            color="primary"
+            color='primary'
           />
         }
-        label="In Current Deck"
+        label='In Current Deck'
       />
     );
   };
@@ -158,8 +189,12 @@ const DeckCard = ({ card, removable = null }) => {
           <h4>Question</h4>
           {controls()}
         </div>
-        <CreateIcon onClick={() => alert("delete")} />
-        <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
+        <CreateIcon onClick={() => alert('edit wip')} />
+        {deletable ? (
+          <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
+        ) : (
+          ''
+        )}
         <ReadOnly value={JSON.parse(richText)} />
 
         <div className={classes.details}>
@@ -172,7 +207,7 @@ const DeckCard = ({ card, removable = null }) => {
         </div>
         <div className={classes.details}>
           <strong>Tags:</strong>
-          {` ${tags.map(({ name }) => name).join(", ")}`}{" "}
+          {` ${tags.map(({ name }) => name).join(', ')}`}{' '}
         </div>
       </CardContent>
       <CardActions className={classes.actions}>
@@ -180,11 +215,11 @@ const DeckCard = ({ card, removable = null }) => {
           onClick={() => setExpanded(!expanded)}
           aria-label={actionText}
         >
-          <ExpandMoreIcon className={expanded ? classes.expandOpen : ""} />
+          <ExpandMoreIcon className={expanded ? classes.expandOpen : ''} />
         </IconButton>
       </CardActions>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent>
           <h4>Answer</h4>
           <Answers classes={classes} questionOptions={questionOptions} />
