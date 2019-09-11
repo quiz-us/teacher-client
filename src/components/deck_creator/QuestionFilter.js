@@ -1,44 +1,20 @@
 import React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import useForm from '../hooks/useForm';
+import { useLazyQuery } from '@apollo/react-hooks';
+
 import { makeStyles } from '@material-ui/styles';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import gql from 'graphql-tag';
-import { useLazyQuery } from '@apollo/react-hooks';
 import Card from '@material-ui/core/Card';
-import CustomCard from './Card';
 import CardContent from '@material-ui/core/CardContent';
 
-export const GET_QUESTIONS = gql`
-  query getQuestions($standardId: ID, $keyWords: String, $emptyQuery: Boolean) {
-    questions(
-      standardId: $standardId
-      keyWords: $keyWords
-      emptyQuery: $emptyQuery
-    ) {
-      questionText
-      questionType
-      richText
-      id
-      standards {
-        title
-      }
-      tags {
-        name
-      }
+import useForm from '../hooks/useForm';
+import CustomCard from './Card';
 
-      questionOptions {
-        richText
-        correct
-        id
-      }
-    }
-  }
-`;
+import { GET_QUESTIONS } from '../queries/Question'; 
 
 const useStyles = makeStyles({
   resultsContainer: {
