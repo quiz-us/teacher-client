@@ -13,7 +13,7 @@ import Card from '@material-ui/core/Card';
 import CustomCard from './Card';
 import CardContent from '@material-ui/core/CardContent';
 
-const GET_QUESTIONS = gql`
+export const GET_QUESTIONS = gql`
   query getQuestions($standardId: ID, $keyWords: String, $emptyQuery: Boolean) {
     questions(
       standardId: $standardId
@@ -130,7 +130,7 @@ const QuestionFilter = ({ allStandards }) => {
           ) : (
             questions.map(question => {
               return (
-                <CustomCard key={`search-${question.id}`} card={question} />
+                <CustomCard key={`search-${question.id}`} card={question} inputs={inputs} deletable/>
               );
             })
           )}
