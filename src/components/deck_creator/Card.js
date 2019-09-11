@@ -47,6 +47,15 @@ const useStyles = makeStyles({
     width: '100%',
     justifyContent: 'space-between'
   },
+  cardHeaderLeft: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  cardHeaderText: {
+    paddingRight: '10px',
+  },
   readOnly: {
     width: '100%'
   },
@@ -126,7 +135,8 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
     onCompleted: ({ deleteQuestion: { id } }) => {
       dispatch({ type: 'removeFromCurrent', id });
     },
-    update: (cache, res) => { //needed to remove deleted question from search results
+    update: (cache, res) => {
+      //needed to remove deleted question from search results
       removeQuestionFromCache(cache, res.data);
     },
     onError: err => console.error(err)
@@ -146,7 +156,10 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   };
 
   const handleDeleteDb = id => {
-    const confirmMessage = () => window.confirm('Are you sure you want to delete this question permanently?');
+    const confirmMessage = () =>
+      window.confirm(
+        'Are you sure you want to delete this question permanently?'
+      );
     if (!confirmMessage()) return null;
 
     deleteQuestion({
@@ -183,15 +196,19 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
     <Card className={classes.root}>
       <CardContent>
         <div className={classes.cardHeader}>
-          <h4>Question</h4>
+          <div className={classes.cardHeaderLeft}>
+            <h4 className={classes.cardHeaderText}>Question</h4>
+            <div>
+              <CreateIcon onClick={() => alert('edit wip')} />
+              {deletable ? (
+                <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
+              ) : (
+                ''
+              )}
+            </div>
+          </div>
           {controls()}
         </div>
-        <CreateIcon onClick={() => alert('edit wip')} />
-        {deletable ? (
-          <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
-        ) : (
-          ''
-        )}
         <ReadOnly value={JSON.parse(richText)} />
 
         <div className={classes.details}>
