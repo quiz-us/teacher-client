@@ -1,51 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import { Redirect } from 'react-router-dom';
+import { useMutation } from '@apollo/react-hooks';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import { makeStyles } from '@material-ui/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles } from '@material-ui/styles';
+
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
 import parseError from '../../util/parseError';
 
-const CREATE_DECK = gql`
-  mutation createDeck(
-    $questionIds: [ID!]!
-    $name: String!
-    $description: String
-  ) {
-    createDeck(
-      questionIds: $questionIds
-      name: $name
-      description: $description
-    ) {
-      name
-    }
-  }
-`;
-
-const UPDATE_DECK = gql`
-  mutation updateDeck(
-    $deckId: ID!
-    $questionIds: [ID!]!
-    $name: String!
-    $description: String
-  ) {
-    updateDeck(
-      deckId: $deckId
-      questionIds: $questionIds
-      name: $name
-      description: $description
-    ) {
-      name
-    }
-  }
-`;
+import { CREATE_DECK, UPDATE_DECK } from '../queries/Deck';
 
 const useStyles = makeStyles({
   errorMessage: {

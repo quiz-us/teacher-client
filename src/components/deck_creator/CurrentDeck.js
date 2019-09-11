@@ -1,19 +1,20 @@
 import React, { useContext, useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import Confirmation from './Confirmation';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/styles';
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import Drawer from '@material-ui/core/Drawer';
-import { CurrentDeckContext } from './CurrentDeckContext';
-import CardsContainer from './CardsContainer';
 import Divider from '@material-ui/core/Divider';
 import Hidden from '@material-ui/core/Hidden';
 import Badge from '@material-ui/core/Badge';
 import blueGrey from '@material-ui/core/colors/blueGrey';
+import Drawer from '@material-ui/core/Drawer';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from '@material-ui/styles';
+
+import Confirmation from './Confirmation';
+import { CurrentDeckContext } from './CurrentDeckContext';
+import CardsContainer from './CardsContainer';
+import { GET_DECK, DELETE_DECK } from '../queries/Deck';
 
 const useStyles = makeStyles(theme => ({
   currentDeckContainer: {
@@ -51,40 +52,6 @@ const useStyles = makeStyles(theme => ({
     right: 12
   }
 }));
-
-const GET_DECK = gql`
-  query getDeck($id: ID!) {
-    deck(id: $id) {
-      name
-      description
-      id
-      questions {
-        id
-        questionType
-        standards {
-          title
-        }
-        richText
-        tags {
-          name
-        }
-        questionOptions {
-          richText
-          correct
-          id
-        }
-      }
-    }
-  }
-`;
-
-const DELETE_DECK = gql`
-  mutation deleteDeck($deckId: ID!) {
-    deleteDeck(deckId: $deckId) {
-      name
-    }
-  }
-`;
 
 // if a CurrentDeck has a deckId, then it means that the current deck is being
 // edited. If it does not, it means it's being created:

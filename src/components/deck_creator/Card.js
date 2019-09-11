@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,17 +18,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
-import { useMutation } from '@apollo/react-hooks';
 
-import { GET_QUESTIONS } from './QuestionFilter';
-
-const DELETE_QUESTION = gql`
-  mutation deleteQuestion($questionId: ID!) {
-    deleteQuestion(questionId: $questionId) {
-      id
-    }
-  }
-`;
+import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
 
 const useStyles = makeStyles({
   root: {
