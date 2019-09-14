@@ -18,6 +18,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
+import EditForm from './QuestionForm/components/EditForm';
 
 import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
 
@@ -101,6 +102,8 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   const [standard] = standards;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
+  const [open, setOpen] = useState(false);
+
 
   const removeQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
     const { questions } = cache.readQuery({
@@ -190,7 +193,7 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           <div className={classes.cardHeaderLeft}>
             <h4 className={classes.cardHeaderText}>Question</h4>
             <div>
-              <CreateIcon onClick={() => alert('edit wip')} />
+              <CreateIcon onClick={() => setOpen(true)} />
               {deletable ? (
                 <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
               ) : (
@@ -230,6 +233,7 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           <Answers classes={classes} questionOptions={questionOptions} />
         </CardContent>
       </Collapse>
+      <EditForm open={open} setOpen={setOpen} questionId={id}/>
     </Card>
   );
 };
