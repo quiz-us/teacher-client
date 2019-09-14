@@ -1,8 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { withApollo } from 'react-apollo';
-import { defaultDataIdFromObject } from 'apollo-cache-inmemory';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -19,7 +17,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { CurrentDeckContext } from '../../CurrentDeckContext';
-import { QuestionFormContext } from '../../QuestionForm/components/QuestionFormContext';
+import {
+  QuestionFormProvider,
+  QuestionFormContext
+} from './QuestionFormContext';
+
 // import CardsContainer from './CardsContainer';
 // import parseError from '../../util/parseError';
 
@@ -72,39 +74,25 @@ const useSelectStyles = makeStyles({
 
 // if deck is passed in as a prop, it means a deck already existed and that this
 // is an update call:
-const EditForm = ({ client, open, setOpen, questionId }) => {
-  // console.log(questionId);
-  // const { data } = useQuery(GET_QUESTION, {
-  //   variables: {
-  //     id: questionId
-  //   }
-  // });
-  // console.log(data);
 
-  // const isUpdate = deck.name !== undefined;
-  // const classes = useStyles();
-  if (open) {
-    // const cacheData = client.readQuery({
-    //   query: GET_QUESTION,
-    //   variables: {
-    //     id: questionId
-    //   }
-    // });
-    // console.log("cachedata", cacheData);
-    // const question = {
-    //   __typename: 'question',
-    //   id: questionId
-    // };
-    // const data = defaultDataIdFromObject(question);
-    // console.log("data", data);
-  }
-
+const EditForm = ({
+  open,
+  setOpen,
+  questionId,
+  questionType,
+  richText,
+  standards,
+  tags,
+  questionOptions
+}) => {
   const { state, dispatch } = useContext(QuestionFormContext);
+  // dispatch({ type: 'update', questionType });
+  console.log(state, dispatch);
 
-  const { currentDeck } = useContext(CurrentDeckContext);
-  const [deckName, setDeckName] = useState('');
-  const [deckDescription, setDeckDescription] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  // const { currentDeck } = useContext(CurrentDeckContext);
+  // const [deckName, setDeckName] = useState('');
+  // const [deckDescription, setDeckDescription] = useState('');
+  // const [errorMessage, setErrorMessage] = useState('');
   // const [
   //   createDeck,
   //   { loading: createLoading, data: createData = {}, error: createError }
@@ -272,4 +260,4 @@ const EditForm = ({ client, open, setOpen, questionId }) => {
   );
 };
 
-export default withApollo(EditForm);
+export default EditForm;
