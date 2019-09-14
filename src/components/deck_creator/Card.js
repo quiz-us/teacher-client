@@ -19,6 +19,10 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import EditForm from './QuestionForm/components/EditForm';
+import {
+  QuestionFormProvider,
+  QuestionFormContext
+} from './QuestionForm/components/QuestionFormContext';
 
 import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
 
@@ -233,7 +237,22 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           <Answers classes={classes} questionOptions={questionOptions} />
         </CardContent>
       </Collapse>
-      <EditForm open={open} setOpen={setOpen} questionId={id}/>
+      {open === true ? (
+            <QuestionFormProvider>
+
+        <EditForm
+          open={open}
+          setOpen={setOpen}
+          questionId={id}
+          questionType={questionType}
+          richText={richText}
+          standards={standards}
+          tags={tags}
+          questionOptions={questionOptions}
+        />
+          </QuestionFormProvider>
+      ) : null }
+
     </Card>
   );
 };
