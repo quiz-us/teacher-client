@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
@@ -22,6 +21,8 @@ import { QuestionFormContext, generateRandomId } from './QuestionFormContext';
 import { CurrentDeckContext } from '../../CurrentDeckContext';
 import QuestionAndAnswers from './QuestionAndAnswers';
 import decamelize from '../../../util/decamelize';
+
+import { CREATE_QUESTION } from '../../../queries/Question';
 
 const useStyles = makeStyles({
   form: {
@@ -60,48 +61,6 @@ const useSelectStyles = makeStyles({
     }
   }
 });
-
-const CREATE_QUESTION = gql`
-  mutation createQuestion(
-    $questionType: String!
-    $standardId: ID
-    $tags: [String!]
-    $richText: String!
-    $questionPlaintext: String!
-    $questionOptions: [String!]
-  ) {
-    createQuestion(
-      questionType: $questionType
-      standardId: $standardId
-      tags: $tags
-      richText: $richText
-      questionPlaintext: $questionPlaintext
-      questionOptions: $questionOptions
-    ) {
-      id
-      richText
-      questionType
-      standards {
-        title
-      }
-      questionOptions {
-        id
-        question {
-          id
-        }
-        questionId
-        correct
-        richText
-        optionText
-      }
-      questionText
-      tags {
-        id
-        name
-      }
-    }
-  }
-`;
 
 const questionTypes = ['Free Response', 'Multiple Choice'];
 
