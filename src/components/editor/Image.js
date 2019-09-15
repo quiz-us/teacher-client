@@ -7,14 +7,17 @@ const Image = ({ node, attributes }) => {
 
   const load = (file) => {
     const reader = new FileReader()
-    reader.addEventListener('load', () => setSrc(reader.result));
+    reader.addEventListener('load', () => {
+      setSrc(reader.result);
+    });
     reader.readAsDataURL(file)
   }
   useEffect(() => {
     const { data } = node
     const file = data.get('file')
     load(file)
-  }, [node]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return src ? (
     // alt should be passed in through attributes:
