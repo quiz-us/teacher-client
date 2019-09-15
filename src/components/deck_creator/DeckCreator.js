@@ -1,6 +1,5 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
 import { makeStyles } from '@material-ui/styles';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -9,16 +8,8 @@ import { CurrentDeckProvider } from './CurrentDeckContext';
 import QuestionFilter from './QuestionFilter';
 import CurrentDeck from './CurrentDeck';
 import QuestionForm from './QuestionForm';
+import { GET_STANDARDS } from '../queries/Standard';
 
-const GET_STANDARDS = gql`
-  {
-    allStandards {
-      title
-      description
-      id
-    }
-  }
-`;
 
 const useStyles = makeStyles(theme => ({
   root: {
