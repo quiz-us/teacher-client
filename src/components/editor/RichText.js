@@ -10,7 +10,7 @@ import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import CodeIcon from '@material-ui/icons/Code';
-import InsertImages from 'slate-drop-or-paste-images'
+import InsertImages from 'slate-drop-or-paste-images';
 import React from 'react';
 import { isKeyHotkey } from 'is-hotkey';
 import Image from './Image';
@@ -33,14 +33,14 @@ const schema = {
           return null;
         }
       }
-    },
+    }
   },
   blocks: {
     image: {
-      isVoid: true,
-    },
-  },
-}
+      isVoid: true
+    }
+  }
+};
 
 const plugins = [
   InsertImages({
@@ -49,10 +49,10 @@ const plugins = [
         type: 'image',
         isVoid: true,
         data: { file }
-      })
+      });
     }
   })
-]
+];
 
 /**
  * Define the default node type.
@@ -187,13 +187,11 @@ class RichTextEditor extends React.Component {
   }
 
   renderBlock = (props, editor, next) => {
-    const { attributes, children, node} = props;
+    const { attributes, children, node } = props;
 
     switch (node.type) {
       case 'image': {
-        return (
-          <Image {...props} />
-        )
+        return <Image {...props} editor={editor} />;
       }
       case 'block-quote':
         return <blockquote {...attributes}>{children}</blockquote>;

@@ -72,11 +72,11 @@ const QuestionAndAnswers = ({ classes }) => {
     return e => {
       const { checked } = e.target;
       let updated = [...answers];
-      updated[index].isCorrect = checked;
+      updated[index].correct = checked;
       if (checked) {
         updated = updated.map((answer, i) => {
           if (i !== index) {
-            answer.isCorrect = false;
+            answer.correct = false;
           }
           return answer;
         });
@@ -89,7 +89,7 @@ const QuestionAndAnswers = ({ classes }) => {
     if (questionType === 'Multiple Choice') {
       return (
         <React.Fragment>
-          {answers.map(({ value, answerId, isCorrect }, i) => {
+          {answers.map(({ value, answerId, correct }, i) => {
             if (i > 25) {
               throw Error(
                 "You've added more answer choices than the allowed amount of 26!"
@@ -104,7 +104,7 @@ const QuestionAndAnswers = ({ classes }) => {
                     control={
                       <Checkbox
                         onChange={handleCorrectAnswer(i)}
-                        checked={isCorrect}
+                        checked={correct}
                         value={i}
                         color="primary"
                       />

@@ -126,10 +126,10 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         questionType: formData['questionType'],
         standardId: formData['standardId'],
         tags: formData['tags'],
-        richText: JSON.stringify(formData['question'], 2),
+        richText: JSON.stringify(formData['question'].toJSON()),
         questionPlaintext: formData['questionText'],
         questionOptions: formData['answers'].map(answer =>
-          JSON.stringify(answer, 2)
+          JSON.stringify(answer)
         )
       }
     });
@@ -175,10 +175,10 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       return 'Multiple Choice questions should have more than 1 answer choice!';
     }
     for (let i = 0; i < answers.length; i += 1) {
-      const answer = answers[i].value;
-      const answerText = Plain.serialize(answer);
+      const option = answers[i].value;
+      const optionText = Plain.serialize(option);
 
-      if (empty(answerText)) {
+      if (empty(optionText)) {
         return 'Please make sure there are no empty answer(s)!';
       }
     }
@@ -216,7 +216,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         answers: answers.map(answer => {
           return {
             ...answer,
-            answerText: Plain.serialize(answer.value)
+            optionText: Plain.serialize(answer.value)
           };
         })
       };
