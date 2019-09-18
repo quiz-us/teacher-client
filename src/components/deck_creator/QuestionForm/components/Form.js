@@ -175,7 +175,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       return 'Multiple Choice questions should have more than 1 answer choice!';
     }
     for (let i = 0; i < answers.length; i += 1) {
-      const option = answers[i].value;
+      const option = answers[i].richText;
       const optionText = Plain.serialize(option);
 
       if (empty(optionText)) {
@@ -216,7 +216,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         answers: answers.map(answer => {
           return {
             ...answer,
-            optionText: Plain.serialize(answer.value)
+            optionText: Plain.serialize(answer.richText)
           };
         })
       };
