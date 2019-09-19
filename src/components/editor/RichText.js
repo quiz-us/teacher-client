@@ -22,15 +22,16 @@ import styles from './EditorStyles';
 
 const schema = {
   document: {
-    last: { type: 'paragraph' },
+    last: { type: 'line' },
     normalize: (editor, { code, node }) => {
       switch (code) {
         case 'last_child_type_invalid': {
-          const paragraph = Block.create('paragraph');
-          return editor.insertNodeByKey(node.key, node.nodes.size, paragraph);
+          const line = Block.create('line');
+
+          return editor.insertNodeByKey(node.key, node.nodes.size, line);
         }
         default: {
-          return null;
+          return editor;
         }
       }
     }
