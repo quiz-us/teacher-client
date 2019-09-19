@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
@@ -42,6 +43,9 @@ const useStyles = makeStyles({
   },
   submitButton: {
     width: '40%',
+    margin: '0 auto'
+  },
+  loaderContainer: {
     margin: '0 auto'
   }
 });
@@ -105,7 +109,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
 
-  const [create_question] = useMutation(CREATE_QUESTION, {
+  const [create_question, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: ({ createQuestion }) => {
       currentDeckDispatch({
         type: 'addToCurrent',
@@ -281,15 +285,21 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
           <TagsForm fetchTags={fetchTags} />
         </FormControl>
         <QuestionAndAnswers classes={classes} key={questionAnswerId} />
-        <Button
-          className={classes.submitButton}
-          type="submit"
-          variant="contained"
-          color="primary"
-          data-testid="submit-button"
-        >
-          Submit
-        </Button>
+        {loading ? (
+          <div className={classes.loaderContainer}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <Button
+            className={classes.submitButton}
+            type="submit"
+            variant="contained"
+            color="primary"
+            data-testid="submit-button"
+          >
+            Submit
+          </Button>
+        )}
       </form>
       <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
         <DialogTitle>{errorMessage}</DialogTitle>
