@@ -3,9 +3,9 @@ import crypto from 'crypto';
 
 const generateRandomId = () => crypto.randomBytes(20).toString('hex');
 
-const defaultAnswer = (isCorrect = false) => ({
-  value: undefined,
-  isCorrect,
+const defaultAnswer = (correct = false) => ({
+  richText: undefined,
+  correct,
   answerId: generateRandomId()
 });
 

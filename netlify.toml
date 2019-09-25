@@ -1,0 +1,15 @@
+  
+[build]
+  command = "npm run build"
+  publish = "build/"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production.environment]
+  REACT_APP_SERVER = "https://quiz-us.herokuapp.com/graphql"
+
+[context.staging.environment]
+  REACT_APP_SERVER = "https://quiz-us-staging.herokuapp.com/graphql"

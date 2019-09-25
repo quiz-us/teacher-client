@@ -31,6 +31,9 @@ class ReadOnly extends React.Component {
     const { attributes, children, node } = props;
 
     switch (node.type) {
+      case 'image': {
+        return <img {...attributes} src={node.data.get('file')} />;
+      }
       case 'block-quote':
         return <blockquote {...attributes}>{children}</blockquote>;
       case 'bulleted-list':
