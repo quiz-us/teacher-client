@@ -47,7 +47,7 @@ const QuestionAndAnswers = ({ classes }) => {
   const updateAllAnswers = index => {
     return updatedVal => {
       const updated = [...answers];
-      updated[index].value = updatedVal;
+      updated[index].richText = updatedVal;
       updateAnswers(updated);
     };
   };
@@ -72,11 +72,11 @@ const QuestionAndAnswers = ({ classes }) => {
     return e => {
       const { checked } = e.target;
       let updated = [...answers];
-      updated[index].isCorrect = checked;
+      updated[index].correct = checked;
       if (checked) {
         updated = updated.map((answer, i) => {
           if (i !== index) {
-            answer.isCorrect = false;
+            answer.correct = false;
           }
           return answer;
         });
@@ -89,7 +89,7 @@ const QuestionAndAnswers = ({ classes }) => {
     if (questionType === 'Multiple Choice') {
       return (
         <React.Fragment>
-          {answers.map(({ value, answerId, isCorrect }, i) => {
+          {answers.map(({ richText, answerId, correct }, i) => {
             if (i > 25) {
               throw Error(
                 "You've added more answer choices than the allowed amount of 26!"
@@ -104,7 +104,7 @@ const QuestionAndAnswers = ({ classes }) => {
                     control={
                       <Checkbox
                         onChange={handleCorrectAnswer(i)}
-                        checked={isCorrect}
+                        checked={correct}
                         value={i}
                         color="primary"
                       />
@@ -120,7 +120,7 @@ const QuestionAndAnswers = ({ classes }) => {
                   </IconButton>
                 </div>
                 <RichTextEditor
-                  initialValue={value}
+                  initialValue={richText}
                   updateParentState={updateAllAnswers(i)}
                   key={answerId} // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
                 />
@@ -138,11 +138,11 @@ const QuestionAndAnswers = ({ classes }) => {
         </React.Fragment>
       );
     }
-    return answers.map(({ value, answerId }, i) => {
+    return answers.map(({ richText, answerId }, i) => {
       return (
         <RichTextEditor
           key={answerId}
-          initialValue={value}
+          initialValue={richText}
           updateParentState={updateAllAnswers(i)}
         />
       );

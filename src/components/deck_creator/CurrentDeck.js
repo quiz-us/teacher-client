@@ -21,7 +21,10 @@ const useStyles = makeStyles(theme => ({
     width: '40%'
   },
   submitButton: {
-    height: '40px'
+    height: '40px',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%'
   },
   drawer: {
     width: '70%',

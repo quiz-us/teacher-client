@@ -8,7 +8,16 @@
         captureUnhandledRejections: true,
         enabled: '%NODE_ENV%' !== 'development',
         payload: {
-          environment: 'production'
+          environment: 'production',
+          client: {
+            javascript: {
+              source_map_enabled: true,
+              code_version: '0.0.0',
+              // Optionally have Rollbar guess which frames the error was thrown from
+              // when the browser does not provide line and column numbers.
+              guess_uncaught_frames: true
+            }
+          }
         }
       };
       // Rollbar Snippet

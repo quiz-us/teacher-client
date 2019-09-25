@@ -20,6 +20,12 @@ export default {
     '& code': {
       backgroundColor: '#eee',
       padding: '3px'
+    },
+
+    '& img': {
+      display: 'block',
+      maxWidth: '100%',
+      maxHeight: '20em',
     }
   },
   editor: {
@@ -29,5 +35,5 @@ export default {
   },
   icon: {
     width: '.8em'
-  }
+  },
 };

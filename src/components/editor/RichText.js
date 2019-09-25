@@ -1,6 +1,6 @@
 // heavily based on: https://github.com/ianstormtaylor/slate/tree/master/examples/rich-text
 import { Editor } from 'slate-react';
-import { Value } from 'slate';
+import { Value, Block } from 'slate';
 import LooksOneIcon from '@material-ui/icons/LooksOne';
 import LooksTwoIcon from '@material-ui/icons/LooksTwo';
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
@@ -10,13 +10,50 @@ import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import CodeIcon from '@material-ui/icons/Code';
+import InsertImages from 'slate-drop-or-paste-images';
 import React from 'react';
 import { isKeyHotkey } from 'is-hotkey';
+import Image from './Image';
 import { Button, Toolbar } from './Components';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Plain from 'slate-plain-serializer';
 import styles from './EditorStyles';
+
+const schema = {
+  document: {
+    last: { type: 'line' },
+    normalize: (editor, { code, node }) => {
+      switch (code) {
+        case 'last_child_type_invalid': {
+          const line = Block.create('line');
+
+          return editor.insertNodeByKey(node.key, node.nodes.size, line);
+        }
+        default: {
+          return editor;
+        }
+      }
+    }
+  },
+  blocks: {
+    image: {
+      isVoid: true
+    }
+  }
+};
+
+const plugins = [
+  InsertImages({
+    insertImage: (change, file) => {
+      return change.insertBlock({
+        type: 'image',
+        isVoid: true,
+        data: { file }
+      });
+    }
+  })
+];
 
 /**
  * Define the default node type.
@@ -134,6 +171,8 @@ class RichTextEditor extends React.Component {
           )}
         </Toolbar>
         <Editor
+          plugins={plugins}
+          schema={schema}
           className={classes.editor}
           spellCheck
           placeholder={placeholder}
@@ -152,6 +191,9 @@ class RichTextEditor extends React.Component {
     const { attributes, children, node } = props;
 
     switch (node.type) {
+      case 'image': {
+        return <Image {...props} editor={editor} />;
+      }
       case 'block-quote':
         return <blockquote {...attributes}>{children}</blockquote>;
       case 'bulleted-list':

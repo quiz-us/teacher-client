@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
@@ -42,6 +43,9 @@ const useStyles = makeStyles({
   },
   submitButton: {
     width: '40%',
+    margin: '0 auto'
+  },
+  loaderContainer: {
     margin: '0 auto'
   }
 });
@@ -105,7 +109,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
 
-  const [create_question] = useMutation(CREATE_QUESTION, {
+  const [create_question, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: ({ createQuestion }) => {
       currentDeckDispatch({
         type: 'addToCurrent',
@@ -126,10 +130,10 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         questionType: formData['questionType'],
         standardId: formData['standardId'],
         tags: formData['tags'],
-        richText: JSON.stringify(formData['question'], 2),
+        richText: JSON.stringify(formData['question'].toJSON()),
         questionPlaintext: formData['questionText'],
         questionOptions: formData['answers'].map(answer =>
-          JSON.stringify(answer, 2)
+          JSON.stringify(answer)
         )
       }
     });
@@ -175,10 +179,10 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       return 'Multiple Choice questions should have more than 1 answer choice!';
     }
     for (let i = 0; i < answers.length; i += 1) {
-      const answer = answers[i].value;
-      const answerText = Plain.serialize(answer);
+      const option = answers[i].richText;
+      const optionText = Plain.serialize(option);
 
-      if (empty(answerText)) {
+      if (empty(optionText)) {
         return 'Please make sure there are no empty answer(s)!';
       }
     }
@@ -216,7 +220,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         answers: answers.map(answer => {
           return {
             ...answer,
-            answerText: Plain.serialize(answer.value)
+            optionText: Plain.serialize(answer.richText)
           };
         })
       };
@@ -281,15 +285,21 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
           <TagsForm fetchTags={fetchTags} />
         </FormControl>
         <QuestionAndAnswers classes={classes} key={questionAnswerId} />
-        <Button
-          className={classes.submitButton}
-          type="submit"
-          variant="contained"
-          color="primary"
-          data-testid="submit-button"
-        >
-          Submit
-        </Button>
+        {loading ? (
+          <div className={classes.loaderContainer}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <Button
+            className={classes.submitButton}
+            type="submit"
+            variant="contained"
+            color="primary"
+            data-testid="submit-button"
+          >
+            Submit
+          </Button>
+        )}
       </form>
       <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
         <DialogTitle>{errorMessage}</DialogTitle>
