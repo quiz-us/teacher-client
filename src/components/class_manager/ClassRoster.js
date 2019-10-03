@@ -33,11 +33,12 @@ const ClassRoster = ({ match }) => {
   const { data, loading } = useQuery(GET_STUDENTS, {
     variables: { periodId: params.id }
   });
-  const { students } = data;
 
   if (loading) {
     return <GlobalLoader />;
   }
+
+  const { students } = data;
   return (
     <div className={classes.root}>
       <h3>

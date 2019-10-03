@@ -33,13 +33,13 @@ const Period = ({ name, id }) => {
 
 const ClassManager = () => {
   const { data, loading } = useQuery(GET_PERIODS);
-  const { periods } = data;
   const classes = useStyles();
-  const numClasses = periods ? periods.length : 0;
 
   if (loading) {
     return <GlobalLoader />;
   }
+  const { periods } = data;
+  const numClasses = periods ? periods.length : 0;
 
   return (
     <div className={classes.root}>
