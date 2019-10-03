@@ -47,7 +47,11 @@ const ClassShow = ({ match, location, history }) => {
 
   return (
     <div className={classes.root}>
-      <h1>{classData.period.name}</h1>
+      <div>
+        <h1>{classData.period.name}</h1>
+        <button>Edit</button>
+        <button>Delete</button>
+      </div>
       <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
           {/* NOTE: not using Link because UX is not ideal with Tab:*/}
