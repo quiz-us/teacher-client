@@ -90,7 +90,7 @@ class RichTextEditor extends React.Component {
    */
 
   state = {
-    value: Value.fromJSON(this.props.initialValue)
+    value: Value.fromJSON(this.props.initialValue),
   };
 
   /**
@@ -102,6 +102,7 @@ class RichTextEditor extends React.Component {
 
   hasMark = type => {
     const { value } = this.state;
+    console.log('richtext hasMark:', value, Plain.serialize(value));
     return value.activeMarks.some(mark => mark.type === type);
   };
 

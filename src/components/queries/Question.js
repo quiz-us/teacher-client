@@ -8,15 +8,17 @@ export const GET_QUESTION = gql`
       questionText
       richText
       standards {
+        id
         title
       }
       tags {
+        id
         name
       }
       questionOptions {
-        richText
-        correct
         id
+        correct
+        richText
       }
     }
   }

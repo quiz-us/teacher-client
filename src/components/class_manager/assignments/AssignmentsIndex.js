@@ -13,7 +13,7 @@ const generateColumns = match => [
     accessor: 'deck.name',
     Cell: ({ cell: { value, row } }) => {
       const assignmentId = row.original.id;
-      console.log(match.url);
+      // console.log(match.url);
       return (
         <div>
           <Link className="link" to={`${match.url}/${assignmentId}`}>
