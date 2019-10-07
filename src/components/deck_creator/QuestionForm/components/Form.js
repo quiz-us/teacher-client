@@ -241,6 +241,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         <FormControl
           className={`${classes.formControl} ${classes.wideFormControl}`}
         >
+          {/* <TagsForm /> */}
           <TagsForm fetchTags={fetchTags} />
         </FormControl>
         <QuestionAndAnswers classes={classes} key={questionAnswerId} />

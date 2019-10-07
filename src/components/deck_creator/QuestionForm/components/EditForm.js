@@ -1,6 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+// import { Value, Document } from 'slate';
+
+// import Plain from 'slate-plain-serializer';
+// import { Document } from 'slate';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -16,6 +20,9 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import TagsForm from './TagsForm';
+import QuestionAndAnswers from './QuestionAndAnswers';
+
 import { CurrentDeckContext } from '../../CurrentDeckContext';
 import {
   QuestionFormProvider,
@@ -24,6 +31,8 @@ import {
 
 // import CardsContainer from './CardsContainer';
 // import parseError from '../../util/parseError';
+import { GET_STANDARDS } from '../../../queries/Standard';
+
 
 import {
   UPDATE_QUESTION,
@@ -77,36 +86,70 @@ const useSelectStyles = makeStyles({
 
 const EditForm = ({
   open,
-  setOpen,
   questionId,
-  questionType,
-  richText,
-  standards,
-  tags,
-  questionOptions
+  setOpen,
 }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
-  // dispatch({ type: 'update', questionType });
-  console.log(state, dispatch);
+  const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
+  const {
+    loading: standardsLoading,
+    data: { allStandards = [] } = {}
+  } = useQuery(GET_STANDARDS);
+  const { data, getQuestionLoading } = useQuery(GET_QUESTION, {
+    variables: { id: questionId },
+    onCompleted: ({question}) => {
+      dispatch({
+        type: 'update',
+        name: 'standardId',
+        value: question.standards[0].id,
+      });
+      dispatch({
+        type: 'update',
+        name: 'tags',
+        value: question.tags.map(obj => obj.name),
+      });
+      dispatch({
+        type: 'update',
+        name: 'question',
+        value: question.richText,
+      });
 
-  // const { currentDeck } = useContext(CurrentDeckContext);
-  // const [deckName, setDeckName] = useState('');
-  // const [deckDescription, setDeckDescription] = useState('');
-  // const [errorMessage, setErrorMessage] = useState('');
-  // const [
-  //   createDeck,
-  //   { loading: createLoading, data: createData = {}, error: createError }
-  // ] = useMutation(CREATE_DECK);
-  // const [
-  //   updateDeck,
-  //   { loading: updateLoading, data: updateData = {}, error: updateError }
-  // ] = useMutation(UPDATE_DECK);
-  // useEffect(() => {
-  //   if (isUpdate) {
-  //     setDeckName(deck.name);
-  //     setDeckDescription(deck.description);
-  //   }
-  // }, [deck, isUpdate]);
+      // const slateObj = Value.fromJSON(question.richText);
+      // const json = Plain.deserialize(question.richText);
+      // const hm = Plain.serialize(json);
+      // console.log(question);
+      // console.log('question:', question);
+      // console.log('slateObj:', slateObj);
+      // console.log('json:', json);
+      // console.log('hm:', json);
+
+      dispatch({
+        type: 'update',
+        name: 'answers',
+        value: question.questionOptions.map(option => ({
+          ...option,
+          richText: option.richText,
+        }))
+      });
+    },
+  
+    //fetch policy
+  });
+
+  const [ updateQuestion, { createQuestionLoading }] = useMutation(UPDATE_QUESTION, {
+    onCompleted: ({ updateQuestion }) => {
+      currentDeckDispatch({
+        type: 'receiveCurrent',
+        card: updateQuestion,
+        id: updateQuestion.id
+      });
+      dispatch({
+        type: 'resetForm'
+      });
+      window.scrollTo(0, 0);
+      // setQuestionAnswerId(generateRandomId());
+    }
+  });
 
   // if (createData.createDeck || updateData.updateDeck) {
   //   return (
@@ -154,13 +197,26 @@ const EditForm = ({
   const classes = useStyles();
   const selectClasses = useSelectStyles();
 
+  const handleInputChange = e => {
+    dispatch({
+      type: 'update',
+      name: e.target.name,
+      value: e.target.value
+    });
+  };
+  if (getQuestionLoading || Object.keys(data).length === 0) return 'loading';
+
+  const { standardId, answers } = state;
   return (
     <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='md'>
       <DialogTitle>Update Question</DialogTitle>
       <DialogContent>
         <Card>
           <form className={classes.form} onSubmit={handleSubmit}>
+            questionId
             {questionId}
+            richText
+            {state.question}
             {/* <FormControl className={classes.formControl}>
               <InputLabel htmlFor='questionType-select'>
                 Select Question Type
@@ -188,7 +244,7 @@ const EditForm = ({
                 })}
               </Select>
             </FormControl> */}
-            {/* <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl}>
               <InputLabel htmlFor='standard-select'>Select Standard</InputLabel>
               <Select
                 value={standardId}
@@ -213,22 +269,17 @@ const EditForm = ({
                   );
                 })}
               </Select>
-            </FormControl> */}
-            {/* <FormControl
+            </FormControl>
+            <FormControl
               className={`${classes.formControl} ${classes.wideFormControl}`}
             >
-              <TagsForm fetchTags={fetchTags} />
-            </FormControl> */}
-            {/* <QuestionAndAnswers classes={classes} key={questionAnswerId} /> */}
-            {/* <Button
-              className={classes.submitButton}
-              type='submit'
-              variant='contained'
-              color='primary'
-              data-testid='submit-button'
-            >
-              Submit
-            </Button> */}
+              <TagsForm />
+            </FormControl>
+            <QuestionAndAnswers
+              classes={classes}
+              key={questionId}
+            />
+            {/* {loading} */}
           </form>
           {/* <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
             <DialogTitle>{errorMessage}</DialogTitle>
