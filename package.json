@@ -14,7 +14,7 @@
     "crypto": "^1.0.1",
     "downshift": "^3.2.12",
     "graphql": "^14.4.2",
-    "html2canvas": "^1.0.0-rc.3",
+    "html2canvas": "^1.0.0-rc.5",
     "immutable": "^4.0.0-rc.12",
     "inline-style-prefixer": "^5.1.0",
     "is-empty": "^1.2.0",
