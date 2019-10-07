@@ -13,7 +13,7 @@
     "apollo-link-context": "^1.0.18",
     "crypto": "^1.0.1",
     "downshift": "^3.2.12",
-    "graphql": "^14.4.2",
+    "graphql": "^14.5.8",
     "html2canvas": "^1.0.0-rc.3",
     "immutable": "^4.0.0-rc.12",
     "inline-style-prefixer": "^5.1.0",
