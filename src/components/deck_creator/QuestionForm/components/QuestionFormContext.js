@@ -53,6 +53,7 @@ const QuestionFormContext = React.createContext(initialState);
 
 function QuestionFormProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // console.error('context state', state);
   return (
     <QuestionFormContext.Provider value={{ state, dispatch }}>
       {children}

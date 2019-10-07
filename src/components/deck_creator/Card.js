@@ -244,11 +244,6 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           open={open}
           setOpen={setOpen}
           questionId={id}
-          questionType={questionType}
-          richText={richText}
-          standards={standards}
-          tags={tags}
-          questionOptions={questionOptions}
         />
           </QuestionFormProvider>
       ) : null }
