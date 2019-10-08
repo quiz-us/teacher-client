@@ -11,6 +11,7 @@ export const GET_DECK = gql`
         questionType
         standards {
           title
+          id
         }
         richText
         tags {

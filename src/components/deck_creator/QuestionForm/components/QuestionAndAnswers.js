@@ -35,7 +35,7 @@ const QuestionAndAnswers = ({ classes }) => {
   let componentClasses = useStyles();
 
   const { state, dispatch } = useContext(QuestionFormContext);
-  const { questionType, answers } = state;
+  const { questionType, answers, question } = state;
 
   const updateAnswers = updated => {
     dispatch({
@@ -96,15 +96,6 @@ const QuestionAndAnswers = ({ classes }) => {
                 "You've added more answer choices than the allowed amount of 26!"
               );
             }
-
-            {
-              console.log('QuestionAndAnswers richText', richText);
-            }
-            {
-              richText &&
-                console.log('QuestionAndAnswers richText STR', richText);
-            }
-
             return (
               <div key={answerId}>
                 <div className={componentClasses.mcControls}>
@@ -116,15 +107,15 @@ const QuestionAndAnswers = ({ classes }) => {
                         onChange={handleCorrectAnswer(i)}
                         checked={correct}
                         value={i}
-                        color='primary'
+                        color="primary"
                       />
                     }
-                    label='Correct Answer'
+                    label="Correct Answer"
                   />
                   <IconButton
                     className={componentClasses.deleteButton}
                     onClick={deleteAnswerChoice(i)}
-                    title='delete answer'
+                    title="delete answer"
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -139,8 +130,8 @@ const QuestionAndAnswers = ({ classes }) => {
           })}
           <Button
             className={componentClasses.addButton}
-            variant='contained'
-            color='secondary'
+            variant="contained"
+            color="secondary"
             onClick={addAnswerChoice}
           >
             Add Answer Choice
@@ -158,7 +149,6 @@ const QuestionAndAnswers = ({ classes }) => {
       );
     });
   };
-  console.log('q&a', state.question );
   return (
     <div className={classes.questionAnswerContainer}>
       <FormControl
@@ -166,7 +156,7 @@ const QuestionAndAnswers = ({ classes }) => {
       >
         <h3>Question: </h3>
         <RichTextEditor
-          // initialValue={Plain.deserialize('')}
+          initialValue={state.question || Plain.deserialize('')}
           updateParentState={value =>
             dispatch({ type: 'update', name: 'question', value })
           }
@@ -176,7 +166,7 @@ const QuestionAndAnswers = ({ classes }) => {
         className={`${classes.formControl} ${classes.wideFormControl}`}
       >
         <h3>Answer: </h3>
-        {/* {answer()} */}
+        {answer()}
       </FormControl>
     </div>
   );

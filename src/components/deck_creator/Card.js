@@ -50,7 +50,7 @@ const useStyles = makeStyles({
     justifyContent: 'space-between'
   },
   cardHeaderText: {
-    paddingRight: '10px',
+    paddingRight: '10px'
   },
   readOnly: {
     width: '100%'
@@ -77,9 +77,9 @@ const Answers = ({ questionOptions, classes }) => {
           <div className={classes.answerChoiceRow} key={`answerChoice-${id}`}>
             <span className={classes.correctnessIcon}>
               {correct ? (
-                <CheckIcon title='Correct Answer' />
+                <CheckIcon title="Correct Answer" />
               ) : (
-                <ClearIcon title='Incorrect Answer' />
+                <ClearIcon title="Incorrect Answer" />
               )}
             </span>
 
@@ -107,7 +107,6 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [open, setOpen] = useState(false);
-
 
   const removeQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
     const { questions } = cache.readQuery({
@@ -181,10 +180,10 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           <Switch
             checked={inCurrentDeck}
             onChange={updateCurrentDeck}
-            color='primary'
+            color="primary"
           />
         }
-        label='In Current Deck'
+        label="In Current Deck"
       />
     );
   };
@@ -231,23 +230,13 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
         </IconButton>
       </CardActions>
 
-      <Collapse in={expanded} timeout='auto' unmountOnExit>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <h4>Answer</h4>
           <Answers classes={classes} questionOptions={questionOptions} />
         </CardContent>
       </Collapse>
-      {open === true ? (
-            <QuestionFormProvider>
-
-        <EditForm
-          open={open}
-          setOpen={setOpen}
-          questionId={id}
-        />
-          </QuestionFormProvider>
-      ) : null }
-
+      {open && <EditForm open={open} setOpen={setOpen} card={card} />}
     </Card>
   );
 };
