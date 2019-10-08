@@ -10,7 +10,7 @@
     "@material-ui/pickers": "^3.2.4",
     "@material-ui/styles": "^4.3.0",
     "apollo-boost": "^0.4.3",
-    "apollo-link-context": "^1.0.18",
+    "apollo-link-context": "^1.0.19",
     "crypto": "^1.0.1",
     "downshift": "^3.2.12",
     "graphql": "^14.4.2",
