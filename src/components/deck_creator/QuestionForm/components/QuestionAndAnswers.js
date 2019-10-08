@@ -156,7 +156,11 @@ const QuestionAndAnswers = ({ classes }) => {
       >
         <h3>Question: </h3>
         <RichTextEditor
-          initialValue={state.question || Plain.deserialize('')}
+          initialValue={
+            Object.keys(question).length === 0
+              ? Plain.deserialize('')
+              : question
+          }
           updateParentState={value =>
             dispatch({ type: 'update', name: 'question', value })
           }
