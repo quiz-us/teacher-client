@@ -6,7 +6,7 @@ import GlobalLoader from '../../app/GlobalLoader';
 import MaterialTable from 'material-table';
 import tableIcons from '../../table/TableIcons';
 
-const generateColumns = data => {
+const generateColumns = (data = {}) => {
   const columns = [
     {
       title: 'Standards',
@@ -27,7 +27,7 @@ const generateColumns = data => {
   return columns;
 };
 
-const generateData = data => {
+const generateData = (data = {}) => {
   const parsedData = [];
   if (data.periodStandardsMastery) {
     data.periodStandardsMastery.forEach(({ standard, studentPerformance }) => {
@@ -71,6 +71,10 @@ const ClassMastery = ({ match }) => {
         icons={tableIcons}
         columns={columns}
         data={parsedData}
+        options={{
+          pageSize: 25,
+          pageSizeOptions: [25, 50, 100]
+        }}
         title="Mastery Data"
       />
     </div>
