@@ -9,7 +9,7 @@ const defaultAnswer = (correct = false) => ({
   answerId: generateRandomId()
 });
 
-const generateInitialState = () => ({
+const generateDefaultState = () => ({
   questionType: 'Multiple Choice',
   standardId: '',
   tags: [],
@@ -17,17 +17,17 @@ const generateInitialState = () => ({
   answers: [defaultAnswer(true)]
 });
 
-let initialState = generateInitialState();
+let defaultState = generateDefaultState();
 
 let reducer = (state, action) => {
   const { type, name, value } = action;
   switch (type) {
     case 'resetForm':
-      initialState = generateInitialState();
+      defaultState = generateDefaultState();
       return {
         // would need to regenerate instead of using existing because
         // answer's random key needs to be regenerated:
-        ...initialState,
+        ...defaultState,
         questionType: state.questionType,
         standardId: state.standardId
       };
@@ -49,9 +49,9 @@ let reducer = (state, action) => {
   }
 };
 
-const QuestionFormContext = React.createContext(initialState);
+const QuestionFormContext = React.createContext();
 
-function QuestionFormProvider({ children }) {
+function QuestionFormProvider({ children, initialState = defaultState }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   // console.error('context state', state);
   return (

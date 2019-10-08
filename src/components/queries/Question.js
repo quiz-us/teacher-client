@@ -37,6 +37,7 @@ export const GET_QUESTIONS = gql`
       id
       standards {
         title
+        id
       }
       tags {
         name
@@ -73,6 +74,7 @@ export const CREATE_QUESTION = gql`
       questionType
       standards {
         title
+        id
       }
       questionOptions {
         id

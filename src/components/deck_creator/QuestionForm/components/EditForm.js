@@ -33,7 +33,6 @@ import {
 // import parseError from '../../util/parseError';
 import { GET_STANDARDS } from '../../../queries/Standard';
 
-
 import {
   UPDATE_QUESTION,
   GET_QUESTION,
@@ -84,72 +83,32 @@ const useSelectStyles = makeStyles({
 // if deck is passed in as a prop, it means a deck already existed and that this
 // is an update call:
 
-const EditForm = ({
-  open,
-  questionId,
-  setOpen,
-}) => {
+const EditForm = ({ open, questionId, setOpen }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
+  console.log(state);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
   const {
     loading: standardsLoading,
-    data: { allStandards = [] } = {}
+    data: { allStandards = [] } = { allStandards: [] }
   } = useQuery(GET_STANDARDS);
-  const { data, getQuestionLoading } = useQuery(GET_QUESTION, {
-    variables: { id: questionId },
-    onCompleted: ({question}) => {
-      dispatch({
-        type: 'update',
-        name: 'standardId',
-        value: question.standards[0].id,
-      });
-      dispatch({
-        type: 'update',
-        name: 'tags',
-        value: question.tags.map(obj => obj.name),
-      });
-      dispatch({
-        type: 'update',
-        name: 'question',
-        value: question.richText,
-      });
 
-      // const slateObj = Value.fromJSON(question.richText);
-      // const json = Plain.deserialize(question.richText);
-      // const hm = Plain.serialize(json);
-      // console.log(question);
-      // console.log('question:', question);
-      // console.log('slateObj:', slateObj);
-      // console.log('json:', json);
-      // console.log('hm:', json);
-
-      dispatch({
-        type: 'update',
-        name: 'answers',
-        value: question.questionOptions.map(option => ({
-          ...option,
-          richText: option.richText,
-        }))
-      });
-    },
-  
-    //fetch policy
-  });
-
-  const [ updateQuestion, { createQuestionLoading }] = useMutation(UPDATE_QUESTION, {
-    onCompleted: ({ updateQuestion }) => {
-      currentDeckDispatch({
-        type: 'receiveCurrent',
-        card: updateQuestion,
-        id: updateQuestion.id
-      });
-      dispatch({
-        type: 'resetForm'
-      });
-      window.scrollTo(0, 0);
-      // setQuestionAnswerId(generateRandomId());
+  const [updateQuestion, { createQuestionLoading }] = useMutation(
+    UPDATE_QUESTION,
+    {
+      onCompleted: ({ updateQuestion }) => {
+        currentDeckDispatch({
+          type: 'receiveCurrent',
+          card: updateQuestion,
+          id: updateQuestion.id
+        });
+        dispatch({
+          type: 'resetForm'
+        });
+        window.scrollTo(0, 0);
+        // setQuestionAnswerId(generateRandomId());
+      }
     }
-  });
+  );
 
   // if (createData.createDeck || updateData.updateDeck) {
   //   return (
@@ -204,48 +163,16 @@ const EditForm = ({
       value: e.target.value
     });
   };
-  if (getQuestionLoading || Object.keys(data).length === 0) return 'loading';
 
   const { standardId, answers } = state;
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='md'>
+    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="md">
       <DialogTitle>Update Question</DialogTitle>
       <DialogContent>
         <Card>
           <form className={classes.form} onSubmit={handleSubmit}>
-            questionId
-            {questionId}
-            richText
-            {state.question}
-            {/* <FormControl className={classes.formControl}>
-              <InputLabel htmlFor='questionType-select'>
-                Select Question Type
-              </InputLabel>
-              <Select
-                value={questionType}
-                onChange={handleQuestionTypeChange}
-                classes={selectClasses}
-                className={classes.select}
-                inputProps={{
-                  name: 'questionType',
-                  id: 'questionType-select'
-                }}
-              >
-                {questionTypes.map(type => {
-                  return (
-                    <MenuItem
-                      className={classes.menuItem}
-                      key={type}
-                      value={type}
-                    >
-                      {type}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl> */}
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor='standard-select'>Select Standard</InputLabel>
+              <InputLabel htmlFor="standard-select">Select Standard</InputLabel>
               <Select
                 value={standardId}
                 onChange={handleInputChange}
@@ -275,10 +202,7 @@ const EditForm = ({
             >
               <TagsForm />
             </FormControl>
-            <QuestionAndAnswers
-              classes={classes}
-              key={questionId}
-            />
+            <QuestionAndAnswers classes={classes} key={questionId} />
             {/* {loading} */}
           </form>
           {/* <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
@@ -300,10 +224,10 @@ const EditForm = ({
           </span>
         )} */}
 
-        <Button onClick={handleClose} color='secondary'>
+        <Button onClick={handleClose} color="secondary">
           Go Back
         </Button>
-        <Button onClick={handleSubmit} color='primary' autoFocus>
+        <Button onClick={handleSubmit} color="primary" autoFocus>
           Update
         </Button>
       </DialogActions>
@@ -311,4 +235,24 @@ const EditForm = ({
   );
 };
 
-export default EditForm;
+export default props => {
+  const {
+    card: { questionType, standards, tags, richText, questionOptions }
+  } = props;
+  const initialState = {
+    questionType,
+    standardId: standards[0].id,
+    tags: tags.map(({ name }) => name),
+    question: JSON.parse(richText),
+    answers: questionOptions.map(({ richText, correct, id }) => ({
+      richText: JSON.parse(richText),
+      correct,
+      answerId: `${id}-answerId`
+    }))
+  };
+  return (
+    <QuestionFormProvider initialState={initialState}>
+      <EditForm {...props} />
+    </QuestionFormProvider>
+  );
+};
