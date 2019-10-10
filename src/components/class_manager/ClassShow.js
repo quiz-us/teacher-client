@@ -1,13 +1,12 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
-import { GET_PERIOD } from '../queries/Period';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
 import ClassAssignments from './ClassAssignments';
 import ClassMastery from './mastery/ClassMastery';
-import { useQuery } from '@apollo/react-hooks';
-import GlobalLoader from '../app/GlobalLoader';
+import ClassEdit from './ClassEdit';
+
 import BadgeIndex from './BadgeIndex';
 
 const defaultIndex = location => {
@@ -27,18 +26,24 @@ const useStyles = makeStyles(theme => ({
   },
   panel: {
     padding: '10px'
+  },
+  heading: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  buttonsContainer: {
+    display: 'flex',
+    marginLeft: 20
+  },
+  iconButtons: {
+    height: 30,
+    padding: 0,
+    marginRight: 5
   }
 }));
 
 const ClassShow = ({ match, location, history }) => {
-  const { params } = match;
   const classes = useStyles();
-  const { data: classData, loading: classLoading } = useQuery(GET_PERIOD, {
-    variables: { periodId: params.id }
-  });
-  if (classLoading) {
-    return <GlobalLoader />;
-  }
   const navigate = path => {
     return () => {
       history.push(path);
@@ -47,11 +52,7 @@ const ClassShow = ({ match, location, history }) => {
 
   return (
     <div className={classes.root}>
-      <div>
-        <h1>{classData.period.name}</h1>
-        <button>Edit</button>
-        <button>Delete</button>
-      </div>
+      <Route path={match.path} component={ClassEdit} />
       <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
           {/* NOTE: not using Link because UX is not ideal with Tab:*/}
