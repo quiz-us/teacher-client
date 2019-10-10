@@ -30,11 +30,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     return null;
   }
 
+  const { loggedIn } = data;
+
   return (
     <Route
       {...rest}
       render={props =>
-        data.loggedIn ? (
+        loggedIn ? (
           <Component {...props} />
         ) : (
           <Redirect

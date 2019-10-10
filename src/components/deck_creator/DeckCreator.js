@@ -9,7 +9,7 @@ import QuestionFilter from './QuestionFilter';
 import CurrentDeck from './CurrentDeck';
 import QuestionForm from './QuestionForm';
 import { GET_STANDARDS } from '../queries/Standard';
-
+import GlobalLoader from '../app/GlobalLoader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,10 +35,13 @@ const useStyles = makeStyles(theme => ({
 
 const DeckCreator = ({ match = { params: {} }, history }) => {
   const classes = useStyles();
-  const {
-    loading: standardsLoading,
-    data: { allStandards = [] } = {}
-  } = useQuery(GET_STANDARDS);
+  const { loading, data } = useQuery(GET_STANDARDS);
+
+  if (loading) {
+    return <GlobalLoader />;
+  }
+
+  const { allStandards = [] } = data;
 
   return (
     <CurrentDeckProvider>
@@ -51,13 +54,13 @@ const DeckCreator = ({ match = { params: {} }, history }) => {
 
           <TabPanel className={classes.panel}>
             <QuestionForm
-              standardsLoading={standardsLoading}
+              standardsLoading={loading}
               allStandards={allStandards}
             />
           </TabPanel>
           <TabPanel className={classes.panel}>
             <QuestionFilter
-              standardsLoading={standardsLoading}
+              standardsLoading={loading}
               allStandards={allStandards}
             />
           </TabPanel>
