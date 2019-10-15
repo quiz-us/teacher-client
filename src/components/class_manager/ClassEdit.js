@@ -5,9 +5,9 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
-import { GET_PERIOD } from '../queries/Period';
+import { GET_PERIOD, EDIT_PERIOD } from '../queries/Period';
 import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles(theme => ({
@@ -36,27 +36,47 @@ const useStyles = makeStyles(theme => ({
 const ClassEdit = ({ match }) => {
   const classes = useStyles();
   const [editMode, setEditMode] = useState(false);
+  const [editableName, setEditableName] = useState('');
   const { params } = match;
   const { data, loading } = useQuery(GET_PERIOD, {
-    variables: { periodId: params.id }
+    variables: { periodId: params.id },
+    onCompleted: ({ period }) => {
+      setEditableName(period.name);
+    }
   });
+
+  const [editPeriod] = useMutation(EDIT_PERIOD, {
+    onCompleted: () => setEditMode(false),
+    onError: err => console.error(err)
+  });
+
   if (loading) {
     return <GlobalLoader />;
   }
   const {
     period: { name }
   } = data;
+
+  const submit = e => {
+    e.preventDefault();
+    editPeriod({ variables: { periodId: params.id, name: editableName } });
+  };
   return (
     <div className={classes.heading}>
       {editMode ? (
-        <form>
+        <form onSubmit={submit}>
           <TextField
             className={classes.field}
             name="classTitle"
             type="text"
-            defaultValue={name}
+            onChange={e => setEditableName(e.target.value)}
+            value={editableName}
           />
-          <IconButton className={classes.iconButtons} title="save edits">
+          <IconButton
+            className={classes.iconButtons}
+            type="submit"
+            title="save edits"
+          >
             <CheckIcon />
           </IconButton>
           <IconButton
