@@ -14,25 +14,7 @@ jobs:
 
     steps:
       - checkout
-
       - run: npm install
-      # install python
-      # - run:
-      #     name: Install python
-      #     working_directory: /
-      #     command: |
-      #       sudo apt-get -y -qq update
-      #       sudo apt-get -y -qq install python3.4-dev
-      #       sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-      #       python3.4 get-pip.py --user
-      # install awscli
-      # - run:
-      #     name: Install AWS CLI
-      #     command: /home/circleci/.local/bin/pip install awscli --upgrade --user
-      # - save_cache:
-      #     paths:
-      #       - node_modules
-      #     key: v1-dependencies-{{ checksum "package.json" }}
-      # - run:
-      #     name: Run Jest Tests
-      #     command: npm test
+      - run:
+          name: Run Jest Tests
+          command: npm test

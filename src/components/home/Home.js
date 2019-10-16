@@ -37,12 +37,15 @@ const Home = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [selectedDeck, setSelectedDeck] = useState({});
-  const { loading, data: { decks } = {} } = useQuery(GET_DECKS, {
+  const { loading, data } = useQuery(GET_DECKS, {
     fetchPolicy: 'network-only'
   });
+
   if (loading) {
     return <GlobalLoader />;
   }
+
+  const { decks = {} } = data;
   const openAssigner = deck => {
     return () => {
       setOpen(true);
