@@ -50,14 +50,13 @@ const AssignmentsIndex = ({ match }) => {
   const { data, loading } = useQuery(GET_CLASS_ASSIGNMENTS, {
     variables: { periodId: params.id }
   });
-  const { periodAssignments } = data;
 
   const columns = generateColumns(match);
 
   if (loading) {
     return <GlobalLoader />;
   }
-  console.log(data);
+  const { periodAssignments } = data;
   return (
     <div className={classes.root}>
       <h3>Assignments</h3>

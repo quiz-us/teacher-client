@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const generateColumns = data => {
+const generateColumns = (data = {}) => {
   const cellStyle = prefix({
     backgroundColor: '#039be5',
     color: '#FFF',
@@ -74,7 +74,7 @@ const generateColumns = data => {
   return columns;
 };
 
-const generateData = data => {
+const generateData = (data = {}) => {
   const parsedData = [];
   if (data.assignmentResults) {
     data.assignmentResults.forEach(({ fullname, answer }) => {

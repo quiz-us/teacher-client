@@ -41,7 +41,7 @@ jest.mock(
   }
 );
 
-describe('<QuestionForm />', () => {
+xdescribe('<QuestionForm />', () => {
   const questionTypes = ['Multiple Choice', 'Free Response'];
   const standards = [
     { id: 1, name: 'Standard 1' },
@@ -82,7 +82,7 @@ describe('<QuestionForm />', () => {
     });
   });
 
-  describe('<TagsForm/>', () => {
+  xdescribe('<TagsForm/>', () => {
     test('autosuggests options based on input', async () => {
       // currently console logging warnings about using `act` because mock
       // function resolves a Promise. It seems that the fix is to wait for
@@ -108,7 +108,7 @@ describe('<QuestionForm />', () => {
     });
   });
 
-  describe('submitting question form', () => {
+  xdescribe('submitting question form', () => {
     test('renders error modal if required fields are not filled', () => {
       fireEvent.click(getByTestId('submit-button'));
       expect(getByText("Please fill out 'Question Type'!")).toBeTruthy();
