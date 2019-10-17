@@ -1,13 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import Plain from 'slate-plain-serializer';
+
 // import { Value, Document } from 'slate';
 
 // import Plain from 'slate-plain-serializer';
 // import { Document } from 'slate';
 
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -35,8 +37,6 @@ import { GET_STANDARDS } from '../../../queries/Standard';
 
 import {
   UPDATE_QUESTION,
-  GET_QUESTION,
-  GET_QUESTIONS
 } from '../../../queries/Question';
 
 const useStyles = makeStyles({
@@ -85,7 +85,6 @@ const useSelectStyles = makeStyles({
 
 const EditForm = ({ open, questionId, setOpen }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
-  console.log(state);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
   const {
     loading: standardsLoading,
@@ -96,16 +95,17 @@ const EditForm = ({ open, questionId, setOpen }) => {
     UPDATE_QUESTION,
     {
       onCompleted: ({ updateQuestion }) => {
-        currentDeckDispatch({
-          type: 'receiveCurrent',
-          card: updateQuestion,
-          id: updateQuestion.id
-        });
-        dispatch({
-          type: 'resetForm'
-        });
-        window.scrollTo(0, 0);
-        // setQuestionAnswerId(generateRandomId());
+        console.log('# updateQuestion', updateQuestion);
+    //     currentDeckDispatch({
+    //       type: 'receiveCurrent',
+    //       card: updateQuestion,
+    //       id: updateQuestion.id
+    //     });
+    //     dispatch({
+    //       type: 'resetForm'
+    //     });
+    //     // window.scrollTo(0, 0);
+    //     // setQuestionAnswerId(generateRandomId());
       }
     }
   );
@@ -127,10 +127,38 @@ const EditForm = ({ open, questionId, setOpen }) => {
   //   mutationError = parseError(updateError);
   // }
 
-  // const currentDeckArr = Object.keys(currentDeck);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = () => {
+  const onSubmit = formData => {
+    console.log(formData['tags']);
+    updateQuestion({
+      variables: {
+        id: questionId,
+        questionType: formData['questionType'],
+        standardId: formData['standardId'],
+        tags: formData['tags'],
+        richText: JSON.stringify(formData['question']),
+        questionPlaintext: formData['questionText'],
+        questionOptions: formData['answers'].map(answer =>
+          JSON.stringify(answer)
+        )
+      }
+    });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+      const formData = {
+        ...state,
+        questionText: Plain.serialize(state.question),
+        answers: answers.map(answer => {
+          return {
+            ...answer,
+            optionText: Plain.serialize(answer.richText)
+          };
+        })
+      };
+      onSubmit(formData);
     // setErrorMessage('');
     // if (currentDeckArr.length && deckName) {
     //   const questionIds = Object.keys(currentDeck);
@@ -237,7 +265,7 @@ const EditForm = ({ open, questionId, setOpen }) => {
 
 export default props => {
   const {
-    card: { questionType, standards, tags, richText, questionOptions }
+    card: { questionType, standards, tags, richText, questionOptions, id, }
   } = props;
   const initialState = {
     questionType,
@@ -245,14 +273,15 @@ export default props => {
     tags: tags.map(({ name }) => name),
     question: JSON.parse(richText),
     answers: questionOptions.map(({ richText, correct, id }) => ({
-      richText: JSON.parse(richText),
+      answerId: `${id}-answerId`,
       correct,
-      answerId: `${id}-answerId`
+      id: id,
+      richText: JSON.parse(richText),
     }))
   };
   return (
     <QuestionFormProvider initialState={initialState}>
-      <EditForm {...props} />
+      <EditForm {...props} questionId={id} />
     </QuestionFormProvider>
   );
 };
