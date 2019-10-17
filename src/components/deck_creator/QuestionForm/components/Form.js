@@ -4,6 +4,8 @@ import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
 import { useMutation } from '@apollo/react-hooks';
 
+import { Value } from 'slate';
+
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -68,6 +70,13 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
 
+  const { questionType, standardId, answers } = state;
+
+  const [errorMessage, setErrorMessage] = useState('');
+  const [questionAnswerId, setQuestionAnswerId] = useState(
+    generateRandomId()
+  );
+
   const [create_question, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: ({ createQuestion }) => {
       currentDeckDispatch({
@@ -83,28 +92,8 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
     },
   });
 
-  const onSubmit = formData => {
-    create_question({
-      variables: {
-        questionType: formData['questionType'],
-        standardId: formData['standardId'],
-        tags: formData['tags'],
-        richText: JSON.stringify(formData['question'].toJSON()),
-        questionPlaintext: formData['questionText'],
-        questionOptions: formData['answers'].map(answer =>
-          JSON.stringify(answer)
-        ),
-      },
-    });
-  };
-
-  const { questionType, standardId, answers } = state;
-
   const classes = useStyles();
   const selectClasses = useSelectStyles();
-
-  const [errorMessage, setErrorMessage] = useState('');
-  const [questionAnswerId, setQuestionAnswerId] = useState(generateRandomId());
 
   const closeErrorMessage = () => setErrorMessage('');
 
@@ -170,6 +159,21 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
     return true;
   };
 
+  const onSubmit = formData => {
+    create_question({
+      variables: {
+        questionType: formData['questionType'],
+        standardId: formData['standardId'],
+        tags: formData['tags'],
+        richText: JSON.stringify(formData['question'].toJSON()),
+        questionPlaintext: formData['questionText'],
+        questionOptions: formData['answers'].map(answer =>
+          JSON.stringify(answer)
+        )
+      }
+    });
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
     if (validateForm()) {
@@ -186,6 +190,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       onSubmit(formData);
     }
   };
+
   return (
     <Card>
       <form className={classes.form} onSubmit={handleSubmit}>
