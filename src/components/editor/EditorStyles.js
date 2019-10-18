@@ -25,7 +25,7 @@ export default {
     '& img': {
       display: 'block',
       maxWidth: '100%',
-      maxHeight: '20em',
+      maxHeight: '20em'
     }
   },
   editor: {
@@ -36,4 +36,7 @@ export default {
   icon: {
     width: '.8em'
   },
+  mdi: {
+    width: '1.2em'
+  }
 };
