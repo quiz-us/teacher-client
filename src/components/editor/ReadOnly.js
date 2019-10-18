@@ -63,6 +63,10 @@ class ReadOnly extends React.Component {
         return <em {...attributes}>{children}</em>;
       case 'underlined':
         return <u {...attributes}>{children}</u>;
+      case 'superscript':
+        return <sup {...attributes}>{children}</sup>;
+      case 'subscript':
+        return <sub {...attributes}>{children}</sub>;
       default:
         return next();
     }
