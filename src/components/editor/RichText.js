@@ -9,6 +9,8 @@ import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import FormatSuperscriptIcon from 'mdi-react/FormatSuperscriptIcon';
+import FormatSubscriptIcon from 'mdi-react/FormatSubscriptIcon';
 import CodeIcon from '@material-ui/icons/Code';
 import InsertImages from 'slate-drop-or-paste-images';
 import React from 'react';
@@ -149,6 +151,16 @@ class RichTextEditor extends React.Component {
             <FormatUnderlinedIcon className={classes.icon} />
           )}
           {this.renderMarkButton('code', <CodeIcon className={classes.icon} />)}
+          {this.renderMarkButton(
+            'superscript',
+            <FormatSuperscriptIcon
+              className={`${classes.icon} ${classes.mdi}`}
+            />
+          )}
+          {this.renderMarkButton(
+            'subscript',
+            <FormatSubscriptIcon className={`${classes.icon} ${classes.mdi}`} />
+          )}
           {this.renderBlockButton(
             'heading-one',
             <LooksOneIcon className={classes.icon} />
@@ -223,6 +235,10 @@ class RichTextEditor extends React.Component {
         return <em {...attributes}>{children}</em>;
       case 'underlined':
         return <u {...attributes}>{children}</u>;
+      case 'superscript':
+        return <sup {...attributes}>{children}</sup>;
+      case 'subscript':
+        return <sub {...attributes}>{children}</sub>;
       default:
         return next();
     }

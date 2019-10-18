@@ -21,6 +21,7 @@
     "jspdf": "^1.5.3",
     "localforage": "^1.7.3",
     "material-table": "^1.52.0",
+    "mdi-react": "^6.2.0",
     "moment": "^2.24.0",
     "qrcode.react": "^0.9.3",
     "react": "^16.10.2",
