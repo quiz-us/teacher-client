@@ -34,7 +34,7 @@
     "slate": "^0.47.8",
     "slate-drop-or-paste-images": "^0.9.1",
     "slate-react": "^0.22.9",
-    "use-debounce": "^3.0.1"
+    "use-debounce": "^3.1.0"
   },
   "scripts": {
     "start": "PORT=8000 react-scripts start",
