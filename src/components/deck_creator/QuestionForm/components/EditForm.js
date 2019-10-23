@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-// import { Redirect } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
@@ -32,7 +31,7 @@ import {
 // import CardsContainer from './CardsContainer';
 // import parseError from '../../util/parseError';
 import { GET_STANDARDS } from '../../../queries/Standard';
-import { GET_QUESTIONS, UPDATE_QUESTION } from '../../../queries/Question';
+import { UPDATE_QUESTION } from '../../../queries/Question';
 
 const useStyles = makeStyles({
   form: {
@@ -91,42 +90,16 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     data: { allStandards = [] } = { allStandards: [] }
   } = useQuery(GET_STANDARDS);
 
-  // const updateQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
-
-  //   //read what is currently in the cache for GET_QUESTIONS query
-  //   const { questions } = cache.readQuery({
-  //     query: GET_QUESTIONS,
-  //     variables: {
-  //       standardId: inputs.standardId,
-  //       keyWords: inputs.keyWords
-  //     }
-  //   });
-
-  //   // remove the deleted question
-  //   const updatedQuestions = questions.filter(question => question.id !== id);
-
-  //   // write the GET_QUESTIONS without the deleted question
-  //   cache.writeQuery({
-  //     query: GET_QUESTIONS,
-  //     variables: {
-  //       standardId: inputs.standardId,
-  //       keyWords: inputs.keyWords
-  //     },
-  //     data: { questions: updatedQuestions }
-  //   });
-  // };
-
   const [updateQuestion, { createQuestionLoading }] = useMutation(
     UPDATE_QUESTION,
     {
       onCompleted: ({ updateQuestion }) => {
         handleClose();
-        // dispatch({
-        //   type: 'update'
-        //   name:
-        // });
-        //     // window.scrollTo(0, 0);
-        //     // setQuestionAnswerId(generateRandomId());
+        currentDeckDispatch({
+          type: 'addToCurrent',
+          id: updateQuestion.id,
+          card: updateQuestion
+        });
       },
       update: (cache, res) => {}
     }
