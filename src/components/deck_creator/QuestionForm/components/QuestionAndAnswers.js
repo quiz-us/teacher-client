@@ -122,8 +122,8 @@ const QuestionAndAnswers = ({ classes }) => {
                 </div>
                 <RichTextEditor
                   initialValue={richText}
-                  updateParentState={updateAllAnswers(i)}
                   key={answerId} // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
+                  updateParentState={updateAllAnswers(i)}
                 />
               </div>
             );

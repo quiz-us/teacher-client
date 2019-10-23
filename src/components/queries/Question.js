@@ -138,6 +138,7 @@ export const UPDATE_QUESTION = gql`
                id
                correct
                optionText
+               richText
              }
            }
          }

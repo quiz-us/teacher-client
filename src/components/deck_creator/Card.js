@@ -84,7 +84,7 @@ const Answers = ({ questionOptions, classes }) => {
             </span>
 
             <div className={classes.readOnly}>
-              <ReadOnly value={JSON.parse(richText)} />
+              <ReadOnly key={richText} value={JSON.parse(richText)} />
             </div>
           </div>
         );
@@ -95,6 +95,7 @@ const Answers = ({ questionOptions, classes }) => {
 
 const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
+
   const {
     id,
     questionType,
@@ -211,7 +212,7 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           </div>
           {controls()}
         </div>
-        <ReadOnly value={JSON.parse(richText)} />
+        <ReadOnly key={card.richText} value={JSON.parse(richText)} />
 
         <div className={classes.details}>
           <strong>Standard:</strong>
