@@ -91,44 +91,44 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     data: { allStandards = [] } = { allStandards: [] }
   } = useQuery(GET_STANDARDS);
 
-  const updateQuestionFromCache = (cache, { updateQuestion }) => {
-    //read what is currently in the cache for GET_QUESTIONS query
-    const { questions } = cache.readQuery({
-      query: GET_QUESTIONS,
-      variables: {
-        standardId: inputs.standardId,
-        keyWords: inputs.keyWords
-      }
-    });
-    console.log('# old questions', questions)
-  };
+  // const updateQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
+
+  //   //read what is currently in the cache for GET_QUESTIONS query
+  //   const { questions } = cache.readQuery({
+  //     query: GET_QUESTIONS,
+  //     variables: {
+  //       standardId: inputs.standardId,
+  //       keyWords: inputs.keyWords
+  //     }
+  //   });
+
+  //   // remove the deleted question
+  //   const updatedQuestions = questions.filter(question => question.id !== id);
+
+  //   // write the GET_QUESTIONS without the deleted question
+  //   cache.writeQuery({
+  //     query: GET_QUESTIONS,
+  //     variables: {
+  //       standardId: inputs.standardId,
+  //       keyWords: inputs.keyWords
+  //     },
+  //     data: { questions: updatedQuestions }
+  //   });
+  // };
 
   const [updateQuestion, { createQuestionLoading }] = useMutation(
     UPDATE_QUESTION,
     {
       onCompleted: ({ updateQuestion }) => {
         handleClose();
-        console.log("on complete")
-        //     dispatch({
-        //       type: 'resetForm'
-        //     });
+        // dispatch({
+        //   type: 'update'
+        //   name:
+        // });
         //     // window.scrollTo(0, 0);
         //     // setQuestionAnswerId(generateRandomId());
       },
-      update: (cache, res) => {
-        // res
-        // data:
-        //   updateQuestion:
-        //   id: "5"
-        //   questionOptions: (2) [{…}, {…}]
-        //   questionText: "yo1"
-        //   questionType: "Multiple Choice"
-        //   richText: "{"object":"value","document":{"object":"document","data":{},"nodes":[{"object":"block","type":"line","data":{},"nodes":[{"object":"text","text":"yo1","marks":[]}]}]}}"
-        //   standards: [{…}]
-        //   tags: [{…}]
-        //   __typename: "Question"
-        updateQuestionFromCache(cache, res.data);
-      }
+      update: (cache, res) => {}
     }
   );
 
@@ -182,7 +182,14 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
         answers: answers.map(answer => {
           return {
             ...answer,
-            optionText: Plain.serialize(answer.richText)
+
+            // When a form is created, if field is edttied,
+            // it's richText becomes an instance of a Slate Value
+
+            // When a formed is editted, if a field is editted,
+            // it's richText also becomes an instance of a Slate Value.
+            // However, when a teacher
+            optionText: Plain.serialize(Value.create(answer.richText))
           };
         })
       };
