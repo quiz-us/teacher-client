@@ -110,7 +110,6 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
   const [open, setOpen] = useState(false);
 
   const removeQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
-    
     //read what is currently in the cache for GET_QUESTIONS query
     const { questions } = cache.readQuery({
       query: GET_QUESTIONS,
@@ -242,7 +241,9 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           <Answers classes={classes} questionOptions={questionOptions} />
         </CardContent>
       </Collapse>
-      {open && <EditForm open={open} setOpen={setOpen} card={card} inputs={inputs}/>}
+      {open && (
+        <EditForm open={open} setOpen={setOpen} card={card} inputs={inputs} />
+      )}
     </Card>
   );
 };

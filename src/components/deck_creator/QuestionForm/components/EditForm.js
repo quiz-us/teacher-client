@@ -1,21 +1,22 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
 
 import { Value } from 'slate';
 
-import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
 import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
+import Dialog from '@material-ui/core/Dialog';
 import InputLabel from '@material-ui/core/InputLabel';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import TagsForm from './TagsForm';
@@ -74,8 +75,7 @@ const useSelectStyles = makeStyles({
   }
 });
 
-// if deck is passed in as a prop, it means a deck already existed and that this
-// is an update call:
+
 
 const EditForm = ({ open, questionId, setOpen, inputs }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
@@ -84,7 +84,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
   const { questionType, standardId, answers } = state;
   const [errorMessage, setErrorMessage] = useState('');
 
-  // todo: change fetch policy
+  // maybe todo: change fetch policy?
   const {
     loading: standardsLoading,
     data: { allStandards = [] } = { allStandards: [] }
@@ -95,13 +95,13 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     {
       onCompleted: ({ updateQuestion }) => {
         handleClose();
+        console.log(updateQuestion);
         currentDeckDispatch({
           type: 'addToCurrent',
           id: updateQuestion.id,
           card: updateQuestion
         });
       },
-      update: (cache, res) => {}
     }
   );
 
@@ -167,6 +167,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
         })
       };
       onSubmit(formData);
+      console.log('formData', formData);
     }
     // setErrorMessage('');
     // if (currentDeckArr.length && deckName) {
@@ -330,4 +331,23 @@ export default props => {
       <EditForm {...props} questionId={id} />
     </QuestionFormProvider>
   );
+};
+
+EditForm.propTypes = {
+  open: PropTypes.bool.isRequired,
+  questionId: PropTypes.string.isRequired,
+  card: PropTypes.shape({
+    questionText: PropTypes.string,
+    questionType: PropTypes.string,
+    richText: PropTypes.string,
+    id: PropTypes.string,
+    questionOptions: PropTypes.array,
+    standards: PropTypes.array,
+    tags: PropTypes.array
+  }),
+  setOpen: PropTypes.func,
+  inputs: PropTypes.shape({
+    keyWords: PropTypes.string,
+    standardId: PropTypes.string
+  })
 };
