@@ -94,14 +94,6 @@ export const CREATE_QUESTION = gql`
     }
   }
 `;
-// id:,
-// standard_id: nil,
-// question_type: nil,
-// rich_text: nil,
-// question_plaintext: nil,
-// tags: nil
-// $questionOptions: [String!]
-// questionOptions: $questionOptions
 
 export const UPDATE_QUESTION = gql`
          mutation updateQuestion(
