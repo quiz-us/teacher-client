@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+
+import { useMutation } from '@apollo/react-hooks';
 import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
-import { useMutation } from '@apollo/react-hooks';
-
-import { Value } from 'slate';
 
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
