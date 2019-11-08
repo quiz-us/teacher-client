@@ -32,3 +32,14 @@ export const ENROLL_STUDENT = gql`
     }
   }
 `;
+
+export const EDIT_STUDENT = gql`
+  mutation editStudent($studentId: ID!, $studentParams: StudentParams!) {
+    editStudent(studentId: $studentId, studentParams: $studentParams) {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+`
