@@ -1,20 +1,36 @@
-version: 2
+defaults: &defaults
+  docker:
+    # specify the version you desire here
+    - image: circleci/node:10
+  working_directory: ~/repo
+
+ersion: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+  build_and_test:
+    <<: *defaults
     steps:
       - checkout
       - run: npm install
       - run:
           name: Run Jest Tests
           command: npm test
+  deploy_staging:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run build
+      - run: npm install -g netlify-cli
+      - run: netlify deploy --dir=./build -e staging
+
+workflows:
+  version: 2
+  build_and_deploy_staging:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: staging
