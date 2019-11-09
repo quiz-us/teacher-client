@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
-      - run: npx netlify deploy --dir=./build -e staging
+      - run: npx -p netlify-cli netlify deploy --dir=./build -e staging
 
 workflows:
   version: 2
