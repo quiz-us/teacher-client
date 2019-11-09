@@ -32,7 +32,13 @@ class ReadOnly extends React.Component {
 
     switch (node.type) {
       case 'image': {
-        return <img {...attributes} src={node.data.get('file')} />;
+        return (
+          <img
+            alt="Flashcard Details"
+            {...attributes}
+            src={node.data.get('file')}
+          />
+        );
       }
       case 'block-quote':
         return <blockquote {...attributes}>{children}</blockquote>;
