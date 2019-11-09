@@ -8,6 +8,7 @@ const options = {
 
 exports.handler = function(event, context, callback) {
   console.log(event);
+  console.log(process.env.CIRCLE);
 
   const req = https.request(options, res => {
     res.on('data', d => {
