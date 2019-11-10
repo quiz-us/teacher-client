@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
 import {
   GET_STUDENTS,
