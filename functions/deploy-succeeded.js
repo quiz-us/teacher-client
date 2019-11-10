@@ -8,7 +8,8 @@ const options = {
 
 exports.handler = function(event, context, callback) {
   const { body } = event;
-  console.log(JSON.stringify(JSON.parse(body), 4));
+  const { data } = JSON.parse(body);
+  console.log('DATA', data);
 
   const req = https.request(options, res => {
     res.on('data', d => {
