@@ -22,8 +22,11 @@ jobs:
 #       - run: npm run build
 #       - run: npx -p netlify-cli netlify deploy --dir=./build -e staging
 
-# workflows:
-#   version: 2
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_and_test
 #   build_and_deploy_staging:
 #     jobs:
 #       - build_and_test
