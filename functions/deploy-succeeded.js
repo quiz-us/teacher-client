@@ -7,12 +7,12 @@ const options = {
 };
 
 exports.handler = function(event, context, callback) {
-  console.log(event);
-  console.log(process.env.CIRCLE);
+  const { body } = event;
+  console.log('BODY', body);
 
   const req = https.request(options, res => {
     res.on('data', d => {
-      console.log('response:', d);
+      process.stdout.write(d);
     });
   });
 
