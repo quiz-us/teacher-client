@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
@@ -22,24 +22,24 @@ const defaultIndex = location => {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: '25px 40px'
+    margin: '25px 40px',
   },
   panel: {
-    padding: '10px'
+    padding: '10px',
   },
   heading: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonsContainer: {
     display: 'flex',
-    marginLeft: 20
+    marginLeft: 20,
   },
   iconButtons: {
     height: 30,
     padding: 0,
-    marginRight: 5
-  }
+    marginRight: 5,
+  },
 }));
 
 const ClassShow = ({ match, location, history }) => {
@@ -52,6 +52,9 @@ const ClassShow = ({ match, location, history }) => {
 
   return (
     <div className={classes.root}>
+      <Link className="link" to="/class-manager">
+        Back To All Classes
+      </Link>
       <Route path={match.path} component={ClassEdit} />
       <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
