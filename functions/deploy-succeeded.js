@@ -8,9 +8,14 @@ const options = {
 
 exports.handler = function(event, context, callback) {
   const { body } = event;
-  const parsedBody = JSON.parse(body);
-  console.log(Object.keys(parsedBody.payload));
-  console.log('BRANCH', parsedBody.payload.branch);
+  const {
+    payload: { branch }
+  } = JSON.parse(body);
+
+  // only run the smoke tests on staging branch:
+  if (branch !== 'staging') {
+    return;
+  }
 
   const req = https.request(options, res => {
     res.on('data', d => {
