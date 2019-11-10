@@ -37,7 +37,7 @@ const customize = type => {
 
 export default ({ children, type }) => {
   const classes = useAuthFormStyles();
-  const { headertext, LinkComponent } = customize(type);
+  const { headertext } = customize(type);
   return (
     <div className={classes.root}>
       <Card className={classes.formContainer}>
