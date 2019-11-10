@@ -10,6 +10,7 @@ exports.handler = function(event, context, callback) {
   const { body } = event;
   const parsedBody = JSON.parse(body);
   console.log(Object.keys(parsedBody.payload));
+  console.log('BRANCH', parsedBody.payload.branch);
 
   const req = https.request(options, res => {
     res.on('data', d => {
