@@ -7,9 +7,8 @@ const options = {
 };
 
 exports.handler = function(event, context, callback) {
-  const {
-    body: { branch }
-  } = event;
+  const { body } = event;
+  const { branch } = JSON.parse(body);
   console.log('BRANCH', branch);
 
   const req = https.request(options, res => {
