@@ -9,9 +9,7 @@ const options = {
 exports.handler = function(event, context, callback) {
   const { body } = event;
   const parsedBody = JSON.parse(body);
-  console.log('DATA', Object.keys(parsedBody));
-  console.log(parsedBody.payload);
-  console.log(parsedBody.site);
+  console.log(parsedBody.payload.published_deploy);
 
   const req = https.request(options, res => {
     res.on('data', d => {
