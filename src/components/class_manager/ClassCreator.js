@@ -7,30 +7,31 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { useMutation } from '@apollo/react-hooks';
 import { GET_PERIODS, CREATE_PERIOD } from '../queries/Period';
+import parseError from '../../util/parseError';
+import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({
   root: {
     margin: '20px',
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   form: {
-    display: 'flex'
-  }
+    display: 'flex',
+  },
 }));
 
 const Form = ({ classes }) => {
   const [periodName, setPeriodName] = useState('');
-  const [createPeriod, { loading }] = useMutation(CREATE_PERIOD, {
-    onCompleted: data => {
+  const [createPeriod, { loading, error }] = useMutation(CREATE_PERIOD, {
+    onCompleted: () => {
       setPeriodName('');
     },
     refetchQueries: [
       {
-        query: GET_PERIODS
-      }
+        query: GET_PERIODS,
+      },
     ],
-    onError: err => console.error(err)
   });
   const handleSubmit = e => {
     e.preventDefault();
@@ -39,6 +40,7 @@ const Form = ({ classes }) => {
   return (
     <form className={classes.form} onSubmit={handleSubmit}>
       <TextField
+        autoFocus
         label="Class Name"
         type="text"
         value={periodName}
@@ -58,9 +60,10 @@ const Form = ({ classes }) => {
                 </IconButton>
               )}
             </React.Fragment>
-          )
+          ),
         }}
       />
+      <ErrorModal errorMessage={error && parseError(error)} />
     </form>
   );
 };
@@ -78,7 +81,7 @@ const ClassCreator = () => {
           variant="contained"
           onClick={() => setActivated(true)}
         >
-          Create class
+          Create Class
         </Button>
       )}
     </div>

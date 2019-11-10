@@ -53,8 +53,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         });
         return true;
       }
-      alert(message);
-      return true;
+      console.error(message);
     });
   }
   if (networkError) {
