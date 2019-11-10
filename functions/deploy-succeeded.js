@@ -8,8 +8,9 @@ const options = {
 
 exports.handler = function(event, context, callback) {
   const { body } = event;
-  const { branch } = JSON.parse(body);
-  console.log('BRANCH', branch);
+  const { published_deploy } = JSON.parse(body);
+  console.log(published_deploy);
+  console.log('BRANCH', published_deploy.branch);
 
   const req = https.request(options, res => {
     res.on('data', d => {
