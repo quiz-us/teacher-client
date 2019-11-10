@@ -15,22 +15,22 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     marginBottom: 20,
-    height: 80
+    height: 80,
   },
   buttonsContainer: {
     display: 'flex',
-    marginLeft: 20
+    marginLeft: 20,
   },
   iconButtons: {
     height: 30,
     padding: 0,
-    marginRight: 5
+    marginRight: 5,
   },
   field: {
     fontWeight: 'bold',
     fontSize: '2em',
-    marginRight: 20
-  }
+    marginRight: 20,
+  },
 }));
 
 const ClassEdit = ({ match }) => {
@@ -42,19 +42,19 @@ const ClassEdit = ({ match }) => {
     variables: { periodId: params.id },
     onCompleted: ({ period }) => {
       setEditableName(period.name);
-    }
+    },
   });
 
   const [editPeriod] = useMutation(EDIT_PERIOD, {
     onCompleted: () => setEditMode(false),
-    onError: err => console.error(err)
+    onError: err => console.error(err),
   });
 
   if (loading) {
     return <GlobalLoader />;
   }
   const {
-    period: { name }
+    period: { name },
   } = data;
 
   const submit = e => {
@@ -97,9 +97,6 @@ const ClassEdit = ({ match }) => {
               onClick={() => setEditMode(true)}
             >
               <EditIcon />
-            </IconButton>
-            <IconButton className={classes.iconButtons} title="delete class">
-              <DeleteIcon />
             </IconButton>
           </div>
         </React.Fragment>
