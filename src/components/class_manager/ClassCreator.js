@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { useMutation } from '@apollo/react-hooks';
 import { GET_PERIODS, CREATE_PERIOD } from '../queries/Period';
-import parseError from '../../util/parseError';
 import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({
@@ -63,7 +62,7 @@ const Form = ({ classes }) => {
           ),
         }}
       />
-      <ErrorModal errorMessage={error && parseError(error)} />
+      <ErrorModal error={error} />
     </form>
   );
 };
