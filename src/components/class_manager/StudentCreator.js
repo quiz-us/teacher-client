@@ -7,58 +7,60 @@ import useForm from '../hooks/useForm';
 import { useMutation } from '@apollo/react-hooks';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { ENROLL_STUDENT, GET_STUDENTS } from '../queries/Student';
+import parseError from '../../util/parseError';
+import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({
   root: {
     margin: '20px',
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   formContainer: {
     display: 'flex',
     flexDirection: 'column',
     padding: '25px',
-    width: '100%'
+    width: '100%',
   },
   form: {
     display: 'flex',
     justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column'
-    }
+      flexDirection: 'column',
+    },
   },
   field: {
     marginRight: theme.spacing(3),
     width: '25%',
     [theme.breakpoints.down('sm')]: {
-      width: '100%'
-    }
+      width: '100%',
+    },
   },
   createButton: {
     [theme.breakpoints.down('sm')]: {
-      marginTop: '25px'
-    }
-  }
+      marginTop: '25px',
+    },
+  },
 }));
 
 const Form = ({ classes, periodId }) => {
   const { inputs, handleInputChange, resetForm } = useForm({
     firstName: '',
     lastName: '',
-    email: ''
+    email: '',
   });
   const { firstName, lastName, email } = inputs;
-  const [enrollStudent, { loading }] = useMutation(ENROLL_STUDENT, {
-    onCompleted: data => {
+  const [enrollStudent, { loading, error }] = useMutation(ENROLL_STUDENT, {
+    onCompleted: () => {
       resetForm();
     },
     refetchQueries: [
       {
         query: GET_STUDENTS,
-        variables: { periodId }
-      }
+        variables: { periodId },
+      },
     ],
-    onError: err => console.error(err)
+    onError: err => console.error(err),
   });
   const handleSubmit = e => {
     e.preventDefault();
@@ -108,6 +110,7 @@ const Form = ({ classes, periodId }) => {
           </Button>
         )}
       </form>
+      <ErrorModal errorMessage={error && parseError(error)} />
     </Card>
   );
 };
