@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { prefix } from 'inline-style-prefixer';
 import {
   GET_ASSIGNMENT_RESULTS,
-  GET_ASSIGNMENT
+  GET_ASSIGNMENT,
 } from '../../queries/Assignment';
 import MaterialTable from 'material-table';
 import tableIcons from '../../table/TableIcons';
@@ -17,14 +17,14 @@ const useStyles = makeStyles(theme => ({
     margin: '20px',
     overflow: 'scroll',
     height: '180px',
-    padding: '20px'
+    padding: '20px',
   },
   expandedRow: {
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   expandedQuestion: {
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 }));
 
 const generateColumns = (data = {}) => {
@@ -32,21 +32,21 @@ const generateColumns = (data = {}) => {
     backgroundColor: '#039be5',
     color: '#FFF',
     position: 'sticky',
-    left: 0
+    left: 0,
   });
   const headerStyle = prefix({
     backgroundColor: '#039be5',
     position: 'sticky',
     left: 0,
-    zIndex: 11
+    zIndex: 11,
   });
   const columns = [
     {
       title: 'Student',
       field: 'fullname',
       cellStyle,
-      headerStyle
-    }
+      headerStyle,
+    },
   ];
   if (!data.teacherAssignment) {
     return columns;
@@ -68,7 +68,7 @@ const generateColumns = (data = {}) => {
         }
 
         return null;
-      }
+      },
     });
   });
   return columns;
@@ -86,7 +86,7 @@ const generateData = (data = {}) => {
       });
       parsedData.push({
         fullname,
-        ...parsedAnswers
+        ...parsedAnswers,
       });
     });
   }
@@ -96,20 +96,20 @@ const generateData = (data = {}) => {
 const AssignmentResults = ({ match }) => {
   const classes = useStyles();
   const {
-    params: { assignmentId }
+    params: { assignmentId },
   } = match;
   const { data: assignmentData, loading: assignmentLoading } = useQuery(
     GET_ASSIGNMENT,
     {
-      variables: { assignmentId }
+      variables: { assignmentId },
     }
   );
   const { data, loading } = useQuery(GET_ASSIGNMENT_RESULTS, {
-    variables: { assignmentId }
+    variables: { assignmentId },
   });
   const parsedData = useMemo(() => generateData(data), [data]);
   const columns = useMemo(() => generateColumns(assignmentData), [
-    assignmentData
+    assignmentData,
   ]);
   if (loading || assignmentLoading) {
     return <GlobalLoader />;
@@ -120,7 +120,7 @@ const AssignmentResults = ({ match }) => {
     backgroundColor: '#01579b',
     color: '#FFF',
     position: 'sticky',
-    top: 0
+    top: 0,
   });
   return (
     <div className="results-table">
@@ -143,7 +143,7 @@ const AssignmentResults = ({ match }) => {
                   mcCorrect,
                   questionType,
                   selfGrade,
-                  questionId
+                  questionId,
                 } = question;
                 let result;
                 if (questionType === 'Free Response') {
@@ -167,8 +167,8 @@ const AssignmentResults = ({ match }) => {
         }}
         options={{
           headerStyle,
-          search: false,
-          sorting: false
+          search: true,
+          sorting: false,
         }}
       />
     </div>
