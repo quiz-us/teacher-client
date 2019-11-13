@@ -1,4 +1,7 @@
-export default (error = {}) => {
+export default error => {
+  if (!error) {
+    return '';
+  }
   const { graphQLErrors = [], message = undefined } = error;
   let mutationError = message;
   if (graphQLErrors.length) {
