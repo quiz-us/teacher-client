@@ -13,6 +13,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import GlobalLoader from '../../app/GlobalLoader';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    'td:nth-child(1)': {
+      position: 'sticky',
+    },
+  },
   expandedContainer: {
     margin: '20px',
     overflow: 'scroll',
@@ -28,12 +33,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const generateColumns = (data = {}) => {
-  const cellStyle = prefix({
+  const cellStyle = {
     backgroundColor: '#039be5',
     color: '#FFF',
+    zIndex: 11,
     position: 'sticky',
     left: 0,
-  });
+  };
   const headerStyle = prefix({
     backgroundColor: '#039be5',
     position: 'sticky',
@@ -116,57 +122,14 @@ const AssignmentResults = ({ match }) => {
   }
   const { teacherAssignment = { deck: {} } } = assignmentData;
   const name = teacherAssignment.deck.name || '';
-  const headerStyle = prefix({
-    backgroundColor: '#01579b',
-    color: '#FFF',
-    position: 'sticky',
-    top: 0,
-  });
   return (
-    <div className="results-table">
+    <div className={classes.root}>
       <MaterialTable
         icons={tableIcons}
         columns={columns}
         data={parsedData}
         title={`${name} Results`}
-        detailPanel={rowData => {
-          return (
-            <div className={classes.expandedContainer}>
-              {Object.keys(rowData).map((columnName, i) => {
-                const question = rowData[columnName];
-                if (!question.questionId) {
-                  return null;
-                }
-                const {
-                  responseText,
-                  questionText,
-                  mcCorrect,
-                  questionType,
-                  selfGrade,
-                  questionId,
-                } = question;
-                let result;
-                if (questionType === 'Free Response') {
-                  result = selfGrade;
-                } else if (questionType === 'Multiple Choice') {
-                  result = mcCorrect ? '✓' : 'x';
-                }
-                return (
-                  <div
-                    key={`expanded-${questionId}`}
-                    className={classes.expandedRow}
-                  >
-                    <div className={classes.expandedQuestion}>{`${i +
-                      1}. ${questionText}`}</div>
-                    <div>{`[${result}] ${responseText}`}</div>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        }}
         options={{
-          headerStyle,
           search: true,
           sorting: false,
         }}
