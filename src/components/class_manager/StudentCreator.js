@@ -7,7 +7,6 @@ import useForm from '../hooks/useForm';
 import { useMutation } from '@apollo/react-hooks';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { ENROLL_STUDENT, GET_STUDENTS } from '../queries/Student';
-import parseError from '../../util/parseError';
 import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({
@@ -110,7 +109,7 @@ const Form = ({ classes, periodId }) => {
           </Button>
         )}
       </form>
-      <ErrorModal errorMessage={error && parseError(error)} />
+      <ErrorModal error={error} />
     </Card>
   );
 };

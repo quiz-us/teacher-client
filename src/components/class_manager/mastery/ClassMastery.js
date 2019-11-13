@@ -10,8 +10,8 @@ const generateColumns = (data = {}) => {
   const columns = [
     {
       title: 'Standards',
-      field: 'standard'
-    }
+      field: 'standard',
+    },
   ];
   if (!data.students) {
     return columns;
@@ -20,7 +20,7 @@ const generateColumns = (data = {}) => {
   data.students.forEach(({ firstName, lastName, id }) => {
     columns.push({
       title: `${firstName} ${lastName}`,
-      field: id
+      field: id,
     });
   });
 
@@ -40,7 +40,7 @@ const generateData = (data = {}) => {
 
       parsedData.push({
         standard: standard.title,
-        ...parsedPerformance
+        ...parsedPerformance,
       });
     });
   }
@@ -49,16 +49,16 @@ const generateData = (data = {}) => {
 
 const ClassMastery = ({ match }) => {
   const {
-    params: { id }
+    params: { id },
   } = match;
   const { data: studentData, loading: studentLoading } = useQuery(
     GET_STUDENTS,
     {
-      variables: { periodId: id }
+      variables: { periodId: id },
     }
   );
   const { data, loading } = useQuery(GET_PERIOD_MASTERY, {
-    variables: { periodId: id }
+    variables: { periodId: id },
   });
   const parsedData = useMemo(() => generateData(data), [data]);
   const columns = useMemo(() => generateColumns(studentData), [studentData]);
@@ -66,14 +66,14 @@ const ClassMastery = ({ match }) => {
     return <GlobalLoader />;
   }
   return (
-    <div>
+    <div className="results-table">
       <MaterialTable
         icons={tableIcons}
         columns={columns}
         data={parsedData}
         options={{
-          pageSize: 25,
-          pageSizeOptions: [25, 50, 100]
+          pageSize: 10,
+          pageSizeOptions: [10, 25, 50],
         }}
         title="Mastery Data"
       />

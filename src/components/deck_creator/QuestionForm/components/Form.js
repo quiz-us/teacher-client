@@ -21,44 +21,44 @@ import TagsForm from './TagsForm';
 import { QuestionFormContext, generateRandomId } from './QuestionFormContext';
 import { CurrentDeckContext } from '../../CurrentDeckContext';
 import QuestionAndAnswers from './QuestionAndAnswers';
-import decamelize from '../../../util/decamelize';
+import decamelize from 'decamelize';
 
 const useStyles = makeStyles({
   form: {
     width: '90%',
     margin: '20px auto',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   formControl: {
     // width: '40%',
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   wideFormControl: {
     // width: '90%'
   },
   questionAnswerContainer: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   submitButton: {
     width: '40%',
-    margin: '0 auto'
+    margin: '0 auto',
   },
   loaderContainer: {
-    margin: '0 auto'
-  }
+    margin: '0 auto',
+  },
 });
 
 const useSelectStyles = makeStyles({
   root: {
-    padding: '10px'
+    padding: '10px',
   },
   select: {
     '&:focus': {
-      backgroundColor: 'transparent'
-    }
-  }
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
 const CREATE_QUESTION = gql`
@@ -114,14 +114,14 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       currentDeckDispatch({
         type: 'addToCurrent',
         card: createQuestion,
-        id: createQuestion.id
+        id: createQuestion.id,
       });
       dispatch({
-        type: 'resetForm'
+        type: 'resetForm',
       });
       window.scrollTo(0, 0);
       setQuestionAnswerId(generateRandomId());
-    }
+    },
   });
 
   const onSubmit = formData => {
@@ -134,8 +134,8 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         questionPlaintext: formData['questionText'],
         questionOptions: formData['answers'].map(answer =>
           JSON.stringify(answer)
-        )
-      }
+        ),
+      },
     });
   };
 
@@ -153,7 +153,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
     dispatch({
       type: 'update',
       name: e.target.name,
-      value: e.target.value
+      value: e.target.value,
     });
   };
 
@@ -204,7 +204,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         }
       }
       if (empty(inputVal)) {
-        setErrorMessage(`Please fill out '${decamelize(inputKey)}'!`);
+        setErrorMessage(`Please fill out '${decamelize(inputKey, ' ')}'!`);
         return false;
       }
     }
@@ -220,9 +220,9 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         answers: answers.map(answer => {
           return {
             ...answer,
-            optionText: Plain.serialize(answer.richText)
+            optionText: Plain.serialize(answer.richText),
           };
-        })
+        }),
       };
       onSubmit(formData);
     }
@@ -241,7 +241,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
             className={classes.select}
             inputProps={{
               name: 'questionType',
-              id: 'questionType-select'
+              id: 'questionType-select',
             }}
           >
             {questionTypes.map(type => {
@@ -262,7 +262,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
             className={classes.select}
             inputProps={{
               name: 'standardId',
-              id: 'standard-select'
+              id: 'standard-select',
             }}
           >
             {standardsLoading && <div>Loading...</div>}
@@ -318,9 +318,9 @@ Form.propTypes = {
     PropTypes.shape({
       description: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired
+      id: PropTypes.string.isRequired,
     })
-  )
+  ),
 };
 
 export default Form;

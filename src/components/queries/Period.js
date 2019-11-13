@@ -36,6 +36,14 @@ export const EDIT_PERIOD = gql`
   }
 `;
 
+export const DELETE_PERIOD = gql`
+  mutation($periodId: ID!) {
+    deletePeriod(periodId: $periodId) {
+      id
+    }
+  }
+`;
+
 export const GET_PERIOD_MASTERY = gql`
   query getPeriodMastery($periodId: ID!) {
     periodStandardsMastery(periodId: $periodId) {
