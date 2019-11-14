@@ -3,8 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { GET_PERIOD_MASTERY } from '../../queries/Period';
 import { GET_STUDENTS } from '../../queries/Student';
 import GlobalLoader from '../../app/GlobalLoader';
-import MaterialTable from 'material-table';
-import tableIcons from '../../table/TableIcons';
+import StickyColumnTable from '../../table/StickyColumnTable';
 
 const generateColumns = (data = {}) => {
   const columns = [
@@ -67,8 +66,7 @@ const ClassMastery = ({ match }) => {
   }
   return (
     <div className="results-table">
-      <MaterialTable
-        icons={tableIcons}
+      <StickyColumnTable
         columns={columns}
         data={parsedData}
         options={{

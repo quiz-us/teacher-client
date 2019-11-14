@@ -1,57 +1,19 @@
 import React, { useMemo } from 'react';
-import { makeStyles } from '@material-ui/styles';
 import { useQuery } from '@apollo/react-hooks';
-import { prefix } from 'inline-style-prefixer';
 import {
   GET_ASSIGNMENT_RESULTS,
   GET_ASSIGNMENT,
 } from '../../queries/Assignment';
-import MaterialTable from 'material-table';
-import tableIcons from '../../table/TableIcons';
+import StickyColumnTable from '../../table/StickyColumnTable';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ClearIcon from '@material-ui/icons/Clear';
 import GlobalLoader from '../../app/GlobalLoader';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    'td:nth-child(1)': {
-      position: 'sticky',
-    },
-  },
-  expandedContainer: {
-    margin: '20px',
-    overflow: 'scroll',
-    height: '180px',
-    padding: '20px',
-  },
-  expandedRow: {
-    marginBottom: '20px',
-  },
-  expandedQuestion: {
-    fontWeight: 'bold',
-  },
-}));
-
 const generateColumns = (data = {}) => {
-  const cellStyle = {
-    backgroundColor: '#039be5',
-    color: '#FFF',
-    zIndex: 11,
-    position: 'sticky',
-    left: 0,
-  };
-  const headerStyle = prefix({
-    backgroundColor: '#039be5',
-    position: 'sticky',
-    left: 0,
-    zIndex: 11,
-  });
   const columns = [
     {
       title: 'Student',
       field: 'fullname',
-      cellStyle,
-      headerStyle,
     },
   ];
   if (!data.teacherAssignment) {
@@ -100,7 +62,6 @@ const generateData = (data = {}) => {
 };
 
 const AssignmentResults = ({ match }) => {
-  const classes = useStyles();
   const {
     params: { assignmentId },
   } = match;
@@ -122,10 +83,10 @@ const AssignmentResults = ({ match }) => {
   }
   const { teacherAssignment = { deck: {} } } = assignmentData;
   const name = teacherAssignment.deck.name || '';
+  console.log(columns);
   return (
-    <div className={classes.root}>
-      <MaterialTable
-        icons={tableIcons}
+    <div>
+      <StickyColumnTable
         columns={columns}
         data={parsedData}
         title={`${name} Results`}
