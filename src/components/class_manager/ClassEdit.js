@@ -105,20 +105,22 @@ const ClassEdit = ({ history, match }) => {
             >
               <EditIcon />
             </IconButton>
-            <IconButton className={classes.iconButtons} title="delete class">
-              <DeleteIcon
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      'Are you sure you want to delete this class? This will unenroll all students and then delete this class!'
-                    )
-                  ) {
-                    deletePeriod({
-                      variables: { periodId: params.id },
-                    });
-                  }
-                }}
-              />
+            <IconButton
+              className={classes.iconButtons}
+              title="delete class"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    'Are you sure you want to delete this class? This will unenroll all students and then delete this class!'
+                  )
+                ) {
+                  deletePeriod({
+                    variables: { periodId: params.id },
+                  });
+                }
+              }}
+            >
+              <DeleteIcon />
             </IconButton>
           </div>
         </React.Fragment>
