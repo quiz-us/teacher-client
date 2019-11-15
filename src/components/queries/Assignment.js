@@ -43,8 +43,9 @@ export const GET_CLASS_ASSIGNMENTS = gql`
 export const GET_ASSIGNMENT_RESULTS = gql`
   query getAssignmentsResults($assignmentId: ID!) {
     assignmentResults(assignmentId: $assignmentId) {
-      fullname
-      answer
+      firstname
+      lastname
+      result
     }
   }
 `;
@@ -59,6 +60,7 @@ export const GET_ASSIGNMENT = gql`
           questionText
         }
       }
+      numQuestions
     }
   }
 `;
