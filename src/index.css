@@ -29,13 +29,3 @@ a {
   color: blue;
   text-decoration: underline;
 }
-.results-table ::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 5px;
-}
-
-.results-table ::-webkit-scrollbar-thumb {
-  border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-}

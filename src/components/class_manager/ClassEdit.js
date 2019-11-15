@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
   heading: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 20,
     height: 80,
   },
   buttonsContainer: {
@@ -96,7 +95,7 @@ const ClassEdit = ({ history, match }) => {
         </form>
       ) : (
         <React.Fragment>
-          <h1>{name}</h1>
+          <h2>{name}</h2>
           <div className={classes.buttonsContainer}>
             <IconButton
               className={classes.iconButtons}

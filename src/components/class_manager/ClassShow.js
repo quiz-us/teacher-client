@@ -42,14 +42,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ClassShow = ({ match, location, history }) => {
+const ClassShow = ({ match, location }) => {
   const classes = useStyles();
-  const navigate = path => {
-    return () => {
-      history.push(path);
-    };
-  };
-
   return (
     <div className={classes.root}>
       <Link className="link" to="/class-manager">
@@ -58,10 +52,15 @@ const ClassShow = ({ match, location, history }) => {
       <Route path={match.path} component={ClassEdit} />
       <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
-          {/* NOTE: not using Link because UX is not ideal with Tab:*/}
-          <Tab onClick={navigate(match.url)}>Roster</Tab>
-          <Tab onClick={navigate(`${match.url}/assignments`)}>Assignments</Tab>
-          <Tab onClick={navigate(`${match.url}/mastery`)}>Mastery Data</Tab>
+          <Tab>
+            <Link to={match.url}>Roster</Link>
+          </Tab>
+          <Tab>
+            <Link to={`${match.url}/assignments`}>Assignments</Link>
+          </Tab>
+          <Tab>
+            <Link to={`${match.url}/mastery`}>Mastery Data</Link>
+          </Tab>
         </TabList>
 
         <TabPanel className={classes.panel}>

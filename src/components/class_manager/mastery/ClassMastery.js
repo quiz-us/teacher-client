@@ -65,7 +65,7 @@ const ClassMastery = ({ match }) => {
     return <GlobalLoader />;
   }
   return (
-    <div className="results-table">
+    <div>
       <StickyColumnTable
         columns={columns}
         data={parsedData}
