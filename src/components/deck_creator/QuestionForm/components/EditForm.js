@@ -291,9 +291,9 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
         </Card>
       </DialogContent>
       <DialogActions>
-        {/* {createLoading && <span>Creating deck...</span>}
-        {updateLoading && <span>Updating deck...</span>}
-        {(errorMessage.length > 0 || mutationError) && (
+        {/* {createLoading && <span>Creating deck...</span>} */}
+        {/* {updateLoading && <span>Updating deck...</span>} */}
+        {/* {(errorMessage.length > 0 || mutationError) && (
           <span className={classes.errorMessage}>
             {errorMessage || mutationError}
           </span>

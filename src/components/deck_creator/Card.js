@@ -84,7 +84,7 @@ const Answers = ({ questionOptions, classes }) => {
             </span>
 
             <div className={classes.readOnly}>
-              <ReadOnly key={richText} value={JSON.parse(richText)} />
+              <ReadOnly key={`${id}-${richText}`} value={JSON.parse(richText)} />
             </div>
           </div>
         );
