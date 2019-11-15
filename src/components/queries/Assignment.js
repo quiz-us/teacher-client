@@ -45,6 +45,7 @@ export const GET_ASSIGNMENT_RESULTS = gql`
     assignmentResults(assignmentId: $assignmentId) {
       firstname
       lastname
+      studentId
       result
     }
   }

@@ -44,7 +44,12 @@
     "watch": "react-scripts test --watchAll=true"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "react/prop-types": [
+        "warn"
+      ]
+    }
   },
   "browserslist": {
     "production": [
