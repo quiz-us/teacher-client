@@ -83,6 +83,7 @@ const AssignmentResults = ({ match }) => {
       <StudentAssignmentShow
         studentId={selectedStudentId}
         assignmentId={assignmentId}
+        handleClose={() => setSelectedStudentId(null)}
       />
     </div>
   );
