@@ -95,7 +95,6 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     {
       onCompleted: ({ updateQuestion }) => {
         handleClose();
-        console.log(updateQuestion);
         currentDeckDispatch({
           type: 'addToCurrent',
           id: updateQuestion.id,
