@@ -98,7 +98,6 @@ export const CREATE_QUESTION = gql`
 export const UPDATE_QUESTION = gql`
          mutation updateQuestion(
            $id: ID!
-           $questionType: String
            $standardId: ID
            $tags: [String!]
            $richText: String
@@ -107,7 +106,6 @@ export const UPDATE_QUESTION = gql`
          ) {
            updateQuestion(
              id: $id
-             questionType: $questionType
              standardId: $standardId
              tags: $tags
              richText: $richText
