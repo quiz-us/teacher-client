@@ -45,5 +45,7 @@ describe('<EditForm />', () => {
       { id: 1, name: 'Standard 1' },
       { id: 2, name: 'Standard 2' }
     ];
-    
+    it('fake test, true is true', () => {
+      expect(true).toBeTruthy();
+    })
 })
