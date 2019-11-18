@@ -28,15 +28,15 @@ import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
 
 const useStyles = makeStyles({
   root: {
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   actions: {
     justifyContent: 'center',
     padding: 0,
-    height: '15px'
+    height: '15px',
   },
   expandOpen: {
-    transform: 'rotate(180deg)'
+    transform: 'rotate(180deg)',
   },
   cardHeader: {
     display: 'flex',
@@ -50,22 +50,22 @@ const useStyles = makeStyles({
     justifyContent: 'space-between'
   },
   cardHeaderText: {
-    paddingRight: '10px'
+    paddingRight: '10px',
   },
   readOnly: {
-    width: '100%'
+    width: '100%',
   },
   details: {
-    marginTop: '15px'
+    marginTop: '15px',
   },
   answerChoiceRow: {
     display: 'flex',
-    marginTop: '10px'
+    marginTop: '10px',
   },
   correctnessIcon: {
     display: 'flex',
     alignItems: 'center',
-    marginRight: '5px'
+    marginRight: '5px',
   }
 });
 

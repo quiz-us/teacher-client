@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/styles';
 import Confirmation from './Confirmation';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
-import { GET_DECK, DELETE_DECK, GET_QUESTION } from '../queries/Deck';
+import { GET_DECK, DELETE_DECK } from '../queries/Deck';
 
 const useStyles = makeStyles(theme => ({
   currentDeckContainer: {

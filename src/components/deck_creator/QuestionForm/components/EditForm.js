@@ -29,8 +29,6 @@ import {
   QuestionFormContext
 } from './QuestionFormContext';
 
-// import CardsContainer from './CardsContainer';
-// import parseError from '../../util/parseError';
 import { GET_STANDARDS } from '../../../queries/Standard';
 import { UPDATE_QUESTION } from '../../../queries/Question';
 
@@ -90,7 +88,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     data: { allStandards = [] } = { allStandards: [] }
   } = useQuery(GET_STANDARDS);
 
-  const [updateQuestion, { createQuestionLoading }] = useMutation(
+  const [updateQuestion] = useMutation(
     UPDATE_QUESTION,
     {
       onCompleted: ({ updateQuestion }) => {
@@ -108,24 +106,6 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
   const selectClasses = useSelectStyles();
 
   const closeErrorMessage = () => setErrorMessage('');
-
-  // ATTEMPT TO COMBINE FORM AND EDITFORM
-  // if (createData.createDeck || updateData.updateDeck) {
-  //   return (
-  //     <Redirect
-  //       to={{
-  //         pathname: '/'
-  //       }}
-  //     />
-  //   );
-  // }
-  // MUTATION ERROR HANDLING:
-  // let mutationError;
-  // if (createError) {
-  //   mutationError = parseError(createError);
-  // } else if (updateError) {
-  //   mutationError = parseError(updateError);
-  // }
 
   const handleClose = () => setOpen(false);
 
