@@ -51,6 +51,29 @@ export const GET_ASSIGNMENT_RESULTS = gql`
   }
 `;
 
+export const GET_STUDENT_ASSIGNMENT_RESULTS = gql`
+  query($studentId: ID!, $assignmentId: ID!) {
+    studentAssignmentResults(
+      studentId: $studentId
+      assignmentId: $assignmentId
+    ) {
+      id
+      richText
+      questionType
+      responses {
+        createdAt
+        id
+        questionOption {
+          richText
+        }
+        responseText
+        mcCorrect
+        selfGrade
+      }
+    }
+  }
+`;
+
 export const GET_ASSIGNMENT = gql`
   query getAssignment($assignmentId: ID!) {
     teacherAssignment(assignmentId: $assignmentId) {
