@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
 import ButtonLink from '../../jss/ButtonLink';
-import StudentAssignmentShow from './StudentAssignmentShow';
+import StudentAssignmentShow from './student_assignment_show';
 import {
   GET_ASSIGNMENT_RESULTS,
   GET_ASSIGNMENT,
@@ -36,7 +36,7 @@ const AssignmentResults = ({ match }) => {
   const { data, loading } = useQuery(GET_ASSIGNMENT_RESULTS, {
     variables: { assignmentId },
   });
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState({});
 
   if (loading || assignmentLoading) {
     return <GlobalLoader />;
@@ -55,14 +55,19 @@ const AssignmentResults = ({ match }) => {
     {
       title: 'Results (total correct / total attempts)',
       field: 'result',
-      render: rowData => (
-        <button
-          className={classes.buttonLink}
-          onClick={() => setSelectedStudentId(rowData.studentId)}
-        >
-          {rowData.result}
-        </button>
-      ),
+      render: rowData => {
+        const { studentId, firstname, lastname } = rowData;
+        return (
+          <button
+            className={classes.buttonLink}
+            onClick={() =>
+              setSelectedStudent({ studentId, firstname, lastname })
+            }
+          >
+            {rowData.result}
+          </button>
+        );
+      },
       customSort: (a, b) =>
         parseAndConvert(a.result) - parseAndConvert(b.result),
     },
@@ -81,9 +86,9 @@ const AssignmentResults = ({ match }) => {
         title={`${name} Results (${numQuestions} total questions)`}
       />
       <StudentAssignmentShow
-        studentId={selectedStudentId}
+        selectedStudent={selectedStudent}
         assignmentId={assignmentId}
-        handleClose={() => setSelectedStudentId(null)}
+        handleClose={() => setSelectedStudent({})}
       />
     </div>
   );
