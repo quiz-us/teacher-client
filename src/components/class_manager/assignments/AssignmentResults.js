@@ -1,67 +1,29 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
+
+import ButtonLink from '../../jss/ButtonLink';
+import StudentAssignmentShow from './student_assignment_show';
 import {
   GET_ASSIGNMENT_RESULTS,
   GET_ASSIGNMENT,
 } from '../../queries/Assignment';
-import StickyColumnTable from '../../table/StickyColumnTable';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ClearIcon from '@material-ui/icons/Clear';
+import MaterialTable from '../../table/MaterialTable';
 import GlobalLoader from '../../app/GlobalLoader';
 
-const generateColumns = (data = {}) => {
-  const columns = [
-    {
-      title: 'Student',
-      field: 'fullname',
-    },
-  ];
-  if (!data.teacherAssignment) {
-    return columns;
-  }
-  data.teacherAssignment.deck.questions.forEach(({ questionText, id }) => {
-    columns.push({
-      title: questionText,
-      field: id,
-      render: rowData => {
-        if (!rowData[id]) {
-          return null;
-        }
-        const { questionType, mcCorrect, selfGrade } = rowData[id];
+const useStyles = makeStyles({
+  buttonLink: ButtonLink,
+});
 
-        if (questionType === 'Free Response') {
-          return selfGrade;
-        } else if (questionType === 'Multiple Choice') {
-          return mcCorrect ? <CheckCircleIcon /> : <ClearIcon />;
-        }
-
-        return null;
-      },
-    });
-  });
-  return columns;
-};
-
-const generateData = (data = {}) => {
-  const parsedData = [];
-  if (data.assignmentResults) {
-    data.assignmentResults.forEach(({ fullname, answer }) => {
-      const parsedAnswers = {};
-      JSON.parse(answer).forEach(answer => {
-        if (!parsedAnswers[answer.questionId]) {
-          parsedAnswers[answer.questionId] = answer;
-        }
-      });
-      parsedData.push({
-        fullname,
-        ...parsedAnswers,
-      });
-    });
-  }
-  return parsedData;
+const parseAndConvert = str => {
+  // str should be formatted like `${numCorrect} / ${numAttempted}
+  const numStr = str.split('/')[0].trim();
+  return parseInt(numStr, 10);
 };
 
 const AssignmentResults = ({ match }) => {
+  const classes = useStyles();
   const {
     params: { assignmentId },
   } = match;
@@ -74,29 +36,70 @@ const AssignmentResults = ({ match }) => {
   const { data, loading } = useQuery(GET_ASSIGNMENT_RESULTS, {
     variables: { assignmentId },
   });
-  const parsedData = useMemo(() => generateData(data), [data]);
-  const columns = useMemo(() => generateColumns(assignmentData), [
-    assignmentData,
-  ]);
+  const [selectedStudent, setSelectedStudent] = useState({});
+
   if (loading || assignmentLoading) {
     return <GlobalLoader />;
   }
+
+  const columns = [
+    {
+      title: 'First Name',
+      field: 'firstname',
+    },
+    {
+      title: 'Last Name',
+      field: 'lastname',
+      defaultSort: 'asc',
+    },
+    {
+      title: 'Results (total correct / total attempts)',
+      field: 'result',
+      render: rowData => {
+        const { studentId, firstname, lastname } = rowData;
+        return (
+          <button
+            className={classes.buttonLink}
+            onClick={() =>
+              setSelectedStudent({ studentId, firstname, lastname })
+            }
+          >
+            {rowData.result}
+          </button>
+        );
+      },
+      customSort: (a, b) =>
+        parseAndConvert(a.result) - parseAndConvert(b.result),
+    },
+  ];
+
   const { teacherAssignment = { deck: {} } } = assignmentData;
-  const name = teacherAssignment.deck.name || '';
-  console.log(columns);
+  const {
+    deck: { name = '' },
+    numQuestions,
+  } = teacherAssignment;
   return (
     <div>
-      <StickyColumnTable
+      <MaterialTable
         columns={columns}
-        data={parsedData}
-        title={`${name} Results`}
-        options={{
-          search: true,
-          sorting: false,
-        }}
+        data={data.assignmentResults}
+        title={`${name} Results (${numQuestions} total questions)`}
+      />
+      <StudentAssignmentShow
+        selectedStudent={selectedStudent}
+        assignmentId={assignmentId}
+        handleClose={() => setSelectedStudent({})}
       />
     </div>
   );
+};
+
+AssignmentResults.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      assignmentId: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
 };
 
 export default AssignmentResults;

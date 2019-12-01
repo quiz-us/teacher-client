@@ -43,8 +43,33 @@ export const GET_CLASS_ASSIGNMENTS = gql`
 export const GET_ASSIGNMENT_RESULTS = gql`
   query getAssignmentsResults($assignmentId: ID!) {
     assignmentResults(assignmentId: $assignmentId) {
-      fullname
-      answer
+      firstname
+      lastname
+      studentId
+      result
+    }
+  }
+`;
+
+export const GET_STUDENT_ASSIGNMENT_RESULTS = gql`
+  query($studentId: ID!, $assignmentId: ID!) {
+    studentAssignmentResults(
+      studentId: $studentId
+      assignmentId: $assignmentId
+    ) {
+      id
+      richText
+      questionType
+      responses {
+        createdAt
+        id
+        questionOption {
+          richText
+        }
+        responseText
+        mcCorrect
+        selfGrade
+      }
     }
   }
 `;
@@ -59,6 +84,7 @@ export const GET_ASSIGNMENT = gql`
           questionText
         }
       }
+      numQuestions
     }
   }
 `;
