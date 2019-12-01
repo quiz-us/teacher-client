@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
   heading: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 20,
     height: 80,
   },
   buttonsContainer: {
@@ -96,7 +95,7 @@ const ClassEdit = ({ history, match }) => {
         </form>
       ) : (
         <React.Fragment>
-          <h1>{name}</h1>
+          <h2>{name}</h2>
           <div className={classes.buttonsContainer}>
             <IconButton
               className={classes.iconButtons}
@@ -105,20 +104,22 @@ const ClassEdit = ({ history, match }) => {
             >
               <EditIcon />
             </IconButton>
-            <IconButton className={classes.iconButtons} title="delete class">
-              <DeleteIcon
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      'Are you sure you want to delete this class? This will unenroll all students and then delete this class!'
-                    )
-                  ) {
-                    deletePeriod({
-                      variables: { periodId: params.id },
-                    });
-                  }
-                }}
-              />
+            <IconButton
+              className={classes.iconButtons}
+              title="delete class"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    'Are you sure you want to delete this class? This will unenroll all students and then delete this class!'
+                  )
+                ) {
+                  deletePeriod({
+                    variables: { periodId: params.id },
+                  });
+                }
+              }}
+            >
+              <DeleteIcon />
             </IconButton>
           </div>
         </React.Fragment>

@@ -54,6 +54,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         return true;
       }
       console.error(message);
+      return false;
     });
   }
   if (networkError) {
