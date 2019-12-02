@@ -31,7 +31,7 @@
     "react-scripts": "3.2.0",
     "react-table": "^7.0.0-beta.15",
     "react-tabs": "^3.0.0",
-    "slate": "^0.47.9",
+    "slate": "^0.50.7",
     "slate-drop-or-paste-images": "^0.9.1",
     "slate-react": "^0.22.10",
     "use-debounce": "^3.1.0"
