@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
@@ -44,6 +44,10 @@ const useStyles = makeStyles(theme => ({
 
 const ClassShow = ({ match, location }) => {
   const classes = useStyles();
+  let history = useHistory();
+
+  // Using onClick instead of react-router-dom Link because using Link causes
+  // parts of the Tab to not have the correct click navigation behavior:
   return (
     <div className={classes.root}>
       <Link className="link" to="/class-manager">
@@ -52,14 +56,14 @@ const ClassShow = ({ match, location }) => {
       <Route path={match.path} component={ClassEdit} />
       <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
-          <Tab>
-            <Link to={match.url}>Roster</Link>
+          <Tab onClick={() => history.push(match.url)}>Roster</Tab>
+
+          <Tab onClick={() => history.push(`${match.url}/assignments`)}>
+            Assignments
           </Tab>
-          <Tab>
-            <Link to={`${match.url}/assignments`}>Assignments</Link>
-          </Tab>
-          <Tab>
-            <Link to={`${match.url}/mastery`}>Mastery Data</Link>
+
+          <Tab onClick={() => history.push(`${match.url}/mastery`)}>
+            Mastery Data
           </Tab>
         </TabList>
 
