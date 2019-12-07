@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import Nav from './components/nav/Nav';
 import LogIn from './components/auth/LogIn';
 import { createMuiTheme } from '@material-ui/core/styles';

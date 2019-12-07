@@ -1,6 +1,6 @@
 import React from 'react';
 import Home from './home/Home';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Route } from 'react-router-dom';
 import DecksContainer from './decks/DecksContainer';
 import DeckCreator from './deck_creator/DeckCreator';

@@ -9,7 +9,7 @@ import Badge from '@material-ui/core/Badge';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 import Drawer from '@material-ui/core/Drawer';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Confirmation from './Confirmation';
 import { CurrentDeckContext } from './CurrentDeckContext';
