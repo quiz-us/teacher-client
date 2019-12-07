@@ -2,7 +2,7 @@
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import React from 'react';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Plain from 'slate-plain-serializer';
 import styles from './EditorStyles';

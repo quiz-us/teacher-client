@@ -5,7 +5,7 @@ import empty from 'is-empty';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
