@@ -1,12 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_QUESTIONS = gql`
-  query getQuestions($standardId: ID, $keyWords: String, $emptyQuery: Boolean) {
-    questions(
-      standardId: $standardId
-      keyWords: $keyWords
-      emptyQuery: $emptyQuery
-    ) {
+  query getQuestions($standardId: ID, $keyWords: String) {
+    questions(standardId: $standardId, keyWords: $keyWords) {
       questionText
       questionType
       richText
@@ -17,7 +13,6 @@ export const GET_QUESTIONS = gql`
       tags {
         name
       }
-
       questionOptions {
         richText
         correct
