@@ -4,20 +4,24 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
 import ClassAssignments from './ClassAssignments';
+import StudentMastery from './mastery/StudentMastery';
 import ClassMastery from './mastery/ClassMastery';
 import ClassEdit from './ClassEdit';
 
 import BadgeIndex from './BadgeIndex';
 
+const tabIndexMap = {
+  assignments: 1,
+  'student-mastery': 2,
+  'class-mastery': 3,
+};
+
 const defaultIndex = location => {
   const routeComponents = location.pathname.split('/');
+  const lastI = routeComponents.length - 1;
   let tabIndex = 0;
-  if (routeComponents.some(component => component === 'assignments')) {
-    tabIndex = 1;
-  } else if (routeComponents.some(component => component === 'mastery')) {
-    tabIndex = 2;
-  }
-  return tabIndex;
+
+  return tabIndexMap[routeComponents[lastI]] || tabIndex;
 };
 
 const useStyles = makeStyles(theme => ({
@@ -62,8 +66,12 @@ const ClassShow = ({ match, location }) => {
             Assignments
           </Tab>
 
-          <Tab onClick={() => history.push(`${match.url}/mastery`)}>
-            Mastery Data
+          <Tab onClick={() => history.push(`${match.url}/student-mastery`)}>
+            Student Data
+          </Tab>
+
+          <Tab onClick={() => history.push(`${match.url}/class-mastery`)}>
+            Class Data
           </Tab>
         </TabList>
 
@@ -78,7 +86,16 @@ const ClassShow = ({ match, location }) => {
           />
         </TabPanel>
         <TabPanel className={classes.panel}>
-          <Route path={`${match.path}/mastery`} component={ClassMastery} />
+          <Route
+            path={`${match.path}/student-mastery`}
+            component={StudentMastery}
+          />
+        </TabPanel>
+        <TabPanel className={classes.panel}>
+          <Route
+            path={`${match.path}/class-mastery`}
+            component={ClassMastery}
+          />
         </TabPanel>
       </Tabs>
     </div>
