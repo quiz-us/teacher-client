@@ -69,6 +69,8 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
 
+  const { questionType, standardId, answers } = state;
+
   const [errorMessage, setErrorMessage] = useState('');
   const [questionAnswerId, setQuestionAnswerId] = useState(generateRandomId());
 
@@ -86,23 +88,6 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       setQuestionAnswerId(generateRandomId());
     },
   });
-
-  const onSubmit = formData => {
-    create_question({
-      variables: {
-        questionType: formData['questionType'],
-        standardId: formData['standardId'],
-        tags: formData['tags'],
-        richText: JSON.stringify(formData['question'].toJSON()),
-        questionPlaintext: formData['questionText'],
-        questionOptions: formData['answers'].map(answer =>
-          JSON.stringify(answer)
-        ),
-      },
-    });
-  };
-
-  const { questionType, standardId, answers } = state;
 
   const classes = useStyles();
   const selectClasses = useSelectStyles();
@@ -169,6 +154,21 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
       }
     }
     return true;
+  };
+
+  const onSubmit = formData => {
+    create_question({
+      variables: {
+        questionType: formData['questionType'],
+        standardId: formData['standardId'],
+        tags: formData['tags'],
+        richText: JSON.stringify(formData['question'].toJSON()),
+        questionPlaintext: formData['questionText'],
+        questionOptions: formData['answers'].map(answer =>
+          JSON.stringify(answer)
+        ),
+      },
+    });
   };
 
   const handleSubmit = e => {

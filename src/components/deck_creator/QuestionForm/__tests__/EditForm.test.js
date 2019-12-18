@@ -4,7 +4,7 @@ import {
   render,
   fireEvent,
   cleanup,
-  waitForElement
+  waitForElement,
 } from '@testing-library/react';
 import QuestionForm from '../index';
 
@@ -12,13 +12,13 @@ jest.mock('slate-plain-serializer', () => {
   return {
     serialize: inputVal => {
       return inputVal;
-    }
+    },
   };
 });
 
 jest.mock('../components/QuestionAndAnswers.js', () => () => {
   function handleChange(event) {}
-  return <input onChange={handleChange} data-testid='question-rich-editor' />;
+  return <input onChange={handleChange} data-testid="question-rich-editor" />;
 });
 
 jest.mock(
@@ -40,10 +40,12 @@ jest.mock(
 );
 
 describe('<EditForm />', () => {
-    const questionTypes = ['Multiple Choice', 'Free Response'];
-    const standards = [
-      { id: 1, name: 'Standard 1' },
-      { id: 2, name: 'Standard 2' }
-    ];
-    
-})
+  const questionTypes = ['Multiple Choice', 'Free Response'];
+  const standards = [
+    { id: 1, name: 'Standard 1' },
+    { id: 2, name: 'Standard 2' },
+  ];
+  it('fake test, true is true', () => {
+    expect(true).toBeTruthy();
+  });
+});

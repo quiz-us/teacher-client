@@ -26,11 +26,9 @@ import decamelize from '../../../util/decamelize';
 import { CurrentDeckContext } from '../../CurrentDeckContext';
 import {
   QuestionFormProvider,
-  QuestionFormContext
+  QuestionFormContext,
 } from './QuestionFormContext';
 
-// import CardsContainer from './CardsContainer';
-// import parseError from '../../util/parseError';
 import { GET_STANDARDS } from '../../../queries/Standard';
 import { UPDATE_QUESTION } from '../../../queries/Question';
 
@@ -39,43 +37,41 @@ const useStyles = makeStyles({
     width: '90%',
     margin: '20px auto',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   formControl: {
     // width: '40%',
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   wideFormControl: {
     // width: '90%'
   },
   questionAnswerContainer: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   submitButton: {
     width: '40%',
-    margin: '0 auto'
-  }
+    margin: '0 auto',
+  },
 });
 
 const useSelectStyles = makeStyles({
   root: {
-    padding: '10px'
+    padding: '10px',
   },
   select: {
     '&:focus': {
-      backgroundColor: 'transparent'
-    }
+      backgroundColor: 'transparent',
+    },
   },
   errorMessage: {
-    color: 'red'
+    color: 'red',
   },
   header: {
-    marginTop: '20px'
-  }
+    marginTop: '20px',
+  },
 });
-
-
 
 const EditForm = ({ open, questionId, setOpen, inputs }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
@@ -87,7 +83,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
   // maybe todo: change fetch policy?
   const {
     loading: standardsLoading,
-    data: { allStandards = [] } = { allStandards: [] }
+    data: { allStandards = [] } = { allStandards: [] },
   } = useQuery(GET_STANDARDS);
 
   const [updateQuestion, { createQuestionLoading }] = useMutation(
@@ -95,11 +91,10 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     {
       onCompleted: ({ updateQuestion }) => {
         handleClose();
-        console.log(updateQuestion);
         currentDeckDispatch({
           type: 'addToCurrent',
           id: updateQuestion.id,
-          card: updateQuestion
+          card: updateQuestion,
         });
       },
     }
@@ -109,24 +104,6 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
   const selectClasses = useSelectStyles();
 
   const closeErrorMessage = () => setErrorMessage('');
-
-  // ATTEMPT TO COMBINE FORM AND EDITFORM
-  // if (createData.createDeck || updateData.updateDeck) {
-  //   return (
-  //     <Redirect
-  //       to={{
-  //         pathname: '/'
-  //       }}
-  //     />
-  //   );
-  // }
-  // MUTATION ERROR HANDLING:
-  // let mutationError;
-  // if (createError) {
-  //   mutationError = parseError(createError);
-  // } else if (updateError) {
-  //   mutationError = parseError(updateError);
-  // }
 
   const handleClose = () => setOpen(false);
 
@@ -141,8 +118,8 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
         questionPlaintext: formData['questionText'],
         questionOptions: formData['answers'].map(answer =>
           JSON.stringify(answer)
-        )
-      }
+        ),
+      },
     });
   };
 
@@ -162,9 +139,9 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
             // When a formed is editted, if a field is editted,
             // it's richText also becomes an instance of a Slate Value.
             // However, when a teacher
-            optionText: Plain.serialize(Value.create(answer.richText))
+            optionText: Plain.serialize(Value.create(answer.richText)),
           };
-        })
+        }),
       };
       onSubmit(formData);
       console.log('formData', formData);
@@ -196,7 +173,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
     dispatch({
       type: 'update',
       name: e.target.name,
-      value: e.target.value
+      value: e.target.value,
     });
   };
 
@@ -241,13 +218,13 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='md'>
+    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="md">
       <DialogTitle>Update Question</DialogTitle>
       <DialogContent>
         <Card>
           <form className={classes.form} onSubmit={handleSubmit}>
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor='standard-select'>Select Standard</InputLabel>
+              <InputLabel htmlFor="standard-select">Select Standard</InputLabel>
               <Select
                 value={standardId}
                 onChange={handleInputChange}
@@ -255,7 +232,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
                 className={classes.select}
                 inputProps={{
                   name: 'standardId',
-                  id: 'standard-select'
+                  id: 'standard-select',
                 }}
               >
                 {standardsLoading && <div>Loading...</div>}
@@ -283,7 +260,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
           <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
             <DialogTitle>{errorMessage}</DialogTitle>
             <DialogActions>
-              <Button onClick={closeErrorMessage} color='primary' autoFocus>
+              <Button onClick={closeErrorMessage} color="primary" autoFocus>
                 Close
               </Button>
             </DialogActions>
@@ -299,10 +276,10 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
           </span>
         )} */}
 
-        <Button onClick={handleClose} color='secondary'>
+        <Button onClick={handleClose} color="secondary">
           Go Back
         </Button>
-        <Button onClick={handleSubmit} color='primary' autoFocus>
+        <Button onClick={handleSubmit} color="primary" autoFocus>
           Update
         </Button>
       </DialogActions>
@@ -312,7 +289,7 @@ const EditForm = ({ open, questionId, setOpen, inputs }) => {
 
 export default props => {
   const {
-    card: { questionType, standards, tags, richText, questionOptions, id }
+    card: { questionType, standards, tags, richText, questionOptions, id },
   } = props;
   const initialState = {
     questionType,
@@ -323,8 +300,8 @@ export default props => {
       answerId: `${id}-answerId`,
       correct,
       id: id,
-      richText: JSON.parse(richText)
-    }))
+      richText: JSON.parse(richText),
+    })),
   };
   return (
     <QuestionFormProvider initialState={initialState}>
@@ -343,11 +320,11 @@ EditForm.propTypes = {
     id: PropTypes.string,
     questionOptions: PropTypes.array,
     standards: PropTypes.array,
-    tags: PropTypes.array
+    tags: PropTypes.array,
   }),
   setOpen: PropTypes.func,
   inputs: PropTypes.shape({
     keyWords: PropTypes.string,
-    standardId: PropTypes.string
-  })
+    standardId: PropTypes.string,
+  }),
 };
