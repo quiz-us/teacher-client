@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,21 +10,24 @@ import Typography from '@material-ui/core/Typography';
 // media queries guide: https://material-ui.com/layout/breakpoints/#theme-breakpoints-down-key-media-query
 const styles = theme => ({
   card: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     width: '28%',
     margin: '20px',
     [theme.breakpoints.down('md')]: {
-      width: '45%'
+      width: '45%',
     },
     [theme.breakpoints.down('sm')]: {
-      width: '90%'
-    }
-  }
+      width: '90%',
+    },
+  },
 });
 
 const DeckDisplay = ({
   deck: { name, description, id },
   classes,
-  openAssigner
+  openAssigner,
 }) => {
   return (
     <React.Fragment>

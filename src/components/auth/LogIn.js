@@ -25,7 +25,7 @@ export default ({ history }) => {
   const [logInTeacher, { loading, error }] = useMutation(LOGIN);
   const { inputs, handleInputChange } = useForm({
     email: '',
-    password: ''
+    password: '',
   });
 
   const mutationError = parseError(error);
@@ -34,17 +34,17 @@ export default ({ history }) => {
     e.preventDefault();
     const {
       data: {
-        logInTeacher: { token }
-      }
+        logInTeacher: { token },
+      },
     } = await logInTeacher({ variables: inputs });
     if (token) {
       await localforage.setItem('__QUIZUS__', token);
       const {
         push,
-        location: { state = { from: { pathname: '/' } } }
+        location: { state = { from: { pathname: '/' } } },
       } = history;
       client.writeData({
-        data: { loggedIn: true }
+        data: { loggedIn: true },
       });
       push(state.from.pathname);
     }
@@ -54,6 +54,7 @@ export default ({ history }) => {
     <AuthForm type="login">
       <form className={classes.form} onSubmit={handleSubmit}>
         <TextField
+          autoFocus
           label="Email"
           type="email"
           className={classes.field}

@@ -14,11 +14,11 @@ import ClassShow from './ClassShow';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: '40px'
+    margin: '40px',
   },
   list: {
-    backgroundColor: theme.palette.background.paper
-  }
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 const Period = ({ name, id }) => {
@@ -32,7 +32,9 @@ const Period = ({ name, id }) => {
 };
 
 const ClassManager = () => {
-  const { data, loading } = useQuery(GET_PERIODS);
+  const { data, loading } = useQuery(GET_PERIODS, {
+    fetchPolicy: 'network-only',
+  });
   const classes = useStyles();
 
   if (loading) {

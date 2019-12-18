@@ -1,8 +1,7 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import Nav from './components/nav/Nav';
 import LogIn from './components/auth/LogIn';
-import SignUp from './components/auth/SignUp';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import teal from '@material-ui/core/colors/teal';

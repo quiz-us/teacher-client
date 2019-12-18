@@ -2,7 +2,7 @@ import React from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { useLazyQuery } from '@apollo/react-hooks';
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -14,25 +14,25 @@ import CardContent from '@material-ui/core/CardContent';
 import useForm from '../hooks/useForm';
 import CustomCard from './Card';
 
-import { GET_QUESTIONS } from '../queries/Question'; 
+import { GET_QUESTIONS } from '../queries/Question';
 
 const useStyles = makeStyles({
   resultsContainer: {
     overflow: 'scroll',
     height: '60vh',
-    padding: '10px'
-  }
+    padding: '10px',
+  },
 });
 
 const QuestionFilter = ({ allStandards }) => {
   const classes = useStyles();
   const { inputs, handleInputChange } = useForm({
     standardId: '',
-    keyWords: ''
+    keyWords: '',
   });
   const [
     getQuestions,
-    { loading, data: { questions } = { questions: [] } }
+    { loading, data: { questions } = { questions: [] } },
   ] = useLazyQuery(GET_QUESTIONS);
 
   const [debouncedGetQuestions] = useDebouncedCallback(e => {
@@ -40,15 +40,7 @@ const QuestionFilter = ({ allStandards }) => {
   }, 1000);
 
   const filter = e => {
-    const newFilter = { ...inputs, [e.target.name]: e.target.value };
-    if (Object.values(newFilter).some(input => input !== '')) {
-      return newFilter;
-    } else {
-      return {
-        ...newFilter,
-        emptyQuery: true
-      };
-    }
+    return { ...inputs, [e.target.name]: e.target.value };
   };
 
   const onStandardChange = e => {
@@ -71,7 +63,7 @@ const QuestionFilter = ({ allStandards }) => {
               onChange={onStandardChange}
               inputProps={{
                 name: 'standardId',
-                id: 'questionStandard-select'
+                id: 'questionStandard-select',
               }}
             >
               <MenuItem value="">
@@ -106,7 +98,12 @@ const QuestionFilter = ({ allStandards }) => {
           ) : (
             questions.map(question => {
               return (
-                <CustomCard key={`search-${question.id}`} card={question} inputs={inputs} deletable/>
+                <CustomCard
+                  key={`search-${question.id}`}
+                  card={question}
+                  inputs={inputs}
+                  deletable
+                />
               );
             })
           )}

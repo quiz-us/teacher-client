@@ -1,64 +1,78 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { makeStyles } from '@material-ui/styles';
+import { Route, Link, useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClassRoster from './ClassRoster';
 import ClassAssignments from './ClassAssignments';
+import StudentMastery from './mastery/StudentMastery';
 import ClassMastery from './mastery/ClassMastery';
 import ClassEdit from './ClassEdit';
 
 import BadgeIndex from './BadgeIndex';
 
+const tabIndexMap = {
+  assignments: 1,
+  'student-mastery': 2,
+  'class-mastery': 3,
+};
+
 const defaultIndex = location => {
   const routeComponents = location.pathname.split('/');
+  const lastI = routeComponents.length - 1;
   let tabIndex = 0;
-  if (routeComponents.some(component => component === 'assignments')) {
-    tabIndex = 1;
-  } else if (routeComponents.some(component => component === 'mastery')) {
-    tabIndex = 2;
-  }
-  return tabIndex;
+
+  return tabIndexMap[routeComponents[lastI]] || tabIndex;
 };
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: '25px 40px'
+    margin: '25px 40px',
   },
   panel: {
-    padding: '10px'
+    padding: '10px',
   },
   heading: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonsContainer: {
     display: 'flex',
-    marginLeft: 20
+    marginLeft: 20,
   },
   iconButtons: {
     height: 30,
     padding: 0,
-    marginRight: 5
-  }
+    marginRight: 5,
+  },
 }));
 
-const ClassShow = ({ match, location, history }) => {
+const ClassShow = ({ match, location }) => {
   const classes = useStyles();
-  const navigate = path => {
-    return () => {
-      history.push(path);
-    };
-  };
+  let history = useHistory();
 
+  // Using onClick instead of react-router-dom Link because using Link causes
+  // parts of the Tab to not have the correct click navigation behavior:
   return (
     <div className={classes.root}>
+      <Link className="link" to="/class-manager">
+        Back To All Classes
+      </Link>
       <Route path={match.path} component={ClassEdit} />
       <Tabs defaultIndex={defaultIndex(location)}>
         <TabList>
-          {/* NOTE: not using Link because UX is not ideal with Tab:*/}
-          <Tab onClick={navigate(match.url)}>Roster</Tab>
-          <Tab onClick={navigate(`${match.url}/assignments`)}>Assignments</Tab>
-          <Tab onClick={navigate(`${match.url}/mastery`)}>Mastery Data</Tab>
+          <Tab onClick={() => history.push(match.url)}>Roster</Tab>
+
+          <Tab onClick={() => history.push(`${match.url}/assignments`)}>
+            Assignments
+          </Tab>
+
+          <Tab onClick={() => history.push(`${match.url}/student-mastery`)}>
+            Student Data
+          </Tab>
+
+          <Tab onClick={() => history.push(`${match.url}/class-mastery`)}>
+            Class Data
+          </Tab>
         </TabList>
 
         <TabPanel className={classes.panel}>
@@ -72,7 +86,16 @@ const ClassShow = ({ match, location, history }) => {
           />
         </TabPanel>
         <TabPanel className={classes.panel}>
-          <Route path={`${match.path}/mastery`} component={ClassMastery} />
+          <Route
+            path={`${match.path}/student-mastery`}
+            component={StudentMastery}
+          />
+        </TabPanel>
+        <TabPanel className={classes.panel}>
+          <Route
+            path={`${match.path}/class-mastery`}
+            component={ClassMastery}
+          />
         </TabPanel>
       </Tabs>
     </div>

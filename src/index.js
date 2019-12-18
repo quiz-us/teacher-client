@@ -4,7 +4,7 @@ import './index.css';
 import 'react-tabs/style/react-tabs.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
@@ -22,7 +22,7 @@ if (NODE_ENV === 'production') {
   server = REACT_APP_SERVER;
 }
 const httpLink = createHttpLink({
-  uri: server
+  uri: server,
 });
 
 // set the auth token with every http request:
@@ -33,8 +33,8 @@ const asyncAuthLink = setContext(
         resolve({
           headers: {
             ...headers,
-            authorization: token ? `Bearer ${token}` : null
-          }
+            authorization: token ? `Bearer ${token}` : null,
+          },
         });
       });
     })
@@ -43,25 +43,23 @@ const asyncAuthLink = setContext(
 // client side auth was heavily influenced by:
 // https://www.jaygould.co.uk/2018-08-11-react-apollo-global-error-handling/
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) => {
+  if (graphQLErrors) {
+    graphQLErrors.some(({ message }) => {
       if (message === 'Unauthenticated') {
         appCache.writeData({
           data: {
-            loggedIn: false
-          }
+            loggedIn: false,
+          },
         });
+        return true;
       }
-      console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-          locations
-        )}, Path: ${path}`
-      );
-      return message;
+      console.error(message);
+      return false;
     });
+  }
   if (networkError) {
     alert(
-      `[Something bad happened. Please contact us about this error]: ${networkError}`
+      `[Something went wrong. Please contact us about this error]: ${networkError}`
     );
     console.error(`[Network error]: ${networkError}`);
   }
@@ -71,13 +69,13 @@ const link = ApolloLink.from([errorLink, asyncAuthLink, httpLink]);
 
 const client = new ApolloClient({
   link,
-  cache: appCache
+  cache: appCache,
 });
 
 client.writeData({
   data: {
-    loggedIn: false
-  }
+    loggedIn: false,
+  },
 });
 
 ReactDOM.render(

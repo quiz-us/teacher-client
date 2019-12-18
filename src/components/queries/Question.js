@@ -25,12 +25,8 @@ export const GET_QUESTION = gql`
 `;
 
 export const GET_QUESTIONS = gql`
-  query getQuestions($standardId: ID, $keyWords: String, $emptyQuery: Boolean) {
-    questions(
-      standardId: $standardId
-      keyWords: $keyWords
-      emptyQuery: $emptyQuery
-    ) {
+  query getQuestions($standardId: ID, $keyWords: String) {
+    questions(standardId: $standardId, keyWords: $keyWords) {
       questionText
       questionType
       richText

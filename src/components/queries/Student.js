@@ -32,3 +32,24 @@ export const ENROLL_STUDENT = gql`
     }
   }
 `;
+
+export const UNENROLL_STUDENT = gql`
+  mutation unenrollStudent($studentId: ID!, $periodId: ID!) {
+    unenrollStudent(studentId: $studentId, periodId: $periodId) {
+      id
+      firstName
+      lastName
+    }
+  }
+`;
+
+export const EDIT_STUDENT = gql`
+  mutation editStudent($studentId: ID!, $studentParams: StudentParams!) {
+    editStudent(studentId: $studentId, studentParams: $studentParams) {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+`;

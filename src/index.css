@@ -30,7 +30,6 @@ a {
   text-decoration: underline;
 }
 
-.results-table td:nth-child(2) {
-  position: sticky;
-  position: -webkit-sticky;
+img {
+  max-width: 100%;
 }

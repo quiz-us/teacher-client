@@ -3,7 +3,7 @@ import GlobalLoader from '../app/GlobalLoader';
 import { GET_STUDENTS } from '../queries/Student';
 import { GET_PERIOD } from '../queries/Period';
 import QRCode from 'qrcode.react';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';

@@ -1,43 +1,86 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
-import { GET_STUDENTS } from '../queries/Student';
+import {
+  GET_STUDENTS,
+  EDIT_STUDENT,
+  UNENROLL_STUDENT,
+} from '../queries/Student';
 import StudentCreator from './StudentCreator';
-import Table from '../table/Table';
+import MaterialTable from '../table/MaterialTable';
+import Modal from '../app/Modal';
 import { Link } from 'react-router-dom';
 
 const columns = [
   {
-    Header: 'First Name',
-    accessor: 'firstName'
+    title: 'First Name',
+    field: 'firstName',
   },
   {
-    Header: 'Last Name',
-    accessor: 'lastName'
+    title: 'Last Name',
+    field: 'lastName',
   },
   {
-    Header: 'Email',
-    accessor: 'email'
-  }
+    title: 'Email',
+    field: 'email',
+  },
 ];
 
 const useStyles = makeStyles({
   root: {
-    margin: '50px'
-  }
+    margin: '50px',
+  },
 });
+
 const ClassRoster = ({ match }) => {
   const classes = useStyles();
   const { params } = match;
   const { data, loading } = useQuery(GET_STUDENTS, {
-    variables: { periodId: params.id }
+    variables: { periodId: params.id },
+  });
+  const [unenrollStudent] = useMutation(UNENROLL_STUDENT, {
+    update: (cache, res) => {
+      const { id } = res.data.unenrollStudent;
+      const { students } = cache.readQuery({
+        query: GET_STUDENTS,
+        variables: { periodId: params.id },
+      });
+
+      const updatedStudents = students.filter(student => student.id !== id);
+
+      cache.writeQuery({
+        query: GET_STUDENTS,
+        variables: { periodId: params.id },
+        data: { students: updatedStudents },
+      });
+    },
+  });
+  const [editStudent] = useMutation(EDIT_STUDENT);
+  const [modalState, setModalState] = useState({
+    message: '',
+    title: '',
+    open: false,
   });
 
   if (loading) {
     return <GlobalLoader />;
   }
+  const handleClose = () =>
+    setModalState({ open: false, title: '', message: '' });
 
+  const handleError = error => {
+    let message = error.message && error.message;
+    if (error.graphQLErrors) {
+      message = error.graphQLErrors[0].message;
+    }
+    setModalState({
+      open: true,
+      title: 'Error Occured',
+      message: message,
+    });
+  };
+  const { message, title, open } = modalState;
   const { students } = data;
   return (
     <div className={classes.root}>
@@ -48,8 +91,61 @@ const ClassRoster = ({ match }) => {
         </Link>
         )
       </h3>
-      <Table className={classes.table} columns={columns} data={students} />
+      <MaterialTable
+        columns={columns}
+        data={students}
+        editable={{
+          onRowUpdate: newData =>
+            new Promise(resolve => {
+              editStudent({
+                variables: {
+                  studentId: newData.id,
+                  studentParams: {
+                    firstName: newData.firstName,
+                    lastName: newData.lastName,
+                    email: newData.email,
+                  },
+                },
+              })
+                .then(({ data }) => {
+                  resolve(data.editStudent);
+                })
+                .catch(error => {
+                  handleError(error);
+                  resolve(error);
+                });
+            }),
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              const { firstName, lastName, id } = oldData;
+              unenrollStudent({
+                variables: {
+                  studentId: id,
+                  periodId: params.id,
+                },
+              })
+                .then(({ data }) => {
+                  setModalState({
+                    title: 'Success!',
+                    message: `Successully unenrolled ${firstName} ${lastName} from this class.`,
+                    open: true,
+                  });
+                  resolve(data.unenrollStudent);
+                })
+                .catch(error => {
+                  handleError(error);
+                  resolve(error);
+                });
+            }),
+        }}
+      />
       <StudentCreator periodId={params.id} />
+      <Modal
+        message={message}
+        title={title}
+        open={open}
+        handleClose={handleClose}
+      />
     </div>
   );
 };

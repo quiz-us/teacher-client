@@ -1,34 +1,34 @@
 // heavily based on: https://github.com/ianstormtaylor/slate/tree/master/examples/rich-text
-import { Editor } from "slate-react";
-import { Value, Block } from "slate";
-import LooksOneIcon from "@material-ui/icons/LooksOne";
-import LooksTwoIcon from "@material-ui/icons/LooksTwo";
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
-import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
-import FormatBoldIcon from "@material-ui/icons/FormatBold";
-import FormatUnderlinedIcon from "@material-ui/icons/FormatUnderlined";
-import FormatItalicIcon from "@material-ui/icons/FormatItalic";
-import FormatSuperscriptIcon from "mdi-react/FormatSuperscriptIcon";
-import FormatSubscriptIcon from "mdi-react/FormatSubscriptIcon";
-import CodeIcon from "@material-ui/icons/Code";
-import InsertImages from "slate-drop-or-paste-images";
-import React from "react";
-import { isKeyHotkey } from "is-hotkey";
-import Image from "./Image";
-import { Button, Toolbar } from "./Components";
-import { withStyles } from "@material-ui/styles";
-import PropTypes from "prop-types";
-import Plain from "slate-plain-serializer";
-import styles from "./EditorStyles";
+import { Editor } from 'slate-react';
+import { Value, Block } from 'slate';
+import LooksOneIcon from '@material-ui/icons/LooksOne';
+import LooksTwoIcon from '@material-ui/icons/LooksTwo';
+import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import FormatSuperscriptIcon from 'mdi-react/FormatSuperscriptIcon';
+import FormatSubscriptIcon from 'mdi-react/FormatSubscriptIcon';
+import CodeIcon from '@material-ui/icons/Code';
+import InsertImages from 'slate-drop-or-paste-images';
+import React from 'react';
+import { isKeyHotkey } from 'is-hotkey';
+import Image from './Image';
+import { Button, Toolbar } from './Components';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Plain from 'slate-plain-serializer';
+import styles from './EditorStyles';
 
 const schema = {
   document: {
-    last: { type: "line" },
+    last: { type: 'line' },
     normalize: (editor, { code, node }) => {
       switch (code) {
-        case "last_child_type_invalid": {
-          const line = Block.create("line");
+        case 'last_child_type_invalid': {
+          const line = Block.create('line');
 
           return editor.insertNodeByKey(node.key, node.nodes.size, line);
         }
@@ -36,25 +36,25 @@ const schema = {
           return editor;
         }
       }
-    }
+    },
   },
   blocks: {
     image: {
-      isVoid: true
-    }
-  }
+      isVoid: true,
+    },
+  },
 };
 
 const plugins = [
   InsertImages({
     insertImage: (change, file) => {
       return change.insertBlock({
-        type: "image",
+        type: 'image',
         isVoid: true,
-        data: { file }
+        data: { file },
       });
-    }
-  })
+    },
+  }),
 ];
 
 /**
@@ -63,7 +63,7 @@ const plugins = [
  * @type {String}
  */
 
-const DEFAULT_NODE = "paragraph";
+const DEFAULT_NODE = 'paragraph';
 
 /**
  * Define hotkey matchers.
@@ -71,10 +71,10 @@ const DEFAULT_NODE = "paragraph";
  * @type {Function}
  */
 
-const isBoldHotkey = isKeyHotkey("mod+b");
-const isItalicHotkey = isKeyHotkey("mod+i");
-const isUnderlinedHotkey = isKeyHotkey("mod+u");
-const isCodeHotkey = isKeyHotkey("mod+`");
+const isBoldHotkey = isKeyHotkey('mod+b');
+const isItalicHotkey = isKeyHotkey('mod+i');
+const isUnderlinedHotkey = isKeyHotkey('mod+u');
+const isCodeHotkey = isKeyHotkey('mod+`');
 
 /**
  * The rich text example.
@@ -90,7 +90,7 @@ class RichTextEditor extends React.Component {
    */
 
   state = {
-    value: Value.fromJSON(this.props.initialValue)
+    value: Value.fromJSON(this.props.initialValue),
   };
 
   /**
@@ -139,46 +139,46 @@ class RichTextEditor extends React.Component {
       <div className={classes.root}>
         <Toolbar>
           {this.renderMarkButton(
-            "bold",
+            'bold',
             <FormatBoldIcon className={classes.icon} />
           )}
           {this.renderMarkButton(
-            "italic",
+            'italic',
             <FormatItalicIcon className={classes.icon} />
           )}
           {this.renderMarkButton(
-            "underlined",
+            'underlined',
             <FormatUnderlinedIcon className={classes.icon} />
           )}
-          {this.renderMarkButton("code", <CodeIcon className={classes.icon} />)}
+          {this.renderMarkButton('code', <CodeIcon className={classes.icon} />)}
           {this.renderMarkButton(
-            "superscript",
+            'superscript',
             <FormatSuperscriptIcon
               className={`${classes.icon} ${classes.mdi}`}
             />
           )}
           {this.renderMarkButton(
-            "subscript",
+            'subscript',
             <FormatSubscriptIcon className={`${classes.icon} ${classes.mdi}`} />
           )}
           {this.renderBlockButton(
-            "heading-one",
+            'heading-one',
             <LooksOneIcon className={classes.icon} />
           )}
           {this.renderBlockButton(
-            "heading-two",
+            'heading-two',
             <LooksTwoIcon className={classes.icon} />
           )}
           {this.renderBlockButton(
-            "block-quote",
+            'block-quote',
             <FormatQuoteIcon className={classes.icon} />
           )}
           {this.renderBlockButton(
-            "numbered-list",
+            'numbered-list',
             <FormatListNumberedIcon className={classes.icon} />
           )}
           {this.renderBlockButton(
-            "bulleted-list",
+            'bulleted-list',
             <FormatListBulletedIcon className={classes.icon} />
           )}
         </Toolbar>
@@ -203,20 +203,20 @@ class RichTextEditor extends React.Component {
     const { attributes, children, node } = props;
 
     switch (node.type) {
-      case "image": {
+      case 'image': {
         return <Image {...props} editor={editor} />;
       }
-      case "block-quote":
+      case 'block-quote':
         return <blockquote {...attributes}>{children}</blockquote>;
-      case "bulleted-list":
+      case 'bulleted-list':
         return <ul {...attributes}>{children}</ul>;
-      case "heading-one":
+      case 'heading-one':
         return <h1 {...attributes}>{children}</h1>;
-      case "heading-two":
+      case 'heading-two':
         return <h2 {...attributes}>{children}</h2>;
-      case "list-item":
+      case 'list-item':
         return <li {...attributes}>{children}</li>;
-      case "numbered-list":
+      case 'numbered-list':
         return <ol {...attributes}>{children}</ol>;
       default:
         return next();
@@ -227,17 +227,17 @@ class RichTextEditor extends React.Component {
     const { children, mark, attributes } = props;
 
     switch (mark.type) {
-      case "bold":
+      case 'bold':
         return <strong {...attributes}>{children}</strong>;
-      case "code":
+      case 'code':
         return <code {...attributes}>{children}</code>;
-      case "italic":
+      case 'italic':
         return <em {...attributes}>{children}</em>;
-      case "underlined":
+      case 'underlined':
         return <u {...attributes}>{children}</u>;
-      case "superscript":
+      case 'superscript':
         return <sup {...attributes}>{children}</sup>;
-      case "subscript":
+      case 'subscript':
         return <sub {...attributes}>{children}</sub>;
       default:
         return next();
@@ -276,14 +276,14 @@ class RichTextEditor extends React.Component {
   renderBlockButton = (type, icon) => {
     let isActive = this.hasBlock(type);
 
-    if (["numbered-list", "bulleted-list"].includes(type)) {
+    if (['numbered-list', 'bulleted-list'].includes(type)) {
       const {
-        value: { document, blocks }
+        value: { document, blocks },
       } = this.state;
 
       if (blocks.size > 0) {
         const parent = document.getParent(blocks.first().key);
-        isActive = this.hasBlock("list-item") && parent && parent.type === type;
+        isActive = this.hasBlock('list-item') && parent && parent.type === type;
       }
     }
 
@@ -320,13 +320,13 @@ class RichTextEditor extends React.Component {
     let mark;
 
     if (isBoldHotkey(event)) {
-      mark = "bold";
+      mark = 'bold';
     } else if (isItalicHotkey(event)) {
-      mark = "italic";
+      mark = 'italic';
     } else if (isUnderlinedHotkey(event)) {
-      mark = "underlined";
+      mark = 'underlined';
     } else if (isCodeHotkey(event)) {
-      mark = "code";
+      mark = 'code';
     } else {
       return next();
     }
@@ -362,21 +362,21 @@ class RichTextEditor extends React.Component {
     const { document } = value;
 
     // Handle everything but list buttons.
-    if (type !== "bulleted-list" && type !== "numbered-list") {
+    if (type !== 'bulleted-list' && type !== 'numbered-list') {
       const isActive = this.hasBlock(type);
-      const isList = this.hasBlock("list-item");
+      const isList = this.hasBlock('list-item');
 
       if (isList) {
         editor
           .setBlocks(isActive ? DEFAULT_NODE : type)
-          .unwrapBlock("bulleted-list")
-          .unwrapBlock("numbered-list");
+          .unwrapBlock('bulleted-list')
+          .unwrapBlock('numbered-list');
       } else {
         editor.setBlocks(isActive ? DEFAULT_NODE : type);
       }
     } else {
       // Handle the extra wrapping required for list buttons.
-      const isList = this.hasBlock("list-item");
+      const isList = this.hasBlock('list-item');
       const isType = value.blocks.some(block => {
         return !!document.getClosest(block.key, parent => parent.type === type);
       });
@@ -384,16 +384,16 @@ class RichTextEditor extends React.Component {
       if (isList && isType) {
         editor
           .setBlocks(DEFAULT_NODE)
-          .unwrapBlock("bulleted-list")
-          .unwrapBlock("numbered-list");
+          .unwrapBlock('bulleted-list')
+          .unwrapBlock('numbered-list');
       } else if (isList) {
         editor
           .unwrapBlock(
-            type === "bulleted-list" ? "numbered-list" : "bulleted-list"
+            type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
           )
           .wrapBlock(type);
       } else {
-        editor.setBlocks("list-item").wrapBlock(type);
+        editor.setBlocks('list-item').wrapBlock(type);
       }
     }
   };
@@ -401,12 +401,12 @@ class RichTextEditor extends React.Component {
 
 RichTextEditor.propTypes = {
   initialValue: PropTypes.object,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
 };
 
 RichTextEditor.defaultProps = {
-  initialValue: Plain.deserialize(""),
-  placeholder: "Write here..."
+  initialValue: Plain.deserialize(''),
+  placeholder: 'Write here...',
 };
 
 export default withStyles(styles)(RichTextEditor);

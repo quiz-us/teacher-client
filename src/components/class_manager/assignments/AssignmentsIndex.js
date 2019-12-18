@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../../app/GlobalLoader';
 import { GET_CLASS_ASSIGNMENTS } from '../../queries/Assignment';
