@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
+import decamelize from 'decamelize';
 
 import { Value } from 'slate';
 
@@ -21,7 +22,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import TagsForm from './TagsForm';
 import QuestionAndAnswers from './QuestionAndAnswers';
-import decamelize from '../../../util/decamelize';
 
 import { CurrentDeckContext } from '../../CurrentDeckContext';
 import {
