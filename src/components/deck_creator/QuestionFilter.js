@@ -1,4 +1,5 @@
 import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import { useDebouncedCallback } from 'use-debounce';
 import { useLazyQuery } from '@apollo/react-hooks';
 
@@ -12,7 +13,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
 import useForm from '../hooks/useForm';
+import GlobalLoader from '../app/GlobalLoader';
 import CustomCard from './Card';
+import { GET_STANDARDS } from '../queries/Standard';
 
 import { GET_QUESTIONS } from '../queries/Question';
 
@@ -24,12 +27,15 @@ const useStyles = makeStyles({
   },
 });
 
-const QuestionFilter = ({ allStandards }) => {
+const QuestionFilter = () => {
   const classes = useStyles();
   const { inputs, handleInputChange } = useForm({
     standardId: '',
     keyWords: '',
   });
+  const { loading: standardsLoading, data } = useQuery(GET_STANDARDS);
+
+  const { allStandards = [] } = data;
   const [
     getQuestions,
     { loading, data: { questions } = { questions: [] } },
@@ -38,6 +44,10 @@ const QuestionFilter = ({ allStandards }) => {
   const [debouncedGetQuestions] = useDebouncedCallback(e => {
     getQuestions({ variables: filter(e) });
   }, 1000);
+
+  if (standardsLoading) {
+    return <GlobalLoader />;
+  }
 
   const filter = e => {
     return { ...inputs, [e.target.name]: e.target.value };

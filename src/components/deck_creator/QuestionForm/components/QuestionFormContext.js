@@ -6,7 +6,7 @@ const generateRandomId = () => crypto.randomBytes(20).toString('hex');
 const defaultAnswer = (correct = false) => ({
   richText: undefined,
   correct,
-  answerId: generateRandomId()
+  answerId: generateRandomId(),
 });
 
 const generateDefaultState = () => ({
@@ -14,7 +14,8 @@ const generateDefaultState = () => ({
   standardId: '',
   tags: [],
   question: {},
-  answers: [defaultAnswer(true)]
+  answers: [defaultAnswer(true)],
+  questionAnswerId: generateRandomId(),
 });
 
 let defaultState = generateDefaultState();
@@ -29,7 +30,7 @@ let reducer = (state, action) => {
         // answer's random key needs to be regenerated:
         ...defaultState,
         questionType: state.questionType,
-        standardId: state.standardId
+        standardId: state.standardId,
       };
     case 'update':
       return { ...state, [name]: value };
@@ -37,12 +38,12 @@ let reducer = (state, action) => {
       return {
         ...state,
 
-        answers: [...state.answers, defaultAnswer(false)]
+        answers: [...state.answers, defaultAnswer(false)],
       };
     case 'resetAnswerChoices':
       return {
         ...state,
-        answers: [defaultAnswer(true)]
+        answers: [defaultAnswer(true)],
       };
     default:
       return;

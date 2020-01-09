@@ -24,32 +24,32 @@ const TAG_SEARCH = gql`
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   container: {
     flexGrow: 1,
-    position: 'relative'
+    position: 'relative',
   },
   paper: {
     position: 'absolute',
     zIndex: 1,
     marginTop: theme.spacing(1),
     left: 0,
-    right: 0
+    right: 0,
   },
   chip: {
-    margin: theme.spacing(0.5, 0.25)
+    margin: theme.spacing(0.5, 0.25),
   },
   inputRoot: {
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   inputInput: {
     width: 'auto',
-    flexGrow: 1
+    flexGrow: 1,
   },
   divider: {
-    height: theme.spacing(2)
-  }
+    height: theme.spacing(2),
+  },
 }));
 
 function renderInput(inputProps) {
@@ -62,9 +62,9 @@ function renderInput(inputProps) {
         'data-testid': 'tags-form',
         classes: {
           root: classes.inputRoot,
-          input: classes.inputInput
+          input: classes.inputInput,
         },
-        ...InputProps
+        ...InputProps,
       }}
       {...other}
     />
@@ -77,7 +77,7 @@ function renderSuggestion(suggestionProps) {
     index,
     itemProps,
     highlightedIndex,
-    tags
+    tags,
   } = suggestionProps;
   const isHighlighted = highlightedIndex === index;
   const isSelected = (tags || '').indexOf(suggestion.label) > -1;
@@ -88,7 +88,7 @@ function renderSuggestion(suggestionProps) {
       selected={isHighlighted}
       component="div"
       style={{
-        fontWeight: isSelected ? 500 : 400
+        fontWeight: isSelected ? 500 : 400,
       }}
     >
       {suggestion.name}
@@ -100,7 +100,7 @@ renderSuggestion.propTypes = {
   index: PropTypes.number,
   itemProps: PropTypes.object,
   selectedItem: PropTypes.string,
-  suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired
+  suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
 function DownshiftMultiple(props) {
@@ -112,7 +112,7 @@ function DownshiftMultiple(props) {
   const { tags } = state;
   const { data } = useQuery(TAG_SEARCH, {
     variables: { string: inputValue },
-    skip: inputValue === '' // don't query for tags in the beginning with empty string
+    skip: inputValue === '', // don't query for tags in the beginning with empty string
   });
 
   useEffect(() => {
@@ -133,7 +133,7 @@ function DownshiftMultiple(props) {
     dispatch({
       type: 'update',
       name: 'tags',
-      value: updatedTags
+      value: updatedTags,
     });
   }
 
@@ -170,7 +170,7 @@ function DownshiftMultiple(props) {
       {({ getInputProps, getItemProps, getLabelProps, highlightedIndex }) => {
         const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
           onKeyDown: handleKeyDown,
-          placeholder: 'Add one or more tag(s)'
+          placeholder: 'Add one or more tag(s)',
         });
 
         return (
@@ -203,9 +203,9 @@ function DownshiftMultiple(props) {
                 },
                 onFocus: () => {
                   setIsOpen(true);
-                }
+                },
               },
-              inputProps
+              inputProps,
             })}
 
             {isOpen ? (
@@ -216,7 +216,7 @@ function DownshiftMultiple(props) {
                     index,
                     itemProps: getItemProps({ item: suggestion.name }),
                     highlightedIndex,
-                    tags
+                    tags,
                   });
                 })}
                 {inputValue &&
@@ -228,7 +228,7 @@ function DownshiftMultiple(props) {
                     index: suggestions.length,
                     itemProps: getItemProps({ item: inputValue }),
                     highlightedIndex,
-                    tags
+                    tags,
                   })}
               </Paper>
             ) : null}
@@ -239,26 +239,18 @@ function DownshiftMultiple(props) {
   );
 }
 DownshiftMultiple.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
-const TagForm = props => {
+const TagForm = () => {
   const classes = useStyles();
-  // const { updateTags, fetchTags } = props;
-  // const { updateTags } = props;
   return (
     <div className={classes.root}>
-      <DownshiftMultiple
-        classes={classes}
-        // updateTags={updateTags}
-        // fetchTags={fetchTags}
-      />
+      <DownshiftMultiple classes={classes} />
     </div>
   );
 };
 
-TagForm.propTypes = {
-  // fetchTags: PropTypes.func.isRequired
-};
+TagForm.propTypes = {};
 
 export default TagForm;

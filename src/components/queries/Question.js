@@ -92,43 +92,43 @@ export const CREATE_QUESTION = gql`
 `;
 
 export const UPDATE_QUESTION = gql`
-         mutation updateQuestion(
-           $id: ID!
-           $standardId: ID
-           $tags: [String!]
-           $richText: String
-           $questionPlaintext: String
-           $questionOptions: [String!]
-         ) {
-           updateQuestion(
-             id: $id
-             standardId: $standardId
-             tags: $tags
-             richText: $richText
-             questionPlaintext: $questionPlaintext
-             questionOptions: $questionOptions
-           ) {
-             id
-             questionType
-             standards {
-               id
-               title
-             }
-             questionText
-             richText
-             tags {
-               id
-               name
-             }
-             questionOptions {
-               id
-               correct
-               optionText
-               richText
-             }
-           }
-         }
-       `;
+  mutation updateQuestion(
+    $id: ID!
+    $standardId: ID
+    $tags: [String!]
+    $richText: String
+    $questionPlaintext: String
+    $questionOptions: [String!]
+  ) {
+    updateQuestion(
+      id: $id
+      standardId: $standardId
+      tags: $tags
+      richText: $richText
+      questionPlaintext: $questionPlaintext
+      questionOptions: $questionOptions
+    ) {
+      id
+      questionType
+      standards {
+        id
+        title
+      }
+      questionText
+      richText
+      tags {
+        id
+        name
+      }
+      questionOptions {
+        id
+        correct
+        optionText
+        richText
+      }
+    }
+  }
+`;
 
 export const DELETE_QUESTION = gql`
   mutation deleteQuestion($questionId: ID!) {
