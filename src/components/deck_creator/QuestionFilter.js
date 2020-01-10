@@ -35,7 +35,6 @@ const QuestionFilter = () => {
   });
   const { loading: standardsLoading, data } = useQuery(GET_STANDARDS);
 
-  const { allStandards = [] } = data;
   const [
     getQuestions,
     { loading, data: { questions } = { questions: [] } },
@@ -48,6 +47,8 @@ const QuestionFilter = () => {
   if (standardsLoading) {
     return <GlobalLoader />;
   }
+
+  const { allStandards = [] } = data;
 
   const filter = e => {
     return { ...inputs, [e.target.name]: e.target.value };

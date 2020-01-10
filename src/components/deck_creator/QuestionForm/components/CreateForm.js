@@ -9,7 +9,7 @@ import GlobalLoader from '../../../app/GlobalLoader';
 import { CREATE_QUESTION } from '../../../queries/Question';
 
 const CreateForm = () => {
-  const [create_question, { loading }] = useMutation(CREATE_QUESTION);
+  const [createQuestion, { loading }] = useMutation(CREATE_QUESTION);
 
   if (loading) {
     return <GlobalLoader />;
@@ -27,7 +27,7 @@ const CreateForm = () => {
       }),
     };
 
-    return create_question({
+    return createQuestion({
       variables: {
         questionType: parsedFormData['questionType'],
         standardId: parsedFormData['standardId'],

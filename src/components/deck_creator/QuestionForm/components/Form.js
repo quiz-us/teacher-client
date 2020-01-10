@@ -63,7 +63,7 @@ const useSelectStyles = makeStyles({
 
 const questionTypes = ['Free Response', 'Multiple Choice'];
 
-const Form = ({ handleSubmit }) => {
+const Form = ({ handleSubmit, editMode }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
   const { loading, data } = useQuery(GET_STANDARDS);
@@ -164,29 +164,36 @@ const Form = ({ handleSubmit }) => {
   return (
     <Card>
       <form className={classes.form} onSubmit={onSubmit}>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="questionType-select">
-            Select Question Type
-          </InputLabel>
-          <Select
-            value={questionType}
-            onChange={handleQuestionTypeChange}
-            classes={selectClasses}
-            className={classes.select}
-            inputProps={{
-              name: 'questionType',
-              id: 'questionType-select',
-            }}
-          >
-            {questionTypes.map(type => {
-              return (
-                <MenuItem className={classes.menuItem} key={type} value={type}>
-                  {type}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+        {!editMode && (
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="questionType-select">
+              Select Question Type
+            </InputLabel>
+            <Select
+              value={questionType}
+              onChange={handleQuestionTypeChange}
+              classes={selectClasses}
+              className={classes.select}
+              inputProps={{
+                name: 'questionType',
+                id: 'questionType-select',
+              }}
+            >
+              {questionTypes.map(type => {
+                return (
+                  <MenuItem
+                    className={classes.menuItem}
+                    key={type}
+                    value={type}
+                  >
+                    {type}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        )}
+
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="standard-select">Select Standard</InputLabel>
           <Select
@@ -230,7 +237,7 @@ const Form = ({ handleSubmit }) => {
             color="primary"
             data-testid="submit-button"
           >
-            Submit
+            {editMode ? 'Update' : 'Submit'}
           </Button>
         )}
       </form>
@@ -248,6 +255,7 @@ const Form = ({ handleSubmit }) => {
 
 Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  editMode: PropTypes.bool,
 };
 
 export default Form;
