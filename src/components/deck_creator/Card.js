@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
 
 import Card from '@material-ui/core/Card';
+import Tooltip from '@material-ui/core/Tooltip';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -19,10 +21,6 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import EditForm from './QuestionForm/components/EditForm';
-import {
-  QuestionFormProvider,
-  QuestionFormContext
-} from './QuestionForm/components/QuestionFormContext';
 
 import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
 
@@ -41,16 +39,16 @@ const useStyles = makeStyles({
   cardHeader: {
     display: 'flex',
     width: '100%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   cardHeaderLeft: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   cardHeaderText: {
-    paddingRight: '10px'
+    paddingRight: '10px',
   },
   readOnly: {
     width: '100%',
@@ -66,7 +64,7 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     marginRight: '5px',
-  }
+  },
 });
 
 const Answers = ({ questionOptions, classes }) => {
@@ -77,14 +75,17 @@ const Answers = ({ questionOptions, classes }) => {
           <div className={classes.answerChoiceRow} key={`answerChoice-${id}`}>
             <span className={classes.correctnessIcon}>
               {correct ? (
-                <CheckIcon title='Correct Answer' />
+                <CheckIcon title="Correct Answer" />
               ) : (
-                <ClearIcon title='Incorrect Answer' />
+                <ClearIcon title="Incorrect Answer" />
               )}
             </span>
 
             <div className={classes.readOnly}>
-              <ReadOnly key={`${id}-${richText}`} value={JSON.parse(richText)} />
+              <ReadOnly
+                key={`${id}-${richText}`}
+                value={JSON.parse(richText)}
+              />
             </div>
           </div>
         );
@@ -93,7 +94,12 @@ const Answers = ({ questionOptions, classes }) => {
   );
 };
 
-const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
+Answers.propTypes = {
+  questionOptions: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired,
+};
+
+const DeckCard = ({ card, removable = false, inputs, deletable = false }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
 
   const {
@@ -102,7 +108,7 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
     richText = '',
     standards = [{}],
     tags = [],
-    questionOptions = []
+    questionOptions = [],
   } = card;
   const [standard] = standards;
   const classes = useStyles();
@@ -115,8 +121,8 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
       query: GET_QUESTIONS,
       variables: {
         standardId: inputs.standardId,
-        keyWords: inputs.keyWords
-      }
+        keyWords: inputs.keyWords,
+      },
     });
 
     // remove the deleted question
@@ -127,9 +133,9 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
       query: GET_QUESTIONS,
       variables: {
         standardId: inputs.standardId,
-        keyWords: inputs.keyWords
+        keyWords: inputs.keyWords,
       },
-      data: { questions: updatedQuestions }
+      data: { questions: updatedQuestions },
     });
   };
 
@@ -141,7 +147,7 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
       //needed to remove deleted question from search results
       removeQuestionFromCache(cache, res.data);
     },
-    onError: err => console.error(err)
+    onError: err => console.error(err),
   });
 
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
@@ -166,17 +172,23 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
 
     deleteQuestion({
       variables: {
-        questionId: id
-      }
+        questionId: id,
+      },
     });
   };
 
   const controls = () => {
     if (removable) {
       return (
-        <IconButton onClick={removeFromCurrentDeck}>
-          <ClearIcon />
-        </IconButton>
+        <Tooltip
+          title="Remove From Deck"
+          aria-label="Remove From Deck"
+          placement="top"
+        >
+          <IconButton onClick={removeFromCurrentDeck}>
+            <ClearIcon />
+          </IconButton>
+        </Tooltip>
       );
     }
     return (
@@ -185,10 +197,10 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
           <Switch
             checked={inCurrentDeck}
             onChange={updateCurrentDeck}
-            color='primary'
+            color="primary"
           />
         }
-        label='In Current Deck'
+        label="In Current Deck"
       />
     );
   };
@@ -199,11 +211,27 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
       <CardContent>
         <div className={classes.cardHeader}>
           <div className={classes.cardHeaderLeft}>
-            <h4 className={classes.cardHeaderText}>Question</h4>
+            <h3 className={classes.cardHeaderText}>Question</h3>
             <div>
-              <CreateIcon onClick={() => setOpen(true)} />
+              <Tooltip
+                title="Edit Question"
+                aria-label="Edit Question"
+                placement="top"
+              >
+                <IconButton onClick={() => setOpen(true)}>
+                  <CreateIcon />
+                </IconButton>
+              </Tooltip>
               {deletable ? (
-                <DeleteForeverIcon onClick={() => handleDeleteDb(id)} />
+                <Tooltip
+                  title="Delete Question"
+                  aria-label="Delete Question"
+                  placement="top"
+                >
+                  <IconButton onClick={() => handleDeleteDb(id)}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Tooltip>
               ) : (
                 ''
               )}
@@ -235,17 +263,22 @@ const DeckCard = ({ card, removable = null, inputs, deletable = null }) => {
         </IconButton>
       </CardActions>
 
-      <Collapse in={expanded} timeout='auto' unmountOnExit>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <h4>Answer</h4>
+          <h3>Answer</h3>
           <Answers classes={classes} questionOptions={questionOptions} />
         </CardContent>
       </Collapse>
-      {open && (
-        <EditForm open={open} setOpen={setOpen} card={card} inputs={inputs} />
-      )}
+      {open && <EditForm open={open} setOpen={setOpen} card={card} />}
     </Card>
   );
+};
+
+DeckCard.propTypes = {
+  card: PropTypes.object.isRequired,
+  removable: PropTypes.bool.isRequired,
+  deletable: PropTypes.bool.isRequired,
+  inputs: PropTypes.object,
 };
 
 export default DeckCard;
