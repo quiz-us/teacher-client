@@ -5,15 +5,14 @@ import Plain from 'slate-plain-serializer';
 
 import Form from './Form';
 import { QuestionFormProvider } from './QuestionFormContext';
-import GlobalLoader from '../../../app/GlobalLoader';
 import { CREATE_QUESTION } from '../../../queries/Question';
 
 const CreateForm = () => {
+  // IMPORTANT: cannot directly use the loading check in this component
+  // because if we render something differently while loaindg here, it'll
+  // unmount the whole component and cause for the QuestionFormProvider state
+  // to reset
   const [createQuestion, { loading }] = useMutation(CREATE_QUESTION);
-
-  if (loading) {
-    return <GlobalLoader />;
-  }
 
   const handleSubmit = formData => {
     const parsedFormData = {
@@ -43,7 +42,7 @@ const CreateForm = () => {
 
   return (
     <QuestionFormProvider>
-      <Form handleSubmit={handleSubmit} />
+      <Form handleSubmit={handleSubmit} loading={loading} />
     </QuestionFormProvider>
   );
 };

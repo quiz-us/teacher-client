@@ -99,7 +99,7 @@ Answers.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const DeckCard = ({ card, removable = false, inputs, deletable = false }) => {
+const DeckCard = ({ card, removable, inputs, deletable }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
 
   const {
@@ -279,6 +279,11 @@ DeckCard.propTypes = {
   removable: PropTypes.bool.isRequired,
   deletable: PropTypes.bool.isRequired,
   inputs: PropTypes.object,
+};
+
+DeckCard.defaultProps = {
+  removable: false,
+  deletable: false,
 };
 
 export default DeckCard;

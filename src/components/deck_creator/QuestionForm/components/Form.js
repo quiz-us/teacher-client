@@ -63,10 +63,10 @@ const useSelectStyles = makeStyles({
 
 const questionTypes = ['Free Response', 'Multiple Choice'];
 
-const Form = ({ handleSubmit, editMode }) => {
+const Form = ({ handleSubmit, editMode, loading }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
-  const { loading, data } = useQuery(GET_STANDARDS);
+  const { loading: standardsLoading, data } = useQuery(GET_STANDARDS);
   const { questionType, standardId, answers, questionAnswerId } = state;
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -74,7 +74,7 @@ const Form = ({ handleSubmit, editMode }) => {
   const classes = useStyles();
   const selectClasses = useSelectStyles();
 
-  if (loading) {
+  if (loading || standardsLoading) {
     return <GlobalLoader />;
   }
 
@@ -148,13 +148,13 @@ const Form = ({ handleSubmit, editMode }) => {
     e.preventDefault();
     if (validateForm()) {
       handleSubmit(state).then(({ data: { createQuestion } }) => {
+        dispatch({
+          type: 'resetForm',
+        });
         currentDeckDispatch({
           type: 'addToCurrent',
           card: createQuestion,
           id: createQuestion.id,
-        });
-        dispatch({
-          type: 'resetForm',
         });
         window.scrollTo(0, 0);
       });
@@ -256,6 +256,7 @@ const Form = ({ handleSubmit, editMode }) => {
 Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   editMode: PropTypes.bool,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default Form;

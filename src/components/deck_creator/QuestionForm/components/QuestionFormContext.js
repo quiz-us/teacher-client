@@ -18,17 +18,14 @@ const generateDefaultState = () => ({
   questionAnswerId: generateRandomId(),
 });
 
-let defaultState = generateDefaultState();
-
 let reducer = (state, action) => {
   const { type, name, value } = action;
   switch (type) {
     case 'resetForm':
-      defaultState = generateDefaultState();
       return {
         // would need to regenerate instead of using existing because
         // answer's random key needs to be regenerated:
-        ...defaultState,
+        ...generateDefaultState(),
         questionType: state.questionType,
         standardId: state.standardId,
       };
@@ -51,6 +48,8 @@ let reducer = (state, action) => {
 };
 
 const QuestionFormContext = React.createContext();
+
+const defaultState = generateDefaultState();
 
 function QuestionFormProvider({ children, initialState = defaultState }) {
   const [state, dispatch] = useReducer(reducer, initialState);
