@@ -20,7 +20,6 @@ import TagsForm from './TagsForm';
 import { GET_STANDARDS } from '../../../queries/Standard';
 import GlobalLoader from '../../../app/GlobalLoader';
 import { QuestionFormContext } from './QuestionFormContext';
-import { CurrentDeckContext } from '../../CurrentDeckContext';
 import QuestionAndAnswers from './QuestionAndAnswers';
 
 const useStyles = makeStyles({
@@ -63,9 +62,8 @@ const useSelectStyles = makeStyles({
 
 const questionTypes = ['Free Response', 'Multiple Choice'];
 
-const Form = ({ handleSubmit, editMode, loading }) => {
+const Form = ({ handleSubmit, editMode }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
-  const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
   const { loading: standardsLoading, data } = useQuery(GET_STANDARDS);
   const { questionType, standardId, answers, questionAnswerId } = state;
 
@@ -74,7 +72,7 @@ const Form = ({ handleSubmit, editMode, loading }) => {
   const classes = useStyles();
   const selectClasses = useSelectStyles();
 
-  if (loading || standardsLoading) {
+  if (standardsLoading) {
     return <GlobalLoader />;
   }
 
@@ -147,17 +145,7 @@ const Form = ({ handleSubmit, editMode, loading }) => {
   const onSubmit = e => {
     e.preventDefault();
     if (validateForm()) {
-      handleSubmit(state).then(({ data: { createQuestion } }) => {
-        dispatch({
-          type: 'resetForm',
-        });
-        currentDeckDispatch({
-          type: 'addToCurrent',
-          card: createQuestion,
-          id: createQuestion.id,
-        });
-        window.scrollTo(0, 0);
-      });
+      handleSubmit(state);
     }
   };
 
@@ -225,7 +213,7 @@ const Form = ({ handleSubmit, editMode, loading }) => {
           <TagsForm />
         </FormControl>
         <QuestionAndAnswers classes={classes} key={questionAnswerId} />
-        {loading ? (
+        {standardsLoading ? (
           <div className={classes.loaderContainer}>
             <CircularProgress />
           </div>
@@ -256,7 +244,6 @@ const Form = ({ handleSubmit, editMode, loading }) => {
 Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   editMode: PropTypes.bool,
-  loading: PropTypes.bool.isRequired,
 };
 
 export default Form;

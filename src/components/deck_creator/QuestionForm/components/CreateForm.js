@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import Plain from 'slate-plain-serializer';
 
 import Form from './Form';
-import { QuestionFormProvider } from './QuestionFormContext';
+import {
+  QuestionFormProvider,
+  QuestionFormContext,
+} from './QuestionFormContext';
+import { CurrentDeckContext } from '../../CurrentDeckContext';
 import { CREATE_QUESTION } from '../../../queries/Question';
+import GlobalLoader from '../../../app/GlobalLoader';
 
 const CreateForm = () => {
-  // IMPORTANT: cannot directly use the loading check in this component
-  // because if we render something differently while loaindg here, it'll
-  // unmount the whole component and cause for the QuestionFormProvider state
-  // to reset
-  const [createQuestion, { loading }] = useMutation(CREATE_QUESTION);
+  const { dispatch } = useContext(QuestionFormContext);
+  const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
+  const [createQuestion, { loading }] = useMutation(CREATE_QUESTION, {
+    onCompleted: ({ createQuestion }) => {
+      currentDeckDispatch({
+        type: 'addToCurrent',
+        card: createQuestion,
+        id: createQuestion.id,
+      });
+      dispatch({
+        type: 'resetForm',
+      });
+      window.scrollTo(0, 0);
+    },
+  });
+
+  if (loading) {
+    return <GlobalLoader />;
+  }
 
   const handleSubmit = formData => {
     const parsedFormData = {
@@ -40,13 +59,13 @@ const CreateForm = () => {
     });
   };
 
-  return (
-    <QuestionFormProvider>
-      <Form handleSubmit={handleSubmit} loading={loading} />
-    </QuestionFormProvider>
-  );
+  return <Form handleSubmit={handleSubmit} />;
 };
 
-CreateForm.propTypes = {};
+const CreateFormContainer = () => (
+  <QuestionFormProvider>
+    <CreateForm />
+  </QuestionFormProvider>
+);
 
-export default CreateForm;
+export default CreateFormContainer;
