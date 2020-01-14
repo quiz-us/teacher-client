@@ -20,7 +20,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import { ReadOnly } from '../editor';
 import { CurrentDeckContext } from './CurrentDeckContext';
-import EditForm from './QuestionForm/components/EditForm';
+import EditForm from './QuestionForm/EditForm';
 
 import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
 

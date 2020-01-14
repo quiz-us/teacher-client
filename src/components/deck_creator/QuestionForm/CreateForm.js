@@ -8,9 +8,9 @@ import {
   QuestionFormProvider,
   QuestionFormContext,
 } from './QuestionFormContext';
-import { CurrentDeckContext } from '../../CurrentDeckContext';
-import { CREATE_QUESTION } from '../../../queries/Question';
-import GlobalLoader from '../../../app/GlobalLoader';
+import { CurrentDeckContext } from '../CurrentDeckContext';
+import { CREATE_QUESTION } from '../../queries/Question';
+import GlobalLoader from '../../app/GlobalLoader';
 
 const CreateForm = () => {
   const { dispatch } = useContext(QuestionFormContext);

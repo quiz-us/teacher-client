@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { RichTextEditor } from '../../../editor';
+import { RichTextEditor } from '../../editor';
 import Plain from 'slate-plain-serializer';
 
 import { QuestionFormContext } from './QuestionFormContext';
@@ -17,18 +17,18 @@ const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 
 const useStyles = makeStyles({
   addButton: {
-    margin: '20px auto'
+    margin: '20px auto',
   },
   mcControls: {
-    position: 'relative'
+    position: 'relative',
   },
   correctCheckbox: {
-    marginLeft: '10px'
+    marginLeft: '10px',
   },
   deleteButton: {
     right: 0,
-    position: 'absolute'
-  }
+    position: 'absolute',
+  },
 });
 
 const QuestionAndAnswers = ({ classes }) => {
@@ -41,7 +41,7 @@ const QuestionAndAnswers = ({ classes }) => {
     dispatch({
       type: 'update',
       name: 'answers',
-      value: updated
+      value: updated,
     });
   };
 
@@ -55,7 +55,7 @@ const QuestionAndAnswers = ({ classes }) => {
 
   const addAnswerChoice = e => {
     dispatch({
-      type: 'addAnswerChoice'
+      type: 'addAnswerChoice',
     });
   };
 
@@ -177,7 +177,7 @@ const QuestionAndAnswers = ({ classes }) => {
 };
 
 QuestionAndAnswers.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default QuestionAndAnswers;

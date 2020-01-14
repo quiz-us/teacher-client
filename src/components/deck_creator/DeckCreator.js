@@ -6,7 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { CurrentDeckProvider } from './CurrentDeckContext';
 import QuestionFilter from './QuestionFilter';
 import CurrentDeck from './CurrentDeck';
-import CreateForm from './QuestionForm/components/CreateForm';
+import CreateForm from './QuestionForm/CreateForm';
 
 const useStyles = makeStyles(theme => ({
   root: {

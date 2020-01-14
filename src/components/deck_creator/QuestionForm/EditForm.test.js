@@ -1,20 +1,8 @@
 import React from 'react';
+import Plain from 'slate-plain-serializer';
 
-import {
-  render,
-  fireEvent,
-  cleanup,
-  waitForElement,
-} from '@testing-library/react';
-import QuestionForm from '../index';
-
-jest.mock('slate-plain-serializer', () => {
-  return {
-    serialize: inputVal => {
-      return inputVal;
-    },
-  };
-});
+import { render } from '@testing-library/react';
+import EditForm from './EditForm';
 
 jest.mock('../components/QuestionAndAnswers.js', () => () => {
   function handleChange(event) {}
@@ -40,12 +28,31 @@ jest.mock(
 );
 
 describe('<EditForm />', () => {
-  const questionTypes = ['Multiple Choice', 'Free Response'];
-  const standards = [
-    { id: 1, name: 'Standard 1' },
-    { id: 2, name: 'Standard 2' },
-  ];
-  it('fake test, true is true', () => {
-    expect(true).toBeTruthy();
+  let findByText;
+  const props = {
+    open: true,
+    setOpen: jest.fn(),
+    card: {
+      id: '56',
+      questionType: 'Free Response',
+      standards: [
+        {
+          title: '8.5(C)',
+          id: '14',
+        },
+      ],
+      richText: Plain.deserialize('Original Text'),
+      tags: [{ name: 'dummy tag' }],
+      questionOptions: [
+        {
+          correct: true,
+          richText: Plain.deserialize('Original Answer'),
+          id: '154',
+        },
+      ],
+    },
+  };
+  beforeEach(() => {
+    ({ findByText } = render(<EditForm />));
   });
 });

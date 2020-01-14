@@ -12,9 +12,9 @@ import Button from '@material-ui/core/Button';
 
 import Form from './Form';
 import { QuestionFormProvider } from './QuestionFormContext';
-import { CurrentDeckContext } from '../../CurrentDeckContext';
-import { UPDATE_QUESTION } from '../../../queries/Question';
-import GlobalLoader from '../../../app/GlobalLoader';
+import { CurrentDeckContext } from '../CurrentDeckContext';
+import { UPDATE_QUESTION } from '../../queries/Question';
+import GlobalLoader from '../../app/GlobalLoader';
 
 const UpdateForm = ({ open, setOpen, card }) => {
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
@@ -84,11 +84,11 @@ UpdateForm.propTypes = {
 };
 
 const UpdateFormContainer = props => {
+  console.log('THESE ARE props', props);
   const {
-    card: { questionType, standards, tags, richText, questionOptions, id },
+    card: { questionType, standards, tags, richText, questionOptions },
   } = props;
 
-  console.log('question id', id);
   const initialState = {
     questionType,
     standardId: standards[0].id,

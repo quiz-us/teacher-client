@@ -17,8 +17,8 @@ import decamelize from 'decamelize';
 import Plain from 'slate-plain-serializer';
 
 import TagsForm from './TagsForm';
-import { GET_STANDARDS } from '../../../queries/Standard';
-import GlobalLoader from '../../../app/GlobalLoader';
+import { GET_STANDARDS } from '../../queries/Standard';
+import GlobalLoader from '../../app/GlobalLoader';
 import { QuestionFormContext } from './QuestionFormContext';
 import QuestionAndAnswers from './QuestionAndAnswers';
 

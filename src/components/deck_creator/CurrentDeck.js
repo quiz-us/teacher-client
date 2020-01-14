@@ -14,46 +14,46 @@ import { makeStyles } from '@material-ui/core/styles';
 import Confirmation from './Confirmation';
 import { CurrentDeckContext } from './CurrentDeckContext';
 import CardsContainer from './CardsContainer';
-import { GET_DECK, DELETE_DECK, GET_QUESTION } from '../queries/Deck';
+import { GET_DECK, DELETE_DECK } from '../queries/Deck';
 
 const useStyles = makeStyles(theme => ({
   currentDeckContainer: {
-    width: '40%'
+    width: '40%',
   },
   submitButton: {
     height: '40px',
     position: 'absolute',
     bottom: 0,
-    width: '100%'
+    width: '100%',
   },
   drawer: {
     width: '70%',
     [theme.breakpoints.up('sm')]: {
       width: '30%',
-      flexShrink: 0
-    }
+      flexShrink: 0,
+    },
   },
   drawerPaper: {
     width: '70%',
     [theme.breakpoints.up('sm')]: {
-      width: '30%'
-    }
+      width: '30%',
+    },
   },
   toolbar: {
     ...theme.mixins.toolbar,
     '& header': {
       marginLeft: '20px',
-      display: 'flex'
-    }
+      display: 'flex',
+    },
   },
   openDrawerButton: {
-    background: blueGrey[200]
+    background: blueGrey[200],
   },
   badge: {
     position: 'absolute',
     top: 12,
-    right: 12
-  }
+    right: 12,
+  },
 }));
 
 // if a CurrentDeck has a deckId, then it means that the current deck is being
@@ -90,7 +90,7 @@ const CurrentDeck = ({
   data,
   currentDeckArr,
   classes,
-  setOpen
+  setOpen,
 }) => {
   return (
     <React.Fragment>
@@ -128,14 +128,14 @@ const CurrentDeckContainer = ({ history, deckId }) => {
     },
     onError: error => {
       console.error(error);
-    }
+    },
   });
 
   const [deleteDeck] = useMutation(DELETE_DECK, {
     variables: { deckId },
     onCompleted: () => {
       history.push('/');
-    }
+    },
   });
 
   const isUpdate = data.deck !== undefined;
@@ -164,7 +164,7 @@ const CurrentDeckContainer = ({ history, deckId }) => {
         </Badge>
         <Drawer
           classes={{
-            paper: classes.drawerPaper
+            paper: classes.drawerPaper,
           }}
           variant="temporary"
           open={mobileOpen}
@@ -185,7 +185,7 @@ const CurrentDeckContainer = ({ history, deckId }) => {
       <Hidden xsDown>
         <Drawer
           classes={{
-            paper: classes.drawerPaper
+            paper: classes.drawerPaper,
           }}
           variant="permanent"
           anchor="right"
