@@ -84,7 +84,6 @@ UpdateForm.propTypes = {
 };
 
 const UpdateFormContainer = props => {
-  console.log('THESE ARE props', props);
   const {
     card: { questionType, standards, tags, richText, questionOptions },
   } = props;
