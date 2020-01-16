@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
-import Plain from 'slate-plain-serializer';
+import { parseFormData } from './helper';
 
 import Form from './Form';
 import {
@@ -34,28 +34,8 @@ const CreateForm = () => {
   }
 
   const handleSubmit = formData => {
-    const parsedFormData = {
-      ...formData,
-      questionText: Plain.serialize(formData.question),
-      answers: formData.answers.map(answer => {
-        return {
-          ...answer,
-          optionText: Plain.serialize(answer.richText),
-        };
-      }),
-    };
-
     return createQuestion({
-      variables: {
-        questionType: parsedFormData['questionType'],
-        standardId: parsedFormData['standardId'],
-        tags: parsedFormData['tags'],
-        richText: JSON.stringify(parsedFormData['question'].toJSON()),
-        questionPlaintext: parsedFormData['questionText'],
-        questionOptions: parsedFormData['answers'].map(answer =>
-          JSON.stringify(answer)
-        ),
-      },
+      variables: parseFormData(formData),
     });
   };
 

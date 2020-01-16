@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Value } from 'slate';
 
 import { useMutation } from '@apollo/react-hooks';
-import Plain from 'slate-plain-serializer';
+import { parseFormData } from './helper';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -36,28 +36,10 @@ const UpdateForm = ({ open, setOpen, card }) => {
   }
 
   const handleSubmit = formData => {
-    const parsedFormData = {
-      ...formData,
-      questionText: Plain.serialize(formData.question),
-      answers: formData.answers.map(answer => {
-        return {
-          ...answer,
-          optionText: Plain.serialize(answer.richText),
-        };
-      }),
-    };
-
     return updateQuestion({
       variables: {
+        ...parseFormData(formData),
         id: card.id,
-        questionType: parsedFormData['questionType'],
-        standardId: parsedFormData['standardId'],
-        tags: parsedFormData['tags'],
-        richText: JSON.stringify(parsedFormData['question']),
-        questionPlaintext: parsedFormData['questionText'],
-        questionOptions: parsedFormData['answers'].map(answer =>
-          JSON.stringify(answer)
-        ),
       },
     });
   };
