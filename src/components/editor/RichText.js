@@ -17,7 +17,7 @@ import React from 'react';
 import { isKeyHotkey } from 'is-hotkey';
 import Image from './Image';
 import { Button, Toolbar } from './Components';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Plain from 'slate-plain-serializer';
 import styles from './EditorStyles';
