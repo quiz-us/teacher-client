@@ -13,7 +13,6 @@ const generateColumns = match => [
     accessor: 'deck.name',
     Cell: ({ cell: { value, row } }) => {
       const assignmentId = row.original.id;
-      console.log(match.url);
       return (
         <div>
           <Link className="link" to={`${match.url}/${assignmentId}`}>
@@ -21,34 +20,34 @@ const generateColumns = match => [
           </Link>
         </div>
       );
-    }
+    },
   },
   {
     Header: 'Description',
-    accessor: 'deck.description'
+    accessor: 'deck.description',
   },
   {
     Header: 'Instructions',
-    accessor: 'instructions'
+    accessor: 'instructions',
   },
   {
     Header: 'Due',
     accessor: 'due',
-    Cell: ({ cell: { value } }) => moment(value).format('MM-DD-YYYY')
-  }
+    Cell: ({ cell: { value } }) => moment(value).format('MM-DD-YYYY'),
+  },
 ];
 
 const useStyles = makeStyles({
   root: {
-    margin: '50px'
-  }
+    margin: '50px',
+  },
 });
 
 const AssignmentsIndex = ({ match }) => {
   const classes = useStyles();
   const { params } = match;
   const { data, loading } = useQuery(GET_CLASS_ASSIGNMENTS, {
-    variables: { periodId: params.id }
+    variables: { periodId: params.id },
   });
 
   const columns = generateColumns(match);
