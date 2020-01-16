@@ -8,7 +8,7 @@ const useStyles = makeStyles({
     width: '100vw',
     position: 'relative',
     zIndex: 1000,
-    background: 'rgba(0, 0, 0, 0.2)'
+    background: 'rgba(0, 0, 0, 0.2)',
   },
   progress: {
     position: 'absolute',
@@ -16,14 +16,14 @@ const useStyles = makeStyles({
     bottom: 0,
     left: 0,
     right: 0,
-    margin: 'auto'
-  }
+    margin: 'auto',
+  },
 });
 
 export default () => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-testid="global-loader">
       <CircularProgress className={classes.progress} />
     </div>
   );

@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Image = ({ node, attributes, editor }) => {
-  const [src, setSrc] = useState('');
+  const [src, setSrc] = useState("");
+  const { data } = node;
+  const file = data.get("file");
 
-  const load = file => {
+  const load = async file => {
     const reader = new FileReader();
-    reader.addEventListener('load', () => {
+    reader.addEventListener("load", () => {
       setSrc(reader.result);
       // replace file with data:image src:
       editor.setNodeByKey(node.key, { ...node, data: { file: reader.result } });
     });
     reader.readAsDataURL(file);
   };
+
   useEffect(() => {
-    const { data } = node;
-    const file = data.get('file');
+    const doesS3UrlExist = typeof file === "string"
+    if (doesS3UrlExist) {
+      setSrc(file);
+      return;
+    }
     load(file);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -5,6 +5,8 @@ let reducer = (currentDeck, action) => {
   switch (type) {
     case 'addToCurrent':
       return { ...currentDeck, [id]: card };
+    case 'updateCard':
+      return { ...currentDeck, [id]: card };
     case 'receiveCurrent':
       const receivedDeck = {};
       questions.forEach(question => {

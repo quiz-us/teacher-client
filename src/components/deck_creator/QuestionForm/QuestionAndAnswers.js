@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { RichTextEditor } from '../../../editor';
+import { RichTextEditor } from '../../editor';
+import Plain from 'slate-plain-serializer';
 
 import { QuestionFormContext } from './QuestionFormContext';
 // import { RED } from "../../theme/colors";
@@ -16,31 +17,31 @@ const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 
 const useStyles = makeStyles({
   addButton: {
-    margin: '20px auto'
+    margin: '20px auto',
   },
   mcControls: {
-    position: 'relative'
+    position: 'relative',
   },
   correctCheckbox: {
-    marginLeft: '10px'
+    marginLeft: '10px',
   },
   deleteButton: {
     right: 0,
-    position: 'absolute'
-  }
+    position: 'absolute',
+  },
 });
 
 const QuestionAndAnswers = ({ classes }) => {
   let componentClasses = useStyles();
 
   const { state, dispatch } = useContext(QuestionFormContext);
-  const { questionType, answers } = state;
+  const { questionType, answers, question } = state;
 
   const updateAnswers = updated => {
     dispatch({
       type: 'update',
       name: 'answers',
-      value: updated
+      value: updated,
     });
   };
 
@@ -54,7 +55,7 @@ const QuestionAndAnswers = ({ classes }) => {
 
   const addAnswerChoice = e => {
     dispatch({
-      type: 'addAnswerChoice'
+      type: 'addAnswerChoice',
     });
   };
 
@@ -121,8 +122,8 @@ const QuestionAndAnswers = ({ classes }) => {
                 </div>
                 <RichTextEditor
                   initialValue={richText}
-                  updateParentState={updateAllAnswers(i)}
                   key={answerId} // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
+                  updateParentState={updateAllAnswers(i)}
                 />
               </div>
             );
@@ -155,6 +156,11 @@ const QuestionAndAnswers = ({ classes }) => {
       >
         <h3>Question: </h3>
         <RichTextEditor
+          initialValue={
+            Object.keys(question).length === 0
+              ? Plain.deserialize('')
+              : question
+          }
           updateParentState={value =>
             dispatch({ type: 'update', name: 'question', value })
           }
@@ -171,7 +177,7 @@ const QuestionAndAnswers = ({ classes }) => {
 };
 
 QuestionAndAnswers.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default QuestionAndAnswers;

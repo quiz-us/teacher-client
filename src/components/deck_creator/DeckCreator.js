@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -7,41 +6,32 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { CurrentDeckProvider } from './CurrentDeckContext';
 import QuestionFilter from './QuestionFilter';
 import CurrentDeck from './CurrentDeck';
-import QuestionForm from './QuestionForm';
-import { GET_STANDARDS } from '../queries/Standard';
-import GlobalLoader from '../app/GlobalLoader';
+import CreateForm from './QuestionForm/CreateForm';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%'
+    width: '100%',
   },
   firstContainer: {
     width: '70%',
     padding: '25px',
     [theme.breakpoints.down('xs')]: {
-      width: '100%'
-    }
+      width: '100%',
+    },
   },
   secondContainer: {
-    width: '40%'
+    width: '40%',
   },
   searchResults: {
-    padding: '15px'
+    padding: '15px',
   },
   panel: {
-    padding: '10px'
-  }
+    padding: '10px',
+  },
 }));
 
 const DeckCreator = ({ match = { params: {} }, history }) => {
   const classes = useStyles();
-  const { loading, data } = useQuery(GET_STANDARDS);
-
-  if (loading) {
-    return <GlobalLoader />;
-  }
-
-  const { allStandards = [] } = data;
 
   return (
     <CurrentDeckProvider>
@@ -53,16 +43,10 @@ const DeckCreator = ({ match = { params: {} }, history }) => {
           </TabList>
 
           <TabPanel className={classes.panel}>
-            <QuestionForm
-              standardsLoading={loading}
-              allStandards={allStandards}
-            />
+            <CreateForm />
           </TabPanel>
           <TabPanel className={classes.panel}>
-            <QuestionFilter
-              standardsLoading={loading}
-              allStandards={allStandards}
-            />
+            <QuestionFilter />
           </TabPanel>
         </Tabs>
         <CurrentDeck

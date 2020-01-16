@@ -36,13 +36,13 @@ const schema = {
           return editor;
         }
       }
-    }
+    },
   },
   blocks: {
     image: {
-      isVoid: true
-    }
-  }
+      isVoid: true,
+    },
+  },
 };
 
 const plugins = [
@@ -51,10 +51,10 @@ const plugins = [
       return change.insertBlock({
         type: 'image',
         isVoid: true,
-        data: { file }
+        data: { file },
       });
-    }
-  })
+    },
+  }),
 ];
 
 /**
@@ -90,7 +90,7 @@ class RichTextEditor extends React.Component {
    */
 
   state = {
-    value: Value.fromJSON(this.props.initialValue)
+    value: Value.fromJSON(this.props.initialValue),
   };
 
   /**
@@ -278,7 +278,7 @@ class RichTextEditor extends React.Component {
 
     if (['numbered-list', 'bulleted-list'].includes(type)) {
       const {
-        value: { document, blocks }
+        value: { document, blocks },
       } = this.state;
 
       if (blocks.size > 0) {
@@ -401,12 +401,12 @@ class RichTextEditor extends React.Component {
 
 RichTextEditor.propTypes = {
   initialValue: PropTypes.object,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
 };
 
 RichTextEditor.defaultProps = {
   initialValue: Plain.deserialize(''),
-  placeholder: 'Write here...'
+  placeholder: 'Write here...',
 };
 
 export default withStyles(styles)(RichTextEditor);

@@ -1,10 +1,7 @@
 import React, { useState, useContext } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
-import Plain from 'slate-plain-serializer';
 import empty from 'is-empty';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -16,12 +13,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
+import decamelize from 'decamelize';
+import Plain from 'slate-plain-serializer';
 
 import TagsForm from './TagsForm';
-import { QuestionFormContext, generateRandomId } from './QuestionFormContext';
-import { CurrentDeckContext } from '../../CurrentDeckContext';
+import { GET_STANDARDS } from '../../queries/Standard';
+import GlobalLoader from '../../app/GlobalLoader';
+import { QuestionFormContext } from './QuestionFormContext';
 import QuestionAndAnswers from './QuestionAndAnswers';
-import decamelize from 'decamelize';
 
 const useStyles = makeStyles({
   form: {
@@ -61,91 +60,23 @@ const useSelectStyles = makeStyles({
   },
 });
 
-const CREATE_QUESTION = gql`
-  mutation createQuestion(
-    $questionType: String!
-    $standardId: ID
-    $tags: [String!]
-    $richText: String!
-    $questionPlaintext: String!
-    $questionOptions: [String!]
-  ) {
-    createQuestion(
-      questionType: $questionType
-      standardId: $standardId
-      tags: $tags
-      richText: $richText
-      questionPlaintext: $questionPlaintext
-      questionOptions: $questionOptions
-    ) {
-      id
-      richText
-      questionType
-      standards {
-        title
-      }
-      questionOptions {
-        id
-        question {
-          id
-        }
-        questionId
-        correct
-        richText
-        optionText
-      }
-      questionText
-      tags {
-        id
-        name
-      }
-    }
-  }
-`;
-
 const questionTypes = ['Free Response', 'Multiple Choice'];
 
-const Form = ({ allStandards, fetchTags, standardsLoading }) => {
+const Form = ({ handleSubmit, editMode }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
-  const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
+  const { loading: standardsLoading, data } = useQuery(GET_STANDARDS);
+  const { questionType, standardId, answers, questionAnswerId } = state;
 
-  const [create_question, { loading }] = useMutation(CREATE_QUESTION, {
-    onCompleted: ({ createQuestion }) => {
-      currentDeckDispatch({
-        type: 'addToCurrent',
-        card: createQuestion,
-        id: createQuestion.id,
-      });
-      dispatch({
-        type: 'resetForm',
-      });
-      window.scrollTo(0, 0);
-      setQuestionAnswerId(generateRandomId());
-    },
-  });
-
-  const onSubmit = formData => {
-    create_question({
-      variables: {
-        questionType: formData['questionType'],
-        standardId: formData['standardId'],
-        tags: formData['tags'],
-        richText: JSON.stringify(formData['question'].toJSON()),
-        questionPlaintext: formData['questionText'],
-        questionOptions: formData['answers'].map(answer =>
-          JSON.stringify(answer)
-        ),
-      },
-    });
-  };
-
-  const { questionType, standardId, answers } = state;
+  const [errorMessage, setErrorMessage] = useState('');
 
   const classes = useStyles();
   const selectClasses = useSelectStyles();
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [questionAnswerId, setQuestionAnswerId] = useState(generateRandomId());
+  if (standardsLoading) {
+    return <GlobalLoader />;
+  }
+
+  const { allStandards = [] } = data;
 
   const closeErrorMessage = () => setErrorMessage('');
 
@@ -211,48 +142,46 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
     return true;
   };
 
-  const handleSubmit = e => {
+  const onSubmit = e => {
     e.preventDefault();
     if (validateForm()) {
-      const formData = {
-        ...state,
-        questionText: Plain.serialize(state.question),
-        answers: answers.map(answer => {
-          return {
-            ...answer,
-            optionText: Plain.serialize(answer.richText),
-          };
-        }),
-      };
-      onSubmit(formData);
+      handleSubmit(state);
     }
   };
+
   return (
     <Card>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="questionType-select">
-            Select Question Type
-          </InputLabel>
-          <Select
-            value={questionType}
-            onChange={handleQuestionTypeChange}
-            classes={selectClasses}
-            className={classes.select}
-            inputProps={{
-              name: 'questionType',
-              id: 'questionType-select',
-            }}
-          >
-            {questionTypes.map(type => {
-              return (
-                <MenuItem className={classes.menuItem} key={type} value={type}>
-                  {type}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+      <form className={classes.form} onSubmit={onSubmit}>
+        {!editMode && (
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="questionType-select">
+              Select Question Type
+            </InputLabel>
+            <Select
+              value={questionType}
+              onChange={handleQuestionTypeChange}
+              classes={selectClasses}
+              className={classes.select}
+              inputProps={{
+                name: 'questionType',
+                id: 'questionType-select',
+              }}
+            >
+              {questionTypes.map(type => {
+                return (
+                  <MenuItem
+                    className={classes.menuItem}
+                    key={type}
+                    value={type}
+                  >
+                    {type}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        )}
+
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="standard-select">Select Standard</InputLabel>
           <Select
@@ -265,7 +194,6 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
               id: 'standard-select',
             }}
           >
-            {standardsLoading && <div>Loading...</div>}
             {allStandards.map(standard => {
               return (
                 <MenuItem
@@ -282,10 +210,10 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
         <FormControl
           className={`${classes.formControl} ${classes.wideFormControl}`}
         >
-          <TagsForm fetchTags={fetchTags} />
+          <TagsForm />
         </FormControl>
         <QuestionAndAnswers classes={classes} key={questionAnswerId} />
-        {loading ? (
+        {standardsLoading ? (
           <div className={classes.loaderContainer}>
             <CircularProgress />
           </div>
@@ -297,7 +225,7 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
             color="primary"
             data-testid="submit-button"
           >
-            Submit
+            {editMode ? 'Update' : 'Submit'}
           </Button>
         )}
       </form>
@@ -314,13 +242,8 @@ const Form = ({ allStandards, fetchTags, standardsLoading }) => {
 };
 
 Form.propTypes = {
-  allStandards: PropTypes.arrayOf(
-    PropTypes.shape({
-      description: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-    })
-  ),
+  handleSubmit: PropTypes.func.isRequired,
+  editMode: PropTypes.bool,
 };
 
 export default Form;
