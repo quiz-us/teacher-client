@@ -18,17 +18,16 @@ import { CREATE_DECK, UPDATE_DECK } from '../queries/Deck';
 
 const useStyles = makeStyles({
   errorMessage: {
-    color: 'red'
+    color: 'red',
   },
   header: {
-    marginTop: '20px'
-  }
+    marginTop: '20px',
+  },
 });
 
 // if deck is passed in as a prop, it means a deck already existed and that this
 // is an update call:
-export default function Confirmation({ open, setOpen, deck = {} }) {
-  const isUpdate = deck.name !== undefined;
+export default function Confirmation({ open, setOpen, isUpdate }) {
   const classes = useStyles();
   const { currentDeck } = useContext(CurrentDeckContext);
   const [deckName, setDeckName] = useState('');
@@ -36,24 +35,24 @@ export default function Confirmation({ open, setOpen, deck = {} }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [
     createDeck,
-    { loading: createLoading, data: createData = {}, error: createError }
+    { loading: createLoading, data: createData = {}, error: createError },
   ] = useMutation(CREATE_DECK);
   const [
     updateDeck,
-    { loading: updateLoading, data: updateData = {}, error: updateError }
+    { loading: updateLoading, data: updateData = {}, error: updateError },
   ] = useMutation(UPDATE_DECK);
   useEffect(() => {
     if (isUpdate) {
-      setDeckName(deck.name);
-      setDeckDescription(deck.description);
+      setDeckName(currentDeck.name);
+      setDeckDescription(currentDeck.description);
     }
-  }, [deck, isUpdate]);
+  }, [currentDeck, isUpdate]);
 
   if (createData.createDeck || updateData.updateDeck) {
     return (
       <Redirect
         to={{
-          pathname: '/'
+          pathname: '/',
         }}
       />
     );
@@ -66,18 +65,17 @@ export default function Confirmation({ open, setOpen, deck = {} }) {
     mutationError = parseError(updateError);
   }
 
-  const currentDeckArr = Object.keys(currentDeck);
+  const currentDeckArr = Object.keys(currentDeck.questions);
   const handleClose = () => setOpen(false);
 
   const handleSubmit = () => {
     setErrorMessage('');
     if (currentDeckArr.length && deckName) {
-      const questionIds = Object.keys(currentDeck);
       const variables = {
-        questionIds,
+        questionIds: currentDeckArr,
         name: deckName,
         description: deckDescription,
-        deckId: deck.id
+        deckId: currentDeck.id,
       };
       if (isUpdate) {
         updateDeck({ variables });

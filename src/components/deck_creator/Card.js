@@ -152,7 +152,7 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
 
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
   const updateCurrentDeck = () => {
-    if (currentDeck[id]) {
+    if (currentDeck.questions[id]) {
       dispatch({ type: 'removeFromCurrent', id });
     } else {
       dispatch({ type: 'addToCurrent', card, id });
@@ -195,7 +195,7 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
       <FormControlLabel
         control={
           <Switch
-            checked={inCurrentDeck}
+            checked={!!currentDeck.questions[id]}
             onChange={updateCurrentDeck}
             color="primary"
           />
@@ -204,7 +204,6 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
       />
     );
   };
-  const inCurrentDeck = currentDeck[id] ? true : false;
 
   return (
     <Card className={classes.root}>

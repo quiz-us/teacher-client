@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const DeckCreator = ({ match = { params: {} }, history }) => {
+const DeckCreator = ({ match = { params: {} }, history, isUpdate }) => {
   const classes = useStyles();
 
   return (
@@ -50,6 +50,7 @@ const DeckCreator = ({ match = { params: {} }, history }) => {
           </TabPanel>
         </Tabs>
         <CurrentDeck
+          isUpdate={isUpdate}
           classes={classes}
           deckId={match.params.id}
           history={history}

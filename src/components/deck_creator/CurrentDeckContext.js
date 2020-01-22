@@ -1,26 +1,36 @@
 import React, { useReducer } from 'react';
 
+const initialState = {
+  name: '',
+  description: '',
+  questions: {},
+  id: '',
+};
+
 let reducer = (currentDeck, action) => {
-  const { type, card, id, questions } = action;
+  const { type, card, id, deck } = action;
   switch (type) {
     case 'addToCurrent':
-      return { ...currentDeck, [id]: card };
-    case 'updateCard':
-      return { ...currentDeck, [id]: card };
+    case 'updateCard': {
+      const questions = { ...currentDeck.questions, [id]: card };
+      return { ...currentDeck, questions };
+    }
     case 'receiveCurrent':
-      const receivedDeck = {};
+      const { questions, ...receivedDeck } = deck;
+      receivedDeck.questions = {};
       questions.forEach(question => {
-        receivedDeck[question.id] = question;
+        receivedDeck.questions[question.id] = question;
       });
       return receivedDeck;
-    case 'removeFromCurrent':
-      const { [id]: _, ...updatedCurrentDeck } = currentDeck;
-      return updatedCurrentDeck;
+    case 'removeFromCurrent': {
+      const { [id]: _, ...questions } = currentDeck.questions;
+      return { ...currentDeck, questions };
+    }
     default:
       return;
   }
 };
-const initialState = {};
+
 const CurrentDeckContext = React.createContext(initialState);
 
 function CurrentDeckProvider({ children }) {
