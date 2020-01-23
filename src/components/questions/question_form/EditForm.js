@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 
 import Form from './Form';
 import { QuestionFormProvider } from './QuestionFormContext';
-import { CurrentDeckContext } from '../CurrentDeckContext';
+import { CurrentDeckContext } from '../../decks/CurrentDeckContext';
 import { UPDATE_QUESTION } from '../../queries/Question';
 import GlobalLoader from '../../app/GlobalLoader';
 

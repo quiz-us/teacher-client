@@ -18,11 +18,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-import { ReadOnly } from '../editor';
-import { CurrentDeckContext } from './CurrentDeckContext';
-import EditForm from './QuestionForm/EditForm';
+import { ReadOnly } from '../../editor';
+import { CurrentDeckContext } from '../CurrentDeckContext';
+import EditForm from '../../questions/question_form/EditForm';
 
-import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
+import { GET_QUESTIONS, DELETE_QUESTION } from '../../queries/Question';
 
 const useStyles = makeStyles({
   root: {

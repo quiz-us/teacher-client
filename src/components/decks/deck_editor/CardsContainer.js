@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { CurrentDeckContext } from './CurrentDeckContext';
+import { CurrentDeckContext } from '../CurrentDeckContext';
 import Card from './Card';
 
 const useStyles = makeStyles({

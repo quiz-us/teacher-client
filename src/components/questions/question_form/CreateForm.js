@@ -8,7 +8,7 @@ import {
   QuestionFormProvider,
   QuestionFormContext,
 } from './QuestionFormContext';
-import { CurrentDeckContext } from '../CurrentDeckContext';
+import { CurrentDeckContext } from '../../decks/CurrentDeckContext';
 import { CREATE_QUESTION } from '../../queries/Question';
 import GlobalLoader from '../../app/GlobalLoader';
 

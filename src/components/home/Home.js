@@ -19,18 +19,18 @@ const GET_DECKS = gql`
 
 const useStyles = makeStyles({
   root: {
-    padding: '30px'
+    padding: '30px',
   },
   deckContainer: {
     display: 'flex',
     margin: '20px auto',
     flexWrap: 'wrap',
-    width: '85%'
+    width: '85%',
   },
   link: {
     color: 'blue',
-    textDecoration: 'underline'
-  }
+    textDecoration: 'underline',
+  },
 });
 
 const Home = () => {
@@ -38,7 +38,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [selectedDeck, setSelectedDeck] = useState({});
   const { loading, data } = useQuery(GET_DECKS, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   });
 
   if (loading) {
@@ -72,7 +72,7 @@ const Home = () => {
         ) : (
           <div>
             You currently have no decks. Go{' '}
-            <Link className={classes.link} to="/deck-creator">
+            <Link className={classes.link} to="/decks/create">
               here
             </Link>{' '}
             to create your first deck!

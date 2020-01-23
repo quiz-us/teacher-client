@@ -4,6 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import CreateIcon from '@material-ui/icons/Create';
 import Divider from '@material-ui/core/Divider';
 import Hidden from '@material-ui/core/Hidden';
 import Badge from '@material-ui/core/Badge';
@@ -13,9 +14,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Confirmation from './Confirmation';
-import { CurrentDeckContext } from './CurrentDeckContext';
+import { CurrentDeckContext } from '../CurrentDeckContext';
 import CardsContainer from './CardsContainer';
-import { GET_DECK, DELETE_DECK } from '../queries/Deck';
+import { GET_DECK, DELETE_DECK } from '../../queries/Deck';
 
 const useStyles = makeStyles(theme => ({
   currentDeckContainer: {
@@ -55,47 +56,21 @@ const useStyles = makeStyles(theme => ({
     top: 12,
     right: 12,
   },
+  deckButtons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: '35%',
+  },
+  heading: {
+    width: '65%',
+  },
 }));
 
-const Header = ({ deleteDeck, isUpdate, classes, deckName }) => {
-  return (
-    <div className={classes.toolbar}>
-      <header>
-        <h3>{isUpdate ? deckName : 'Current Deck'}</h3>
-        {isUpdate && (
-          <IconButton
-            onClick={e => {
-              if (
-                window.confirm(
-                  'Are you sure you want to delete this deck? This cannot be undone.'
-                )
-              ) {
-                deleteDeck();
-              }
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        )}
-      </header>
-    </div>
-  );
-};
-
-Header.propTypes = {
-  deleteDeck: PropTypes.func,
-  isUpdate: PropTypes.bool,
-  classes: PropTypes.object.isRequired,
-  deckName: PropTypes.string,
-};
-
-const CurrentDeckContainer = ({ history, deckId, isUpdate }) => {
+const CurrentDeckContainer = ({ history, deckId }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
   // if a current deck already exists (ie. when editing a deck):
   const { loading } = useQuery(GET_DECK, {
     variables: { id: deckId },
-    fetchPolicy: 'network-only',
-    skip: deckId === undefined,
     onCompleted: ({ deck }) => {
       dispatch({ type: 'receiveCurrent', deck });
     },
@@ -113,30 +88,43 @@ const CurrentDeckContainer = ({ history, deckId, isUpdate }) => {
 
   const [open, setOpen] = useState(false);
   const classes = useStyles();
-  const currentDeckArr = Object.keys(currentDeck.questions);
+
+  const { questions, name } = currentDeck;
+  const currentDeckArr = Object.keys(questions);
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const headerComponent = () => (
+    <div className={classes.toolbar}>
+      <header>
+        <h3 className={classes.heading}>{name || 'Current Deck'}</h3>
+        <div className={classes.deckButtons}>
+          <IconButton onClick={() => setOpen(true)}>
+            <CreateIcon />
+          </IconButton>
+          <IconButton
+            onClick={e => {
+              if (
+                window.confirm(
+                  'Are you sure you want to delete this deck? This cannot be undone.'
+                )
+              ) {
+                deleteDeck();
+              }
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      </header>
+    </div>
+  );
+
   const currentDeckComponent = () => (
     <React.Fragment>
-      <Header
-        deleteDeck={deleteDeck}
-        isUpdate={isUpdate}
-        deckName={currentDeck.name}
-        classes={classes}
-      />
+      {headerComponent()}
       <Divider />
       <CardsContainer loading={loading} />
-      {!isUpdate && (
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => setOpen(true)}
-          className={classes.submitButton}
-        >
-          Create Deck
-        </Button>
-      )}
     </React.Fragment>
   );
 
@@ -182,9 +170,7 @@ const CurrentDeckContainer = ({ history, deckId, isUpdate }) => {
           {currentDeckComponent()}
         </Drawer>
       </Hidden>
-      {!isUpdate && (
-        <Confirmation open={open} setOpen={setOpen} isUpdate={isUpdate} />
-      )}
+      <Confirmation open={open} setOpen={setOpen} history={history} />
     </React.Fragment>
   );
 };
@@ -192,7 +178,6 @@ const CurrentDeckContainer = ({ history, deckId, isUpdate }) => {
 CurrentDeckContainer.propTypes = {
   history: PropTypes.object.isRequired,
   deckId: PropTypes.string,
-  isUpdate: PropTypes.bool,
 };
 
 export default CurrentDeckContainer;

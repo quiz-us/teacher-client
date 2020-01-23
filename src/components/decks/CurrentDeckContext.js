@@ -8,8 +8,10 @@ const initialState = {
 };
 
 let reducer = (currentDeck, action) => {
-  const { type, card, id, deck } = action;
+  const { type, card, id, deck, metaField, metaValue } = action;
   switch (type) {
+    case 'updateMeta':
+      return { ...currentDeck, [metaField]: metaValue };
     case 'addToCurrent':
     case 'updateCard': {
       const questions = { ...currentDeck.questions, [id]: card };
