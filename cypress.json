@@ -1,0 +1,10 @@
+{
+  "projectId": "op4obn",
+  "env": {
+    "TEACHER_STAGING": "http://localhost:8000",
+    "STUDENT_STAGING": "https://staging.quizus.org",
+    "DUMMY_EMAIL": "cyn@gmail.com",
+    "DUMMY_PW": "cyn@gmail.com",
+    "DUMMY_QR": "c6ea4058b513b3ed"
+  }
+}
