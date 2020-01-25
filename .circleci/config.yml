@@ -15,7 +15,7 @@ jobs:
           name: Run Jest Tests
           command: npm test
   cypress:
-    <<: defaults
+    <<: *defaults
     steps:
       - checkout
       - run scripts/cypress.sh
