@@ -23,7 +23,17 @@ jobs:
       - run:
           name: Run Jest Tests
           command: npm test
-      - run: scripts/cypress.sh
+      - run:
+          name: cypress
+          command: |
+            git clone git@github.com:quiz-us/quiz-us-server.git
+            cd quiz-us-server
+            gem install bundler:2.0.2
+            bundle update --bundler
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            bundle exec rake db:create
+            bundle exec rake db:schema:load
+            echo "Database is set up!"
 
 workflows:
   version: 2
