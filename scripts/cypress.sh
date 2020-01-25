@@ -7,4 +7,13 @@
 # npm start
 # run cypress
 
-git clone https://github.com/quiz-us/quiz-us-server.git
+git clone -b staging git@github.com:quiz-us/quiz-us-server.git
+cd quiz-us-server
+gem install bundler:2.0.2
+bundle update --bundler
+bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+bundle exec rake db:create
+bundle exec rake db:schema:load
+
+echo "Database is set up!"
