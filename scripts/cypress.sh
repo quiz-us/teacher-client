@@ -16,6 +16,10 @@ bundle install --jobs=4 --retry=3 --path vendor/bundle
 bundle exec rake db:setup
 bundle exec rake db:seed
 echo "Database is set up!"
+bin/rails server -d
+
 
 cd ..
+npm run build
+npx serve --single build -l 8000
 node_modules/.bin/cypress run
