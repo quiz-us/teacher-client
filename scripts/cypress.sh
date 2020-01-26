@@ -17,11 +17,11 @@ bundle exec rake db:create
 bundle exec rake db:schema:load
 bundle exec rake db:seed
 echo "Database is set up!"
-bin/rails server -d
+bin/rails server -d -e test
 
-
+# in CircleCI. build production react. in local, run it against running local dev servers:
 cd ..
 npm run build
 echo "Creating react production build"
-npx serve --single build -l 8000 &
+npx serve --single build -l 8000 & npx wait-on http://localhost:8000
 node_modules/.bin/cypress run
