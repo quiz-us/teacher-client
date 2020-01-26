@@ -1,7 +1,16 @@
 defaults: &defaults
   docker:
     # specify the version you desire here
-    - image: circleci/node:10
+    - image: circleci/ruby:2.6.3-node-browsers
+      environment:
+        PGHOST: localhost
+        PGUSER: quiz-us-server
+        RAILS_ENV: test
+    - image: circleci/postgres:11
+      environment:
+        POSTGRES_USER: quiz-us-server
+        POSTGRES_DB: quiz-us-server_test
+        POSTGRES_PASSWORD: ''
   working_directory: ~/repo
 
 version: 2
@@ -14,25 +23,12 @@ jobs:
       - run:
           name: Run Jest Tests
           command: npm test
-#   deploy_staging:
-#     <<: *defaults
-#     steps:
-#       - checkout
-#       - run: npm install
-#       - run: npm run build
-#       - run: npx -p netlify-cli netlify deploy --dir=./build -e staging
+      - run:
+          name: cypress
+          command: bash scripts/cypress.sh
 
 workflows:
   version: 2
   build:
     jobs:
       - build
-#   build_and_deploy_staging:
-#     jobs:
-#       - build
-#       - deploy_staging:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: staging
