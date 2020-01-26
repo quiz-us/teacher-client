@@ -21,5 +21,7 @@ bin/rails server -d
 
 cd ..
 npm run build
-npx serve --single build -l 8000
+echo "Creating react production build"
+while [ ! -f /build/index.html ]; do sleep 1; done
+npx serve --single build -l 8000 &
 node_modules/.bin/cypress run
