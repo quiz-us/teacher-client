@@ -5,8 +5,8 @@ import faker from 'faker';
 
 // The component AND the query need to be exported
 import StudentMastery from './StudentMastery';
-import { GET_PERIOD_MASTERY } from '../../queries/Period';
-import { GET_STUDENTS } from '../../queries/Student';
+import { GET_PERIOD_MASTERY } from '../../gql/queries/Period';
+import { GET_STUDENTS } from '../../gql/queries/Student';
 
 const {
   name: { firstName, lastName },

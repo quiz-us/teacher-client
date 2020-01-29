@@ -8,7 +8,7 @@ import StudentAssignmentShow from './student_assignment_show';
 import {
   GET_ASSIGNMENT_RESULTS,
   GET_ASSIGNMENT,
-} from '../../queries/Assignment';
+} from '../../gql/queries/Assignment';
 import MaterialTable from '../../table/MaterialTable';
 import GlobalLoader from '../../app/GlobalLoader';
 

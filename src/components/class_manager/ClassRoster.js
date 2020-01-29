@@ -6,7 +6,7 @@ import {
   GET_STUDENTS,
   EDIT_STUDENT,
   UNENROLL_STUDENT,
-} from '../queries/Student';
+} from '../gql/queries/Student';
 import StudentCreator from './StudentCreator';
 import MaterialTable from '../table/MaterialTable';
 import Modal from '../app/Modal';

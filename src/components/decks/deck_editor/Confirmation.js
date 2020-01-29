@@ -12,7 +12,7 @@ import { CurrentDeckContext } from '../CurrentDeckContext';
 import DeckForm from '../DeckForm';
 import parseError from '../../../util/parseError';
 
-import { UPDATE_DECK } from '../../queries/Deck';
+import { UPDATE_DECK } from '../../gql/queries/Deck';
 
 const useStyles = makeStyles({
   errorMessage: {

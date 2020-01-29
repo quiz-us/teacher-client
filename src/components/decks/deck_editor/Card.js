@@ -22,7 +22,7 @@ import { ReadOnly } from '../../editor';
 import { CurrentDeckContext } from '../CurrentDeckContext';
 import EditForm from '../../questions/question_form/EditForm';
 
-import { GET_QUESTIONS, DELETE_QUESTION } from '../../queries/Question';
+import { GET_QUESTIONS, DELETE_QUESTION } from '../../gql/gql/queries/Question';
 
 const useStyles = makeStyles({
   root: {
@@ -151,16 +151,20 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
   });
 
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
-  const updateCurrentDeck = () => {
-    if (currentDeck.questions[id]) {
-      dispatch({ type: 'removeFromCurrent', id });
-    } else {
-      dispatch({ type: 'addToCurrent', card, id });
-    }
-  };
 
   const removeFromCurrentDeck = () => {
+    // TODO: dispatch api call to remove card form deck and then dispatch following:
     dispatch({ type: 'removeFromCurrent', id });
+  };
+
+  const updateCurrentDeck = () => {
+    if (currentDeck.questions[id]) {
+      removeFromCurrentDeck();
+    } else {
+      // TODO: dispatch api call to add card to current deck
+      // and then on success, dispatch reducer call to add to current:
+      dispatch({ type: 'addToCurrent', card, id });
+    }
   };
 
   const handleDeleteDb = id => {

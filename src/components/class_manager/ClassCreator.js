@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { useMutation } from '@apollo/react-hooks';
-import { GET_PERIODS, CREATE_PERIOD } from '../queries/Period';
+import { GET_PERIODS, CREATE_PERIOD } from '../gql/queries/Period';
 import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({

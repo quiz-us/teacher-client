@@ -6,7 +6,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Modal from '../../../app/Modal';
 import Responses from './Responses';
 import Question from './Question';
-import { GET_STUDENT_ASSIGNMENT_RESULTS } from '../../../queries/Assignment';
+import { GET_STUDENT_ASSIGNMENT_RESULTS } from '../../../gql/queries/Assignment';
 
 const useStyles = makeStyles({
   container: {

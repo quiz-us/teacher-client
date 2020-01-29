@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_PERIOD_MASTERY } from '../../queries/Period';
-import { GET_STUDENTS } from '../../queries/Student';
+import { GET_PERIOD_MASTERY } from '../../gql/queries/Period';
+import { GET_STUDENTS } from '../../gql/queries/Student';
 import GlobalLoader from '../../app/GlobalLoader';
 import StickyColumnTable from '../../table/StickyColumnTable';
 

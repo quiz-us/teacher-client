@@ -15,9 +15,9 @@ import CardContent from '@material-ui/core/CardContent';
 import useForm from '../../hooks/useForm';
 import GlobalLoader from '../../app/GlobalLoader';
 import CustomCard from './Card';
-import { GET_STANDARDS } from '../../queries/Standard';
+import { GET_STANDARDS } from '../../gql/queries/Standard';
 
-import { GET_QUESTIONS } from '../../queries/Question';
+import { GET_QUESTIONS } from '../../gql/queries/Question';
 
 const useStyles = makeStyles({
   resultsContainer: {

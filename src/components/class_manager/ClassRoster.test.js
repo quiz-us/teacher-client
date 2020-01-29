@@ -6,23 +6,23 @@ import faker from 'faker';
 
 // The component AND the query need to be exported
 import ClassRoster from './ClassRoster';
-import { GET_STUDENTS } from '../queries/Student';
+import { GET_STUDENTS } from '../gql/queries/Student';
 
 const {
   name: { firstName, lastName },
   internet: { email },
-  random: { uuid }
+  random: { uuid },
 } = faker;
 
 const generateMocked = data => [
   {
     request: {
-      query: GET_STUDENTS
+      query: GET_STUDENTS,
     },
     result: {
-      data
-    }
-  }
+      data,
+    },
+  },
 ];
 
 describe('<ClassRoster />', () => {
@@ -36,9 +36,9 @@ describe('<ClassRoster />', () => {
           lastName: lastName(),
           email: email(),
           id: 1,
-          qrCode: uuid()
-        }
-      ]
+          qrCode: uuid(),
+        },
+      ],
     };
     const mocks = generateMocked(mockedData);
     ({ findByText } = render(
