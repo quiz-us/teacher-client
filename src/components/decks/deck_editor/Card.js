@@ -22,7 +22,8 @@ import { ReadOnly } from '../../editor';
 import { CurrentDeckContext } from '../CurrentDeckContext';
 import EditForm from '../../questions/question_form/EditForm';
 
-import { GET_QUESTIONS, DELETE_QUESTION } from '../../gql/gql/queries/Question';
+import { GET_QUESTIONS } from '../../gql/queries/Question';
+import { DELETE_QUESTION } from '../../gql/mutations/Question';
 
 const useStyles = makeStyles({
   root: {

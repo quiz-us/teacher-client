@@ -9,7 +9,7 @@ import {
   QuestionFormContext,
 } from './QuestionFormContext';
 import { CurrentDeckContext } from '../../decks/CurrentDeckContext';
-import { CREATE_QUESTION } from '../../gql/queries/Question';
+import { CREATE_QUESTION } from '../../gql/mutations/Question';
 import GlobalLoader from '../../app/GlobalLoader';
 
 const CreateForm = () => {
