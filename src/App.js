@@ -11,12 +11,13 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import MainRoutes from './components/MainRoutes';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Notifications from './components/app/notifications';
 
 const theme = createMuiTheme({
   palette: {
     primary: teal,
-    secondary: amber
-  }
+    secondary: amber,
+  },
 });
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           </Switch>
         </MuiPickersUtilsProvider>
       </ThemeProvider>
+      <Notifications />>
     </Router>
   );
 }

@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
 import { NotificationsContext } from './NotificationsContext';
-import ErrorModal from './ErrorModal';
-import Snackbar from './Snackbar';
+import Modal from '../Modal';
+import NotificationSnackbar from './NotificationSnackbar';
 
 const Notifications = () => {
-  const {
-    notifications: { snack, dialog },
-  } = useContext(NotificationsContext);
+  // const {
+  //   notifications: { snack, dialog },
+  // } = useContext(NotificationsContext);
 
   return (
     <React.Fragment>
       {/* TODO:  consider only conditionally rendering the elements if message is present: */}
-      {/* TODO:  rename ErrorModal into something more generic: */}
-      <ErrorModal error={dialog} />
-      <Snackbar message={snack} />
+      {/* TODO:  rename Modal into something more generic: */}
+      {/* <Modal error={dialog} /> */}
+      <NotificationSnackbar />
     </React.Fragment>
   );
 };

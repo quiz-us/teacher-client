@@ -12,6 +12,7 @@ import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import localforage from 'localforage';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { NotificationsProvider } from './components/app/notifications/NotificationsContext';
 
 const { NODE_ENV, REACT_APP_SERVER } = process.env;
 
@@ -80,7 +81,9 @@ client.writeData({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <NotificationsProvider>
+      <App />
+    </NotificationsProvider>
   </ApolloProvider>,
   document.getElementById('root')
 );

@@ -5,17 +5,29 @@ import React, { useReducer } from 'react';
 // or what kind of dialog (ie. just a message or a confirmation )
 
 const initialState = {
-  snack: '',
-  dialog: '',
+  snack: {
+    message: '',
+    severity: 'success',
+    vertical: 'bottom',
+    horizontal: 'center',
+  },
+  dialog: {
+    message: '',
+  },
+  confirmation: {
+    message: '',
+    fn: () => {},
+  },
 };
 
 let reducer = (notifications, action) => {
-  const { type, ...payload } = action;
+  const { type } = action;
   switch (type) {
-    case 'update':
-      return { ...notifications, ...payload };
-    case 'clear':
-      return initialState;
+    case 'SET_SNACK':
+      const updatedSnack = { ...notifications.snack, ...action.snack };
+      return { ...notifications, snack: updatedSnack };
+    case 'RESET_SNACK':
+      return { ...notifications, snack: initialState.snack };
     default:
       return;
   }
@@ -26,7 +38,7 @@ const NotificationsContext = React.createContext(initialState);
 function NotificationsProvider({ children }) {
   const [notifications, dispatch] = useReducer(reducer, initialState);
   return (
-    <NotificationsContext.Provider value={{ currentDeck, dispatch }}>
+    <NotificationsContext.Provider value={{ notifications, dispatch }}>
       {children}
     </NotificationsContext.Provider>
   );
