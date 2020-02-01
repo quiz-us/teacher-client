@@ -18,6 +18,7 @@ import { CurrentDeckContext } from '../CurrentDeckContext';
 import CardsContainer from './CardsContainer';
 import { GET_DECK } from '../../gql/queries/Deck';
 import { DELETE_DECK } from '../../gql/mutations/Deck';
+import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 
 const useStyles = makeStyles(theme => ({
   currentDeckContainer: {
@@ -69,7 +70,8 @@ const useStyles = makeStyles(theme => ({
 
 const CurrentDeckContainer = ({ history, deckId }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
-  // if a current deck already exists (ie. when editing a deck):
+  const { dispatch: dispatchNotify } = useContext(NotificationsContext);
+
   const { loading } = useQuery(GET_DECK, {
     variables: { id: deckId },
     onCompleted: ({ deck }) => {
@@ -104,14 +106,15 @@ const CurrentDeckContainer = ({ history, deckId }) => {
             <CreateIcon />
           </IconButton>
           <IconButton
-            onClick={e => {
-              if (
-                window.confirm(
-                  'Are you sure you want to delete this deck? This cannot be undone.'
-                )
-              ) {
-                deleteDeck();
-              }
+            onClick={() => {
+              dispatchNotify({
+                type: 'OPEN_CONFIRMATION',
+                confirmation: {
+                  func: deleteDeck,
+                  message:
+                    'Are you sure you want to delete this deck? This cannot be undone.',
+                },
+              });
             }}
           >
             <DeleteIcon />
