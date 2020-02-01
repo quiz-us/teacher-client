@@ -1,6 +1,7 @@
 import React from 'react';
 import NotificationSnackbar from './NotificationSnackbar';
 import NotificationsDialog from './NotificationsDialog';
+import NotificationsConfirmation from './NotificationsConfirmation';
 
 const Notifications = () => {
   // const {
@@ -9,6 +10,7 @@ const Notifications = () => {
 
   return (
     <React.Fragment>
+      <NotificationsConfirmation />
       <NotificationsDialog />
       <NotificationSnackbar />
     </React.Fragment>

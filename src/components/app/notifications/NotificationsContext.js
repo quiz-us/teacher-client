@@ -7,15 +7,21 @@ import React, { useReducer } from 'react';
 const initialState = {
   snacks: [], // snack notifications are processed through a queue
   dialog: {},
-  confirmation: {
-    message: '',
-    fn: () => {},
-  },
+  confirmation: {},
 };
 
 let reducer = (notifications, action) => {
   const { type } = action;
   switch (type) {
+    case 'OPEN_CONFIRMATION': {
+      if (typeof action.confirmation.func !== 'function') {
+        throw Error("'func' must be a function.");
+      }
+      return { ...notifications, confirmation: action.confirmation };
+    }
+    case 'CLOSE_CONFIRMATION': {
+      return { ...notifications, confirmation: {} };
+    }
     case 'OPEN_DIALOG': {
       return { ...notifications, dialog: action.dialog };
     }
