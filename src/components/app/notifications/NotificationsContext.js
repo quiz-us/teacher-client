@@ -5,15 +5,8 @@ import React, { useReducer } from 'react';
 // or what kind of dialog (ie. just a message or a confirmation )
 
 const initialState = {
-  snack: {
-    message: '',
-    severity: 'success',
-    vertical: 'bottom',
-    horizontal: 'center',
-  },
-  dialog: {
-    message: '',
-  },
+  snacks: [], // snack notifications are processed through a queue
+  dialog: {},
   confirmation: {
     message: '',
     fn: () => {},
@@ -23,11 +16,21 @@ const initialState = {
 let reducer = (notifications, action) => {
   const { type } = action;
   switch (type) {
-    case 'SET_SNACK':
-      const updatedSnack = { ...notifications.snack, ...action.snack };
-      return { ...notifications, snack: updatedSnack };
-    case 'RESET_SNACK':
-      return { ...notifications, snack: initialState.snack };
+    case 'OPEN_DIALOG': {
+      return { ...notifications, dialog: action.dialog };
+    }
+    case 'CLOSE_DIALOG': {
+      return { ...notifications, dialog: {} };
+    }
+    case 'PUSH_SNACK': {
+      const snacks = [...notifications.snacks, action.snack];
+      return { ...notifications, snacks };
+    }
+    case 'SHIFT_SNACK': {
+      // eslint-disable-next-line no-unused-vars
+      const [removed, ...snacks] = notifications.snacks;
+      return { ...notifications, snacks };
+    }
     default:
       return;
   }

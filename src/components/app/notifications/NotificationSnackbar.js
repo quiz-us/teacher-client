@@ -4,26 +4,32 @@ import Alert from '@material-ui/lab/Alert';
 
 import { NotificationsContext } from './NotificationsContext';
 
-const NotificationSnackbar = ({ snack }) => {
-  const { notifications, dispatch } = useContext(NotificationsContext);
-  console.log(notifications);
+const NotificationSnackbar = () => {
   const {
-    snack: { message, severity, vertical, horizontal },
-  } = notifications;
+    notifications: { snacks },
+    dispatch,
+  } = useContext(NotificationsContext);
+  const [notification] = snacks;
+  const {
+    message = '',
+    severity = 'success',
+    vertical = 'bottom',
+    horizontal = 'center',
+  } = notification || {};
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    dispatch({ type: 'RESET_SNACK' });
+    dispatch({ type: 'SHIFT_SNACK' });
   };
 
   return (
     <Snackbar
       anchorOrigin={{ vertical, horizontal }}
-      open={!!message}
-      autoHideDuration={6000}
+      open={snacks.length > 0}
+      autoHideDuration={5000}
       onClose={handleClose}
     >
       <Alert onClose={handleClose} severity={severity}>

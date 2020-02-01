@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
-import { NotificationsContext } from './NotificationsContext';
-import Modal from '../Modal';
+import React from 'react';
 import NotificationSnackbar from './NotificationSnackbar';
+import NotificationsDialog from './NotificationsDialog';
 
 const Notifications = () => {
   // const {
@@ -10,9 +9,7 @@ const Notifications = () => {
 
   return (
     <React.Fragment>
-      {/* TODO:  consider only conditionally rendering the elements if message is present: */}
-      {/* TODO:  rename Modal into something more generic: */}
-      {/* <Modal error={dialog} /> */}
+      <NotificationsDialog />
       <NotificationSnackbar />
     </React.Fragment>
   );

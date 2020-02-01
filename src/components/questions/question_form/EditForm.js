@@ -25,7 +25,7 @@ const UpdateForm = ({ open, setOpen, card }) => {
       currentDeckDispatch({
         type: 'updateCard',
         card: updateQuestion,
-        id: updateQuestion.id,
+        questionId: updateQuestion.id,
       });
       handleClose();
     },

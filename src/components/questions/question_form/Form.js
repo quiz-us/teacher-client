@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 import empty from 'is-empty';
@@ -9,13 +9,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import decamelize from 'decamelize';
 import Plain from 'slate-plain-serializer';
-
+import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 import TagsForm from './TagsForm';
 import { GET_STANDARDS } from '../../gql/queries/Standard';
 import GlobalLoader from '../../app/GlobalLoader';
@@ -64,10 +61,9 @@ const questionTypes = ['Free Response', 'Multiple Choice'];
 
 const Form = ({ handleSubmit, editMode }) => {
   const { state, dispatch } = useContext(QuestionFormContext);
+  const { dispatch: dispatchNotify } = useContext(NotificationsContext);
   const { loading: standardsLoading, data } = useQuery(GET_STANDARDS);
   const { questionType, standardId, answers, questionAnswerId } = state;
-
-  const [errorMessage, setErrorMessage] = useState('');
 
   const classes = useStyles();
   const selectClasses = useSelectStyles();
@@ -77,8 +73,6 @@ const Form = ({ handleSubmit, editMode }) => {
   }
 
   const { allStandards = [] } = data;
-
-  const closeErrorMessage = () => setErrorMessage('');
 
   const handleInputChange = e => {
     dispatch({
@@ -120,6 +114,16 @@ const Form = ({ handleSubmit, editMode }) => {
     return null;
   };
 
+  const displayError = error => {
+    dispatchNotify({
+      type: 'OPEN_DIALOG',
+      dialog: {
+        title: 'There was an error with your submission.',
+        message: error,
+      },
+    });
+  };
+
   const validateForm = () => {
     const inputKeys = Object.keys(state);
     for (let i = 0; i < inputKeys.length; i += 1) {
@@ -130,12 +134,12 @@ const Form = ({ handleSubmit, editMode }) => {
       } else if (inputKey === 'answers') {
         const error = validateAnswers(inputVal);
         if (error) {
-          setErrorMessage(error);
+          displayError(error);
           return false;
         }
       }
       if (empty(inputVal)) {
-        setErrorMessage(`Please fill out '${decamelize(inputKey, ' ')}'!`);
+        displayError(`Please fill out '${decamelize(inputKey, ' ')}'!`);
         return false;
       }
     }
@@ -229,14 +233,6 @@ const Form = ({ handleSubmit, editMode }) => {
           </Button>
         )}
       </form>
-      <Dialog open={errorMessage !== ''} onClose={closeErrorMessage}>
-        <DialogTitle>{errorMessage}</DialogTitle>
-        <DialogActions>
-          <Button onClick={closeErrorMessage} color="primary" autoFocus>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Card>
   );
 };

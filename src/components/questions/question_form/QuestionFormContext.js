@@ -1,10 +1,11 @@
 import React, { useReducer } from 'react';
 import crypto from 'crypto';
+import Plain from 'slate-plain-serializer';
 
 const generateRandomId = () => crypto.randomBytes(20).toString('hex');
 
 const defaultAnswer = (correct = false) => ({
-  richText: undefined,
+  richText: Plain.deserialize(''),
   correct,
   answerId: generateRandomId(),
 });

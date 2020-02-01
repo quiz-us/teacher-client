@@ -11,9 +11,11 @@ import {
 import { CurrentDeckContext } from '../../decks/CurrentDeckContext';
 import { CREATE_QUESTION } from '../../gql/mutations/Question';
 import GlobalLoader from '../../app/GlobalLoader';
+import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 
 const CreateForm = () => {
   const { dispatch } = useContext(QuestionFormContext);
+  const { dispatch: dispatchNotify } = useContext(NotificationsContext);
   const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
   const [createQuestion, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: ({ createQuestion }) => {
@@ -22,7 +24,13 @@ const CreateForm = () => {
       currentDeckDispatch({
         type: 'addToCurrent',
         card: createQuestion,
-        id: createQuestion.id,
+        questionId: createQuestion.id,
+      });
+      dispatchNotify({
+        type: 'PUSH_SNACK',
+        snack: {
+          message: 'New question was added to the deck!',
+        },
       });
       dispatch({
         type: 'resetForm',
