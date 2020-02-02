@@ -8,13 +8,13 @@ const initialState = {
 };
 
 let reducer = (currentDeck, action) => {
-  const { type, card, id, deck, metaField, metaValue } = action;
+  const { type, card, questionId, deck, metaField, metaValue } = action;
   switch (type) {
     case 'updateMeta':
       return { ...currentDeck, [metaField]: metaValue };
     case 'addToCurrent':
     case 'updateCard': {
-      const questions = { ...currentDeck.questions, [id]: card };
+      const questions = { ...currentDeck.questions, [questionId]: card };
       return { ...currentDeck, questions };
     }
     case 'receiveCurrent':
@@ -25,8 +25,11 @@ let reducer = (currentDeck, action) => {
       });
       return receivedDeck;
     case 'removeFromCurrent': {
-      const { [id]: _, ...questions } = currentDeck.questions;
+      const { [questionId]: _, ...questions } = currentDeck.questions;
       return { ...currentDeck, questions };
+    }
+    case 'resetCurrentDeck': {
+      return initialState;
     }
     default:
       return;
