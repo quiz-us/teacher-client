@@ -13,6 +13,7 @@ import { setContext } from 'apollo-link-context';
 import localforage from 'localforage';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { NotificationsProvider } from './components/app/notifications/NotificationsContext';
+import ErrorBoundary from './ErrorBoundary';
 
 const { NODE_ENV, REACT_APP_SERVER } = process.env;
 
@@ -44,6 +45,12 @@ const asyncAuthLink = setContext(
 // client side auth was heavily influenced by:
 // https://www.jaygould.co.uk/2018-08-11-react-apollo-global-error-handling/
 const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (networkError) {
+    alert(
+      `[Something went wrong. Please contact us about this error]: ${networkError}`
+    );
+    console.error(`[Network error]: ${networkError}`);
+  }
   if (graphQLErrors) {
     graphQLErrors.some(({ message }) => {
       if (message === 'Unauthenticated') {
@@ -57,12 +64,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       console.error(message);
       return false;
     });
-  }
-  if (networkError) {
-    alert(
-      `[Something went wrong. Please contact us about this error]: ${networkError}`
-    );
-    console.error(`[Network error]: ${networkError}`);
   }
 });
 
@@ -80,11 +81,13 @@ client.writeData({
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <NotificationsProvider>
-      <App />
-    </NotificationsProvider>
-  </ApolloProvider>,
+  <ErrorBoundary>
+    <ApolloProvider client={client}>
+      <NotificationsProvider>
+        <App />
+      </NotificationsProvider>
+    </ApolloProvider>
+  </ErrorBoundary>,
   document.getElementById('root')
 );
 

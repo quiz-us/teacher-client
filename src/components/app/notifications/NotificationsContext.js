@@ -1,8 +1,5 @@
 import React, { useReducer } from 'react';
-
-// TODO: think through whether or not we should make snack and dialog objects
-// so that we can pass in more custom props like what kind of snack alert (ie. error vs info)
-// or what kind of dialog (ie. just a message or a confirmation )
+import Schema from 'validate';
 
 const initialState = {
   snacks: [], // snack notifications are processed through a queue
@@ -10,26 +7,84 @@ const initialState = {
   confirmation: {},
 };
 
+const snackSchema = new Schema({
+  message: {
+    type: String,
+    required: true,
+  },
+  severity: {
+    type: String,
+    enum: ['success', 'warning', 'error', 'info'],
+  },
+  vertical: {
+    type: String,
+    enum: ['top', 'bottom'],
+  },
+  horizontal: {
+    type: String,
+    enum: ['left', 'center', 'right'],
+  },
+});
+
+const dialogSchema = new Schema({
+  message: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  maxWidth: {
+    type: String,
+    enum: ['xs', 'sm', 'md', 'lg', 'xl'],
+  },
+});
+
+const confirmationSchema = new Schema({
+  message: {
+    type: String,
+    required: true,
+  },
+  func: {
+    type: Function,
+    required: true,
+  },
+  maxWidth: {
+    type: String,
+    enum: ['xs', 'sm', 'md', 'lg', 'xl'],
+  },
+});
+
 let reducer = (notifications, action) => {
-  const { type } = action;
+  const { type, confirmation, dialog, snack } = action;
   switch (type) {
     case 'OPEN_CONFIRMATION': {
-      if (typeof action.confirmation.func !== 'function') {
-        throw Error("'func' must be a function.");
+      const errors = confirmationSchema.validate(confirmation);
+      if (errors.length) {
+        throw Error(errors);
       }
-      return { ...notifications, confirmation: action.confirmation };
+      return { ...notifications, confirmation: confirmation };
     }
     case 'CLOSE_CONFIRMATION': {
       return { ...notifications, confirmation: {} };
     }
     case 'OPEN_DIALOG': {
-      return { ...notifications, dialog: action.dialog };
+      const errors = dialogSchema.validate(dialog);
+      if (errors.length) {
+        throw Error(errors);
+      }
+      return { ...notifications, dialog: dialog };
     }
     case 'CLOSE_DIALOG': {
       return { ...notifications, dialog: {} };
     }
     case 'PUSH_SNACK': {
-      const snacks = [...notifications.snacks, action.snack];
+      const errors = snackSchema.validate(snack);
+      if (errors.length) {
+        throw Error(errors);
+      }
+      const snacks = [...notifications.snacks, snack];
       return { ...notifications, snacks };
     }
     case 'SHIFT_SNACK': {
