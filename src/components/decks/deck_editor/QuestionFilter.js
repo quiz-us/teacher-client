@@ -12,12 +12,12 @@ import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-import useForm from '../hooks/useForm';
-import GlobalLoader from '../app/GlobalLoader';
+import useForm from '../../hooks/useForm';
+import GlobalLoader from '../../app/GlobalLoader';
 import CustomCard from './Card';
-import { GET_STANDARDS } from '../queries/Standard';
+import { GET_STANDARDS } from '../../gql/queries/Standard';
 
-import { GET_QUESTIONS } from '../queries/Question';
+import { GET_QUESTIONS } from '../../gql/queries/Question';
 
 const useStyles = makeStyles({
   resultsContainer: {

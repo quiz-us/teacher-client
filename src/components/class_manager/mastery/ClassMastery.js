@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_PERIOD_SUMMARY } from '../../queries/Period';
+import { GET_PERIOD_SUMMARY } from '../../gql/queries/Period';
 import GlobalLoader from '../../app/GlobalLoader';
 import StickyColumnTable from '../../table/StickyColumnTable';
 

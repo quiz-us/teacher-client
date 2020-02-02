@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
-import {
-  GET_STUDENTS,
-  EDIT_STUDENT,
-  UNENROLL_STUDENT,
-} from '../queries/Student';
+import { GET_STUDENTS } from '../gql/queries/Student';
+import { EDIT_STUDENT, UNENROLL_STUDENT } from '../gql/mutations/Student';
 import StudentCreator from './StudentCreator';
 import MaterialTable from '../table/MaterialTable';
 import Modal from '../app/Modal';

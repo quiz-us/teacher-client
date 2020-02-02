@@ -1,52 +1,5 @@
 import gql from 'graphql-tag';
-
-export const GET_QUESTION = gql`
-  query getQuestion($id: ID!) {
-    question(id: $id) {
-      id
-      questionType
-      questionText
-      richText
-      standards {
-        id
-        title
-      }
-      tags {
-        id
-        name
-      }
-      questionOptions {
-        id
-        correct
-        richText
-      }
-    }
-  }
-`;
-
-export const GET_QUESTIONS = gql`
-  query getQuestions($standardId: ID, $keyWords: String) {
-    questions(standardId: $standardId, keyWords: $keyWords) {
-      questionText
-      questionType
-      richText
-      id
-      standards {
-        id
-        title
-      }
-      tags {
-        id
-        name
-      }
-      questionOptions {
-        correct
-        id
-        richText
-      }
-    }
-  }
-`;
+import { QUESTION_ATTRIBUTES } from '../fragments/Question';
 
 export const CREATE_QUESTION = gql`
   mutation createQuestion(
@@ -65,30 +18,10 @@ export const CREATE_QUESTION = gql`
       questionPlaintext: $questionPlaintext
       questionOptions: $questionOptions
     ) {
-      id
-      richText
-      questionType
-      standards {
-        title
-        id
-      }
-      questionOptions {
-        id
-        question {
-          id
-        }
-        questionId
-        correct
-        richText
-        optionText
-      }
-      questionText
-      tags {
-        id
-        name
-      }
+      ...questionAttributes
     }
   }
+  ${QUESTION_ATTRIBUTES}
 `;
 
 export const UPDATE_QUESTION = gql`

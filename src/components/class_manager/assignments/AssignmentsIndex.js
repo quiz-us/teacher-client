@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../../app/GlobalLoader';
-import { GET_CLASS_ASSIGNMENTS } from '../../queries/Assignment';
+import { GET_CLASS_ASSIGNMENTS } from '../../gql/queries/Assignment';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Table from '../../table/Table';

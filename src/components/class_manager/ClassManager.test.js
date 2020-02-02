@@ -5,17 +5,17 @@ import { MemoryRouter, Route } from 'react-router-dom';
 
 // The component AND the query need to be exported
 import ClassManager from './ClassManager';
-import { GET_PERIODS } from '../queries/Period';
+import { GET_PERIODS } from '../gql/queries/Period';
 
 const generateMocked = data => [
   {
     request: {
-      query: GET_PERIODS
+      query: GET_PERIODS,
     },
     result: {
-      data
-    }
-  }
+      data,
+    },
+  },
 ];
 
 describe('<ClassManager />', () => {
@@ -25,13 +25,13 @@ describe('<ClassManager />', () => {
       periods: [
         {
           name: 'Period 1',
-          id: 1
+          id: 1,
         },
         {
           name: 'Period 2',
-          id: 2
-        }
-      ]
+          id: 2,
+        },
+      ],
     };
     const mocks = generateMocked(mockedData);
     ({ findByText } = render(
@@ -50,7 +50,7 @@ describe('<ClassManager />', () => {
 
   it('renders without error when there are no created periods', async () => {
     const mockedData = {
-      periods: []
+      periods: [],
     };
     const mocks = generateMocked(mockedData);
     ({ findByText } = render(

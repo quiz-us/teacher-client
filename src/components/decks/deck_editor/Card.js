@@ -18,11 +18,17 @@ import ClearIcon from '@material-ui/icons/Clear';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-import { ReadOnly } from '../editor';
-import { CurrentDeckContext } from './CurrentDeckContext';
-import EditForm from './QuestionForm/EditForm';
+import { ReadOnly } from '../../editor';
+import { CurrentDeckContext } from '../CurrentDeckContext';
+import EditForm from '../../questions/question_form/EditForm';
 
-import { GET_QUESTIONS, DELETE_QUESTION } from '../queries/Question';
+import { GET_QUESTIONS } from '../../gql/queries/Question';
+import { DELETE_QUESTION } from '../../gql/mutations/Question';
+import {
+  ADD_QUESTION_TO_DECK,
+  REMOVE_QUESTION_FROM_DECK,
+} from '../../gql/mutations/Deck';
+import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 
 const useStyles = makeStyles({
   root: {
@@ -102,8 +108,10 @@ Answers.propTypes = {
 const DeckCard = ({ card, removable, inputs, deletable }) => {
   const { currentDeck, dispatch } = useContext(CurrentDeckContext);
 
+  const { questions, id: deckId } = currentDeck;
+
   const {
-    id,
+    id: questionId,
     questionType,
     richText = '',
     standards = [{}],
@@ -114,6 +122,7 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [open, setOpen] = useState(false);
+  const { dispatch: dispatchNotify } = useContext(NotificationsContext);
 
   const removeQuestionFromCache = (cache, { deleteQuestion: { id } }) => {
     //read what is currently in the cache for GET_QUESTIONS query
@@ -126,7 +135,9 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
     });
 
     // remove the deleted question
-    const updatedQuestions = questions.filter(question => question.id !== id);
+    const updatedQuestions = questions.filter(
+      question => question.id !== questionId
+    );
 
     // write the GET_QUESTIONS without the deleted question
     cache.writeQuery({
@@ -140,8 +151,8 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
   };
 
   const [deleteQuestion] = useMutation(DELETE_QUESTION, {
-    onCompleted: ({ deleteQuestion: { id } }) => {
-      dispatch({ type: 'removeFromCurrent', id });
+    onCompleted: ({ deleteQuestion }) => {
+      dispatch({ type: 'removeFromCurrent', questionId: deleteQuestion.id });
     },
     update: (cache, res) => {
       //needed to remove deleted question from search results
@@ -150,17 +161,44 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
     onError: err => console.error(err),
   });
 
+  const [removeQuestionFromDeck] = useMutation(REMOVE_QUESTION_FROM_DECK, {
+    onCompleted: ({ removeQuestionFromDeck: { question } }) => {
+      dispatch({ type: 'removeFromCurrent', questionId: question.id });
+      dispatchNotify({
+        type: 'PUSH_SNACK',
+        snack: {
+          message: 'Question was removed from deck!',
+          vertical: 'top',
+        },
+      });
+    },
+  });
+
+  const [addQuestionToDeck] = useMutation(ADD_QUESTION_TO_DECK, {
+    onCompleted: ({ addQuestionToDeck: { question } }) => {
+      dispatch({ type: 'addToCurrent', card, questionId: question.id });
+      dispatchNotify({
+        type: 'PUSH_SNACK',
+        snack: {
+          message: 'Question was added to the deck!',
+          vertical: 'top',
+        },
+      });
+    },
+  });
+
   const actionText = expanded ? 'Hide Answer' : 'Show Answer';
-  const updateCurrentDeck = () => {
-    if (currentDeck[id]) {
-      dispatch({ type: 'removeFromCurrent', id });
-    } else {
-      dispatch({ type: 'addToCurrent', card, id });
-    }
-  };
 
   const removeFromCurrentDeck = () => {
-    dispatch({ type: 'removeFromCurrent', id });
+    removeQuestionFromDeck({ variables: { questionId, deckId } });
+  };
+
+  const updateCurrentDeck = () => {
+    if (questions[questionId]) {
+      removeFromCurrentDeck();
+    } else {
+      addQuestionToDeck({ variables: { questionId, deckId } });
+    }
   };
 
   const handleDeleteDb = id => {
@@ -195,7 +233,7 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
       <FormControlLabel
         control={
           <Switch
-            checked={inCurrentDeck}
+            checked={!!questions[questionId]}
             onChange={updateCurrentDeck}
             color="primary"
           />
@@ -204,7 +242,6 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
       />
     );
   };
-  const inCurrentDeck = currentDeck[id] ? true : false;
 
   return (
     <Card className={classes.root}>
@@ -228,7 +265,7 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
                   aria-label="Delete Question"
                   placement="top"
                 >
-                  <IconButton onClick={() => handleDeleteDb(id)}>
+                  <IconButton onClick={() => handleDeleteDb(questionId)}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </Tooltip>
