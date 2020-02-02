@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -8,7 +8,8 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { useMutation } from '@apollo/react-hooks';
 import { GET_PERIODS } from '../gql/queries/Period';
 import { CREATE_PERIOD } from '../gql/mutations/Period';
-import ErrorModal from '../app/ErrorModal';
+import { NotificationsContext } from '../app/notifications/NotificationsContext';
+import parseError from '../../util/parseError';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,9 +24,19 @@ const useStyles = makeStyles(theme => ({
 
 const Form = ({ classes }) => {
   const [periodName, setPeriodName] = useState('');
-  const [createPeriod, { loading, error }] = useMutation(CREATE_PERIOD, {
+  const { dispatch: dispatchNotify } = useContext(NotificationsContext);
+  const [createPeriod, { loading }] = useMutation(CREATE_PERIOD, {
     onCompleted: () => {
       setPeriodName('');
+    },
+    onError: error => {
+      dispatchNotify({
+        type: 'OPEN_DIALOG',
+        dialog: {
+          title: 'Error Occured',
+          message: parseError(error),
+        },
+      });
     },
     refetchQueries: [
       {
@@ -63,7 +74,6 @@ const Form = ({ classes }) => {
           ),
         }}
       />
-      <ErrorModal error={error} />
     </form>
   );
 };
