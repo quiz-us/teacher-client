@@ -10,36 +10,48 @@ import {
 } from './QuestionFormContext';
 import { CurrentDeckContext } from '../../decks/CurrentDeckContext';
 import { CREATE_QUESTION } from '../../gql/mutations/Question';
+import { ADD_QUESTION_TO_DECK } from '../../gql/mutations/Deck';
 import GlobalLoader from '../../app/GlobalLoader';
 import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 
 const CreateForm = () => {
   const { dispatch } = useContext(QuestionFormContext);
   const { dispatch: dispatchNotify } = useContext(NotificationsContext);
-  const { dispatch: currentDeckDispatch } = useContext(CurrentDeckContext);
+  const { currentDeck, dispatch: currentDeckDispatch } = useContext(
+    CurrentDeckContext
+  );
+  const [addQuestionToDeck, { loading: questionDeckLoading }] = useMutation(
+    ADD_QUESTION_TO_DECK,
+    {
+      onCompleted: ({ addQuestionToDeck: { question } }) => {
+        currentDeckDispatch({
+          type: 'addToCurrent',
+          card: question,
+          questionId: question.id,
+        });
+        dispatchNotify({
+          type: 'PUSH_SNACK',
+          snack: {
+            message: 'New question was added to the deck!',
+          },
+        });
+        dispatch({
+          type: 'resetForm',
+        });
+        window.scrollTo(0, 0);
+      },
+    }
+  );
+
   const [createQuestion, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: ({ createQuestion }) => {
-      // TODO: dispatch api call to add card to current deck
-      // and then on success, dispatch reducer call to add to current:
-      currentDeckDispatch({
-        type: 'addToCurrent',
-        card: createQuestion,
-        questionId: createQuestion.id,
+      addQuestionToDeck({
+        variables: { questionId: createQuestion.id, deckId: currentDeck.id },
       });
-      dispatchNotify({
-        type: 'PUSH_SNACK',
-        snack: {
-          message: 'New question was added to the deck!',
-        },
-      });
-      dispatch({
-        type: 'resetForm',
-      });
-      window.scrollTo(0, 0);
     },
   });
 
-  if (loading) {
+  if (loading || questionDeckLoading) {
     return <GlobalLoader />;
   }
 

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { QUESTION_ATTRIBUTES } from '../fragments/Question';
 
 export const CREATE_QUESTION = gql`
   mutation createQuestion(
@@ -17,30 +18,10 @@ export const CREATE_QUESTION = gql`
       questionPlaintext: $questionPlaintext
       questionOptions: $questionOptions
     ) {
-      id
-      richText
-      questionType
-      standards {
-        title
-        id
-      }
-      questionOptions {
-        id
-        question {
-          id
-        }
-        questionId
-        correct
-        richText
-        optionText
-      }
-      questionText
-      tags {
-        id
-        name
-      }
+      ...questionAttributes
     }
   }
+  ${QUESTION_ATTRIBUTES}
 `;
 
 export const UPDATE_QUESTION = gql`
