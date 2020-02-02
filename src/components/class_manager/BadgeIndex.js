@@ -1,7 +1,7 @@
 import React from 'react';
 import GlobalLoader from '../app/GlobalLoader';
-import { GET_STUDENTS } from '../queries/Student';
-import { GET_PERIOD } from '../queries/Period';
+import { GET_STUDENTS } from '../gql/queries/Student';
+import { GET_PERIOD } from '../gql/queries/Period';
 import QRCode from 'qrcode.react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
@@ -13,14 +13,14 @@ import jsPDF from 'jspdf';
 const useStyles = makeStyles({
   root: {
     margin: '20px',
-    overflow: 'scroll'
+    overflow: 'scroll',
   },
   badgeIndex: {
     width: '1070px',
     margin: '20px',
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   badge: {
     border: '1px dashed black',
@@ -29,21 +29,21 @@ const useStyles = makeStyles({
     padding: '85px 10px 20px 10px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   downloadContainer: {
-    marginTop: '20px'
-  }
+    marginTop: '20px',
+  },
 });
 
 const BadgeIndex = ({ match }) => {
   const { params } = match;
   const classes = useStyles();
   const { data, loading } = useQuery(GET_STUDENTS, {
-    variables: { periodId: params.id }
+    variables: { periodId: params.id },
   });
   const { data: classData, loading: classLoading } = useQuery(GET_PERIOD, {
-    variables: { periodId: params.id }
+    variables: { periodId: params.id },
   });
   if (loading || classLoading) {
     return <GlobalLoader />;

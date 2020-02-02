@@ -7,7 +7,7 @@ import AssignmentResults from './AssignmentResults';
 import {
   GET_ASSIGNMENT_RESULTS,
   GET_ASSIGNMENT,
-} from '../../queries/Assignment';
+} from '../../gql/queries/Assignment';
 
 const mocks = [
   {

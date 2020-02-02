@@ -13,7 +13,7 @@ import Plain from 'slate-plain-serializer';
 import { QuestionFormContext } from './QuestionFormContext';
 // import { RED } from "../../theme/colors";
 
-const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+const ALPHABET = [...'ABCDEFGHIJ'];
 
 const useStyles = makeStyles({
   addButton: {
@@ -91,9 +91,9 @@ const QuestionAndAnswers = ({ classes }) => {
       return (
         <React.Fragment>
           {answers.map(({ richText, answerId, correct }, i) => {
-            if (i > 25) {
+            if (i > 10) {
               throw Error(
-                "You've added more answer choices than the allowed amount of 26!"
+                "You've added more answer choices than the allowed amount of 10!"
               );
             }
             return (
@@ -116,6 +116,7 @@ const QuestionAndAnswers = ({ classes }) => {
                     className={componentClasses.deleteButton}
                     onClick={deleteAnswerChoice(i)}
                     title="delete answer"
+                    aria-label="Delete Answer Choice"
                   >
                     <DeleteIcon />
                   </IconButton>

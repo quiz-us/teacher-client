@@ -20,35 +20,35 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(1),
     },
     [theme.breakpoints.down('sm')]: {
-      marginRight: 0
-    }
+      marginRight: 0,
+    },
   },
   white: {
-    color: 'white'
+    color: 'white',
   },
   list: {
-    width: 250
+    width: 250,
   },
   navHeader: {
-    padding: '20px 20px'
+    padding: '20px 20px',
   },
   logo: {
     width: 120,
     top: '3px',
     [theme.breakpoints.down('sm')]: {
-      width: 100
+      width: 100,
     },
-    position: 'relative'
+    position: 'relative',
   },
   sideBarLogo: {
     width: 130,
     [theme.breakpoints.down('sm')]: {
-      width: 120
-    }
-  }
+      width: 120,
+    },
+  },
 }));
 
 export default function ButtonAppBar() {
@@ -64,7 +64,7 @@ export default function ButtonAppBar() {
       </div>
       <Divider />
       <List>
-        <Link to="/deck-creator">
+        <Link to="/decks/create">
           <ListItem button>
             <ListItemIcon>
               <BuildIcon />

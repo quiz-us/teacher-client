@@ -6,7 +6,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
-import { GET_PERIOD, EDIT_PERIOD, DELETE_PERIOD } from '../queries/Period';
+import { GET_PERIOD } from '../gql/queries/Period';
+import { EDIT_PERIOD, DELETE_PERIOD } from '../gql/mutations/Period';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ErrorModal from '.././app/ErrorModal';
@@ -80,6 +81,7 @@ const ClassEdit = ({ history, match }) => {
           />
           <IconButton
             className={classes.iconButtons}
+            aria-label="Save Edits"
             type="submit"
             title="save edits"
           >
@@ -88,6 +90,7 @@ const ClassEdit = ({ history, match }) => {
           <IconButton
             className={classes.iconButtons}
             title="cancel edits"
+            aria-label="Cancel Edits"
             onClick={() => setEditMode(false)}
           >
             <CloseIcon />
@@ -100,6 +103,7 @@ const ClassEdit = ({ history, match }) => {
             <IconButton
               className={classes.iconButtons}
               title="edit class name"
+              aria-label="Edit Class Name"
               onClick={() => setEditMode(true)}
             >
               <EditIcon />

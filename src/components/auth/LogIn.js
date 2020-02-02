@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import gql from 'graphql-tag';
@@ -22,32 +22,33 @@ const LOGIN = gql`
 export default ({ history }) => {
   const classes = useAuthFormStyles();
   const client = useApolloClient();
-  const [logInTeacher, { loading, error }] = useMutation(LOGIN);
+  const [error, setError] = useState('');
+  const [logInTeacher, { loading }] = useMutation(LOGIN, {
+    onError: error => {
+      setError(parseError(error));
+    },
+    onCompleted: async ({ logInTeacher: { token } }) => {
+      if (token) {
+        await localforage.setItem('__QUIZUS__', token);
+        const {
+          push,
+          location: { state = { from: { pathname: '/' } } },
+        } = history;
+        client.writeData({
+          data: { loggedIn: true },
+        });
+        push(state.from.pathname);
+      }
+    },
+  });
   const { inputs, handleInputChange } = useForm({
     email: '',
     password: '',
   });
 
-  const mutationError = parseError(error);
-
   const handleSubmit = async e => {
     e.preventDefault();
-    const {
-      data: {
-        logInTeacher: { token },
-      },
-    } = await logInTeacher({ variables: inputs });
-    if (token) {
-      await localforage.setItem('__QUIZUS__', token);
-      const {
-        push,
-        location: { state = { from: { pathname: '/' } } },
-      } = history;
-      client.writeData({
-        data: { loggedIn: true },
-      });
-      push(state.from.pathname);
-    }
+    await logInTeacher({ variables: inputs });
   };
 
   return (
@@ -82,7 +83,7 @@ export default ({ history }) => {
             Log In
           </Button>
         )}
-        {error ? <div className={classes.error}>{mutationError}</div> : null}
+        {error ? <div className={classes.error}>{error}</div> : null}
       </form>
     </AuthForm>
   );

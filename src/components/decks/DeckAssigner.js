@@ -14,22 +14,22 @@ import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
-import { GET_PERIODS } from '../queries/Period';
+import { GET_PERIODS } from '../gql/queries/Period';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { DatePicker } from '@material-ui/pickers';
-import { CREATE_ASSIGNMENTS } from '../queries/Assignment';
+import { CREATE_ASSIGNMENTS } from '../gql/mutations/Assignment';
 import DialogActions from '@material-ui/core/DialogActions';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: '20px'
+    padding: '20px',
   },
   field: {
-    marginBottom: '30px'
+    marginBottom: '30px',
   },
   label: {
-    marginBottom: '10px'
-  }
+    marginBottom: '10px',
+  },
 }));
 
 const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
@@ -46,7 +46,7 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
       onCompleted: () => {
         setSuccess(true);
       },
-      onError: err => console.error(err)
+      onError: err => console.error(err),
     }
   );
   const classes = useStyles();
@@ -58,7 +58,7 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
     return () => {
       setSelectedPeriods({
         ...selectedPeriods,
-        [periodId]: !selectedPeriods[periodId]
+        [periodId]: !selectedPeriods[periodId],
       });
     };
   };
@@ -70,8 +70,8 @@ const DeckAssigner = ({ open, closeAssigner, selectedDeck }) => {
         instructions: instructions,
         due: selectedDate,
         deckId,
-        periodIds: Object.keys(selectedPeriods)
-      }
+        periodIds: Object.keys(selectedPeriods),
+      },
     });
   };
 
