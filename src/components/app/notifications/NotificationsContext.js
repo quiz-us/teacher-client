@@ -60,6 +60,16 @@ const confirmationSchema = new Schema({
   },
 });
 
+const processSnacks = snacks => {
+  const updatedSnacks = { ...snacks };
+
+  if (updatedSnacks.queue.length > 0) {
+    updatedSnacks.snack = updatedSnacks.queue.shift();
+    updatedSnacks.open = true;
+  }
+  return updatedSnacks;
+};
+
 let reducer = (notifications, action) => {
   const { type, confirmation, dialog, snack } = action;
   switch (type) {
@@ -88,7 +98,8 @@ let reducer = (notifications, action) => {
       if (errors.length) {
         throw Error(errors);
       }
-      const updatedSnacks = {
+
+      let updatedSnacks = {
         ...notifications.snacks,
         queue: [
           ...notifications.snacks.queue,
@@ -99,21 +110,13 @@ let reducer = (notifications, action) => {
       if (notifications.snacks.open) {
         updatedSnacks.open = false;
       } else {
-        if (updatedSnacks.queue.length > 0) {
-          updatedSnacks.snack = updatedSnacks.queue.shift();
-          updatedSnacks.open = true;
-        }
+        updatedSnacks = processSnacks(updatedSnacks);
       }
 
       return { ...notifications, snacks: updatedSnacks };
     }
     case 'UPDATE_SNACK_QUEUE': {
-      const updatedSnacks = { ...notifications.snacks };
-      if (updatedSnacks.queue.length > 0) {
-        updatedSnacks.snack = updatedSnacks.queue.shift();
-        updatedSnacks.open = true;
-      }
-      return { ...notifications, snacks: updatedSnacks };
+      return { ...notifications, snacks: processSnacks(notifications.snacks) };
     }
     case 'CLOSE_SNACK': {
       return {
