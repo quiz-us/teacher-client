@@ -21,7 +21,7 @@ const NotificationsDialog = () => {
   return (
     <Dialog maxWidth={maxWidth} open={message.length > 0} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>{message && message}</DialogContent>
+      <DialogContent>{message}</DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary" autoFocus>
           Close
