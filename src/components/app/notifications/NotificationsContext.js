@@ -2,7 +2,11 @@ import React, { useReducer } from 'react';
 import Schema from 'validate';
 
 const initialState = {
-  snacks: [], // snack notifications are processed through a queue
+  snacks: {
+    queue: [], // snack notifications are processed through a queue
+    snack: {},
+    open: false,
+  },
   dialog: {},
   confirmation: {},
 };
@@ -84,13 +88,38 @@ let reducer = (notifications, action) => {
       if (errors.length) {
         throw Error(errors);
       }
-      const snacks = [...notifications.snacks, snack];
-      return { ...notifications, snacks };
+      const updatedSnacks = {
+        ...notifications.snacks,
+        queue: [
+          ...notifications.snacks.queue,
+          { ...snack, key: new Date().getTime() },
+        ],
+      };
+
+      if (notifications.snacks.open) {
+        updatedSnacks.open = false;
+      } else {
+        if (updatedSnacks.queue.length > 0) {
+          updatedSnacks.snack = updatedSnacks.queue.shift();
+          updatedSnacks.open = true;
+        }
+      }
+
+      return { ...notifications, snacks: updatedSnacks };
     }
-    case 'SHIFT_SNACK': {
-      // eslint-disable-next-line no-unused-vars
-      const [removed, ...snacks] = notifications.snacks;
-      return { ...notifications, snacks };
+    case 'UPDATE_SNACK_QUEUE': {
+      const updatedSnacks = { ...notifications.snacks };
+      if (updatedSnacks.queue.length > 0) {
+        updatedSnacks.snack = updatedSnacks.queue.shift();
+        updatedSnacks.open = true;
+      }
+      return { ...notifications, snacks: updatedSnacks };
+    }
+    case 'CLOSE_SNACK': {
+      return {
+        ...notifications,
+        snacks: { ...notifications.snacks, open: false },
+      };
     }
     default:
       return;

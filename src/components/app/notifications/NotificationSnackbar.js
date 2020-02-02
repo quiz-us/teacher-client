@@ -6,31 +6,38 @@ import { NotificationsContext } from './NotificationsContext';
 
 const NotificationSnackbar = () => {
   const {
-    notifications: { snacks },
+    notifications: {
+      snacks: { open, snack },
+    },
     dispatch,
   } = useContext(NotificationsContext);
-  const [notification] = snacks;
+
   const {
     message = '',
     severity = 'success',
     vertical = 'bottom',
     horizontal = 'center',
-  } = notification || {};
+    key,
+  } = snack || {};
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    dispatch({ type: 'SHIFT_SNACK' });
+    dispatch({ type: 'CLOSE_SNACK' });
   };
+
+  const handleExited = () => dispatch({ type: 'UPDATE_SNACK_QUEUE' });
 
   return (
     <Snackbar
+      key={key}
       anchorOrigin={{ vertical, horizontal }}
-      open={snacks.length > 0}
+      open={open}
       autoHideDuration={5000}
       onClose={handleClose}
+      onExited={handleExited}
     >
       <Alert onClose={handleClose} severity={severity}>
         {message}
