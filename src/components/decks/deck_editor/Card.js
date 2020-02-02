@@ -225,7 +225,7 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
         >
           <IconButton
             onClick={removeFromCurrentDeck}
-            aria-label="Remove From Current Decks"
+            aria-label="Remove From Current Deck"
           >
             <ClearIcon />
           </IconButton>
