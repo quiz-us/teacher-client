@@ -223,7 +223,10 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
           aria-label="Remove From Deck"
           placement="top"
         >
-          <IconButton onClick={removeFromCurrentDeck}>
+          <IconButton
+            onClick={removeFromCurrentDeck}
+            aria-label="Remove From Current Decks"
+          >
             <ClearIcon />
           </IconButton>
         </Tooltip>
@@ -255,7 +258,10 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
                 aria-label="Edit Question"
                 placement="top"
               >
-                <IconButton onClick={() => setOpen(true)}>
+                <IconButton
+                  onClick={() => setOpen(true)}
+                  aria-label="Edit Question Button"
+                >
                   <CreateIcon />
                 </IconButton>
               </Tooltip>
@@ -265,7 +271,10 @@ const DeckCard = ({ card, removable, inputs, deletable }) => {
                   aria-label="Delete Question"
                   placement="top"
                 >
-                  <IconButton onClick={() => handleDeleteDb(questionId)}>
+                  <IconButton
+                    onClick={() => handleDeleteDb(questionId)}
+                    aria-label="Permanently Delete Question"
+                  >
                     <DeleteForeverIcon />
                   </IconButton>
                 </Tooltip>

@@ -81,6 +81,7 @@ const ClassEdit = ({ history, match }) => {
           />
           <IconButton
             className={classes.iconButtons}
+            aria-label="Save Edits"
             type="submit"
             title="save edits"
           >
@@ -89,6 +90,7 @@ const ClassEdit = ({ history, match }) => {
           <IconButton
             className={classes.iconButtons}
             title="cancel edits"
+            aria-label="Cancel Edits"
             onClick={() => setEditMode(false)}
           >
             <CloseIcon />
@@ -101,6 +103,7 @@ const ClassEdit = ({ history, match }) => {
             <IconButton
               className={classes.iconButtons}
               title="edit class name"
+              aria-label="Edit Class Name"
               onClick={() => setEditMode(true)}
             >
               <EditIcon />

@@ -116,6 +116,7 @@ const QuestionAndAnswers = ({ classes }) => {
                     className={componentClasses.deleteButton}
                     onClick={deleteAnswerChoice(i)}
                     title="delete answer"
+                    aria-label="Delete Answer Choice"
                   >
                     <DeleteIcon />
                   </IconButton>

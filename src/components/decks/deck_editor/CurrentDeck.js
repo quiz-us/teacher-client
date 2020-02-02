@@ -103,10 +103,11 @@ const CurrentDeckContainer = ({ history, deckId }) => {
       <header>
         <h3 className={classes.heading}>{name || 'Current Deck'}</h3>
         <div className={classes.deckButtons}>
-          <IconButton onClick={() => setOpen(true)}>
+          <IconButton onClick={() => setOpen(true)} aria-label="Edit Deck">
             <CreateIcon />
           </IconButton>
           <IconButton
+            aria-label="Delete Deck"
             onClick={() => {
               dispatchNotify({
                 type: 'OPEN_CONFIRMATION',
