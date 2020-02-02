@@ -1,7 +1,7 @@
 import React from 'react';
 import Rollbar from 'rollbar';
 const { NODE_ENV } = process.env;
-console.log('ENV VA', process.env);
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
