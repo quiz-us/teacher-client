@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -29,7 +29,12 @@ const useStyles = makeStyles(() => ({
 const DeckCreator = ({ history }) => {
   const classes = useStyles();
   const [errorMessage, setErrorMessage] = useState('');
-  const { currentDeck } = useContext(CurrentDeckContext);
+  const { currentDeck, dispatch } = useContext(CurrentDeckContext);
+
+  useEffect(() => {
+    dispatch({ type: 'resetCurrentDeck' });
+  }, [dispatch]);
+
   const [saveDeck, { loading }] = useMutation(CREATE_DECK, {
     onCompleted: ({ createDeck }) => {
       history.push(`/decks/${createDeck.id}/edit`);
