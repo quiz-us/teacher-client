@@ -73,6 +73,7 @@ const CurrentDeckContainer = ({ history, deckId }) => {
   const { dispatch: dispatchNotify } = useContext(NotificationsContext);
 
   const { loading } = useQuery(GET_DECK, {
+    fetchPolicy: 'network-only',
     variables: { id: deckId },
     onCompleted: ({ deck }) => {
       dispatch({ type: 'receiveCurrent', deck });
