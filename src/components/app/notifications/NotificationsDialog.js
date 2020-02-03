@@ -19,7 +19,13 @@ const NotificationsDialog = () => {
     dispatch({ type: 'CLOSE_DIALOG' });
   };
   return (
-    <Dialog maxWidth={maxWidth} open={message.length > 0} onClose={handleClose}>
+    <Dialog
+      maxWidth={maxWidth}
+      disableScrollLock
+      fullWidth={true}
+      open={message.length > 0}
+      onClose={handleClose}
+    >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{message}</DialogContent>
       <DialogActions>

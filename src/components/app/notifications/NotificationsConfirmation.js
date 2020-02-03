@@ -24,7 +24,13 @@ const NotificationsDialog = () => {
   };
 
   return (
-    <Dialog maxWidth={maxWidth} open={message.length > 0} onClose={handleClose}>
+    <Dialog
+      maxWidth={maxWidth}
+      disableScrollLock
+      fullWidth={true}
+      open={message.length > 0}
+      onClose={handleClose}
+    >
       <DialogTitle>Confirm</DialogTitle>
       <DialogContent>{message}</DialogContent>
       <DialogActions>
