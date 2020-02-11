@@ -1,7 +1,0 @@
-{
-  "extends": [
-    "eslint-config-airbnb",
-    "airbnb/hooks",
-    "plugin:prettier/recommended"
-  ]
-}
