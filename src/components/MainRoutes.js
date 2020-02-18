@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Route } from 'react-router-dom';
 import DecksContainer from './decks/DecksContainer';
 import ClassManager from './class_manager/ClassManager';
+import StandardsManager from './standards/StandardsManager';
 
 const useStyles = makeStyles({
   root: {
@@ -19,6 +20,7 @@ export default () => {
       <Route exact path="/" component={Home} />
       <Route path="/decks" component={DecksContainer} />
       <Route path="/class-manager" component={ClassManager} />
+      <Route path="/standards-manager" component={StandardsManager} />
     </div>
   );
 };
