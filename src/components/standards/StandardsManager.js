@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import MaterialTable from '../table/MaterialTable';
 import { GET_STANDARDS_WITH_CATEGORIES } from '../gql/queries/Standard';
+import { GET_STANDARDS_CATEGORIES } from '../gql/queries/StandardsCategory';
 import GlobalLoader from '../app/GlobalLoader';
 import CategoriesManager from './CategoriesManager';
 
@@ -52,6 +53,9 @@ const useStyles = makeStyles(theme => ({
       marginTop: '25px',
     },
   },
+  editCategoriesButton: {
+    width: '100%',
+  },
 }));
 
 const columns = [
@@ -82,32 +86,31 @@ const columns = [
   },
 ];
 
+export const mapStandards = ({ title, description, standardsCategory }) => {
+  return {
+    standardsTitle: title,
+    standardsDescription: description,
+    category: standardsCategory.title,
+  };
+};
+
 const StandardsManager = () => {
   const classes = useStyles();
-  const [tableData, setTableData] = useState([]);
+  const [standards, setStandards] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [open, setOpen] = useState(false);
-  const { loading } = useQuery(GET_STANDARDS_WITH_CATEGORIES, {
-    onCompleted: ({ allStandards }) => {
-      let processedCategories = {};
-      const processedData = allStandards.map(
-        ({ title, description, standardsCategory }) => {
-          processedCategories[standardsCategory.id] = standardsCategory;
-          return {
-            standardsTitle: title,
-            standardsDescription: description,
-            category: standardsCategory.title,
-          };
-        }
-      );
-      processedCategories = Object.entries(processedCategories).map(
-        ([_, cat]) => cat
-      );
-      setCategories(processedCategories);
-      setTableData(processedData);
+  const [open, setOpen] = useState(true);
+  const { loading: categoriesLoading } = useQuery(GET_STANDARDS_CATEGORIES, {
+    onCompleted: ({ standardsCategoryIndex }) => {
+      setCategories(standardsCategoryIndex);
     },
   });
-  if (loading) {
+  const { loading } = useQuery(GET_STANDARDS_WITH_CATEGORIES, {
+    onCompleted: ({ allStandards }) => {
+      const processedData = allStandards.map(mapStandards);
+      setStandards(processedData);
+    },
+  });
+  if (loading || categoriesLoading) {
     return <GlobalLoader />;
   }
   return (
@@ -124,7 +127,11 @@ const StandardsManager = () => {
                 </MenuItem>
               ))}
               <MenuItem>
-                <Button onClick={() => setOpen(true)} color="primary">
+                <Button
+                  className={classes.editCategoriesButton}
+                  onClick={() => setOpen(true)}
+                  color="primary"
+                >
                   Edit Categories
                 </Button>
               </MenuItem>
@@ -157,7 +164,7 @@ const StandardsManager = () => {
         <MaterialTable
           title="All Standards"
           columns={columns}
-          data={tableData}
+          data={standards}
           options={{
             grouping: true,
           }}
@@ -171,6 +178,8 @@ const StandardsManager = () => {
         open={open}
         handleClose={() => setOpen(false)}
         categories={categories}
+        setCategories={setCategories}
+        setStandards={setStandards}
       />
     </div>
   );

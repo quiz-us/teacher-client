@@ -54,6 +54,9 @@ const confirmationSchema = new Schema({
     type: Function,
     required: true,
   },
+  cancelFunc: {
+    type: Function,
+  },
   maxWidth: {
     type: String,
     enum: ['xs', 'sm', 'md', 'lg', 'xl'],

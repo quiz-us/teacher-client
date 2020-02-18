@@ -13,6 +13,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuIcon from '@material-ui/icons/Menu';
 import BuildIcon from '@material-ui/icons/Build';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import { ReactComponent as Logo } from '../../assets/quizus.svg';
 import { ReactComponent as SidebarLogo } from '../../assets/quizus-sidebar.svg';
 
@@ -78,6 +79,14 @@ export default function ButtonAppBar() {
               <FormatListBulletedIcon />
             </ListItemIcon>
             <ListItemText primary={'Class Manager'} />
+          </ListItem>
+        </Link>
+        <Link to="/standards-manager">
+          <ListItem button>
+            <ListItemIcon>
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Standards Manager'} />
           </ListItem>
         </Link>
       </List>

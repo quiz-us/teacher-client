@@ -12,9 +12,15 @@ const NotificationsDialog = () => {
     notifications: { confirmation },
     dispatch,
   } = useContext(NotificationsContext);
-  const { message = '', maxWidth = 'lg', func } = confirmation;
+  const {
+    message = '',
+    maxWidth = 'lg',
+    func,
+    cancelFunc = () => console.log('Action cancelled.'),
+  } = confirmation;
 
   const handleClose = () => {
+    cancelFunc();
     dispatch({ type: 'CLOSE_CONFIRMATION' });
   };
 
