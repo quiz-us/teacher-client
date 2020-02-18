@@ -2,11 +2,11 @@ import React from 'react';
 import MaterialTable from '../table/MaterialTable';
 import Modal from '../app/Modal';
 
-const CategoriesManager = ({ categories }) => {
+const CategoriesManager = ({ categories, open, handleClose }) => {
   return (
     <Modal
-      open={true}
-      handleClose={() => {}}
+      open={open}
+      handleClose={handleClose}
       maxWidth="xl"
       title="Edit Standards Categories"
     >

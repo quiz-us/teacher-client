@@ -86,6 +86,7 @@ const StandardsManager = () => {
   const classes = useStyles();
   const [tableData, setTableData] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [open, setOpen] = useState(false);
   const { loading } = useQuery(GET_STANDARDS_WITH_CATEGORIES, {
     onCompleted: ({ allStandards }) => {
       let processedCategories = {};
@@ -123,7 +124,9 @@ const StandardsManager = () => {
                 </MenuItem>
               ))}
               <MenuItem>
-                <Button color="primary">Edit Categories</Button>
+                <Button onClick={() => setOpen(true)} color="primary">
+                  Edit Categories
+                </Button>
               </MenuItem>
             </Select>
           </FormControl>
@@ -164,7 +167,11 @@ const StandardsManager = () => {
           }}
         />
       </div>
-      <CategoriesManager categories={categories} />
+      <CategoriesManager
+        open={open}
+        handleClose={() => setOpen(false)}
+        categories={categories}
+      />
     </div>
   );
 };
