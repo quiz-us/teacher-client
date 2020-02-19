@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
-import { NotificationsContext } from '../app/notifications/NotificationsContext';
+import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/react-hooks';
+import { NotificationsContext } from '../app/notifications/NotificationsContext';
 import {
   CREATE_STANDARDS_CATEGORY,
+  EDIT_STANDARDS_CATEGORY,
   DELETE_STANDARDS_CATEGORY,
 } from '../gql/mutations/StandardsCategory';
 import { GET_STANDARDS_WITH_CATEGORIES } from '../gql/queries/Standard';
@@ -18,6 +20,31 @@ const CategoriesManager = ({
   handleClose,
 }) => {
   const [createStandardsCategory] = useMutation(CREATE_STANDARDS_CATEGORY);
+  const [editStandardsCategory] = useMutation(EDIT_STANDARDS_CATEGORY, {
+    update: (cache, res) => {
+      const { id, title } = res.data.editStandardsCategory;
+      const { allStandards } = cache.readQuery({
+        query: GET_STANDARDS_WITH_CATEGORIES,
+      });
+
+      const updatedStandards = allStandards.filter(standard => {
+        if (standard.standardsCategory.id !== id) {
+          return {
+            ...standard,
+            category: title,
+          };
+        }
+        return standard;
+      });
+
+      cache.writeQuery({
+        query: GET_STANDARDS_WITH_CATEGORIES,
+        data: { allStandards: updatedStandards },
+      });
+
+      setStandards(updatedStandards.map(mapStandards));
+    },
+  });
   const [deleteStandardsCategory] = useMutation(DELETE_STANDARDS_CATEGORY, {
     update: (cache, res) => {
       const { id } = res.data.deleteStandardsCategory;
@@ -55,6 +82,16 @@ const CategoriesManager = ({
           {
             title: 'Category Description',
             field: 'description',
+            editComponent: props => (
+              <TextField
+                label="Standards Description"
+                type="text"
+                name="standardsDescription"
+                multiline
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
+            ),
           },
         ]}
         data={categories}
@@ -88,7 +125,51 @@ const CategoriesManager = ({
                   reject(error);
                 });
             }),
-          onRowUpdate: (newData, oldData) => {},
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              const { title: newTitle, description: newDescription } = newData;
+              const { title: oldTitle, description: oldDescription } = oldData;
+              if (oldTitle === newTitle && newDescription === oldDescription) {
+                resolve();
+              }
+
+              editStandardsCategory({
+                variables: {
+                  id: oldData.id,
+                  title: newTitle,
+                  description: newDescription,
+                },
+              })
+                .then(({ data: { editStandardsCategory: editedCategory } }) => {
+                  const updatedCategories = categories.map(category => {
+                    if (category.id === editedCategory.id) {
+                      return editedCategory;
+                    }
+                    return category;
+                  });
+
+                  setCategories(updatedCategories);
+                  dispatch({
+                    type: 'PUSH_SNACK',
+                    snack: {
+                      message: `Category '${newData.title}' was updated!`,
+                      vertical: 'top',
+                    },
+                  });
+                  resolve();
+                })
+                .catch(error => {
+                  dispatch({
+                    type: 'PUSH_SNACK',
+                    snack: {
+                      message: 'Something went wrong. Please try again!',
+                      severity: 'error',
+                      vertical: 'top',
+                    },
+                  });
+                  reject(error);
+                });
+            }),
           onRowDelete: oldData =>
             new Promise((resolve, reject) => {
               dispatch({
