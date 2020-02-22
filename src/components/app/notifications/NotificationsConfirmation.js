@@ -12,9 +12,15 @@ const NotificationsDialog = () => {
     notifications: { confirmation },
     dispatch,
   } = useContext(NotificationsContext);
-  const { message = '', maxWidth = 'lg', func } = confirmation;
+  const {
+    message = '',
+    maxWidth = 'lg',
+    func,
+    cancelFunc = () => console.log('Action cancelled.'),
+  } = confirmation;
 
   const handleClose = () => {
+    cancelFunc();
     dispatch({ type: 'CLOSE_CONFIRMATION' });
   };
 
@@ -24,7 +30,13 @@ const NotificationsDialog = () => {
   };
 
   return (
-    <Dialog maxWidth={maxWidth} open={message.length > 0} onClose={handleClose}>
+    <Dialog
+      maxWidth={maxWidth}
+      disableScrollLock
+      fullWidth={true}
+      open={message.length > 0}
+      onClose={handleClose}
+    >
       <DialogTitle>Confirm</DialogTitle>
       <DialogContent>{message}</DialogContent>
       <DialogActions>

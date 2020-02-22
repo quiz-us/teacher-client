@@ -9,3 +9,18 @@ export const GET_STANDARDS = gql`
     }
   }
 `;
+
+export const GET_STANDARDS_WITH_CATEGORIES = gql`
+  {
+    allStandards {
+      title
+      description
+      id
+      standardsCategory {
+        title
+        description
+        id
+      }
+    }
+  }
+`;
