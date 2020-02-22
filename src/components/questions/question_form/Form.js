@@ -205,7 +205,7 @@ const Form = ({ handleSubmit, editMode }) => {
                   key={standard.id}
                   value={standard.id}
                 >
-                  {standard.title}:{standard.description}
+                  {standard.title}: {standard.description}
                 </MenuItem>
               );
             })}
