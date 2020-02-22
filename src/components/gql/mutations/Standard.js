@@ -21,3 +21,12 @@ export const CREATE_STANDARD = gql`
     }
   }
 `;
+
+export const DELETE_STANDARD = gql`
+  mutation deleteStandard($id: ID!) {
+    deleteStandard(id: $id) {
+      id
+      title
+    }
+  }
+`;

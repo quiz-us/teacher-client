@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import TextField from '@material-ui/core/TextField';
 import MaterialTable from '../table/MaterialTable';
+import { NotificationsContext } from '../app/notifications/NotificationsContext';
 import { GET_STANDARDS_WITH_CATEGORIES } from '../gql/queries/Standard';
 import { GET_STANDARDS_CATEGORIES } from '../gql/queries/StandardsCategory';
+import { DELETE_STANDARD } from '../gql/mutations/Standard';
 import GlobalLoader from '../app/GlobalLoader';
 import CategoriesManager from './CategoriesManager';
 import StandardsForm from './StandardsForm';
@@ -22,6 +24,7 @@ const columns = [
   {
     title: 'Category',
     field: 'category',
+    editable: 'never',
     defaultGroupOrder: 0,
   },
   {
@@ -57,9 +60,46 @@ export const mapStandards = ({ title, description, standardsCategory, id }) => {
 
 const StandardsManager = () => {
   const classes = useStyles();
+  const { dispatch } = useContext(NotificationsContext);
   const [standards, setStandards] = useState([]);
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
+  const [deleteStandard] = useMutation(DELETE_STANDARD, {
+    update: (cache, res) => {
+      const { id, title } = res.data.deleteStandard;
+      dispatch({
+        type: 'PUSH_SNACK',
+        snack: {
+          message: `Standard '${title}' was successfully deleted!`,
+          vertical: 'top',
+        },
+      });
+      const { allStandards } = cache.readQuery({
+        query: GET_STANDARDS_WITH_CATEGORIES,
+      });
+
+      const updatedStandards = allStandards.filter(
+        standard => standard.id !== id
+      );
+
+      cache.writeQuery({
+        query: GET_STANDARDS_WITH_CATEGORIES,
+        data: { allStandards: updatedStandards },
+      });
+
+      setStandards(updatedStandards.map(mapStandards));
+    },
+    onError: () => {
+      dispatch({
+        type: 'PUSH_SNACK',
+        snack: {
+          message: 'Something went wrong. Please try again!',
+          severity: 'error',
+          vertical: 'top',
+        },
+      });
+    },
+  });
   const { loading: categoriesLoading } = useQuery(GET_STANDARDS_CATEGORIES, {
     onCompleted: ({ standardsCategoryIndex }) => {
       setCategories(standardsCategoryIndex);
@@ -92,7 +132,27 @@ const StandardsManager = () => {
           }}
           editable={{
             onRowUpdate: (newData, oldData) => {},
-            onRowDelete: oldData => {},
+            onRowDelete: oldData =>
+              new Promise((resolve, reject) => {
+                const confirmation = {
+                  type: 'OPEN_CONFIRMATION',
+                  confirmation: {
+                    message:
+                      'Are you sure you want to delete this standard? This cannot be undone.',
+                    func: () => {
+                      deleteStandard({ variables: { id: oldData.id } })
+                        .then(() => {
+                          resolve();
+                        })
+                        .catch(error => reject(error));
+                    },
+                    cancelFunc: () => {
+                      resolve();
+                    },
+                  },
+                };
+                dispatch(confirmation);
+              }),
           }}
         />
       </div>
