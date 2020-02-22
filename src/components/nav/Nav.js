@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
+import LotOut from '../auth/LogOut';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
@@ -120,6 +121,7 @@ export default function ButtonAppBar() {
         <Link to="/">
           <Logo className={classes.logo} />
         </Link>
+        <LotOut />
       </Toolbar>
       <Drawer open={navOpen} onClose={closeNav}>
         {sideNav()}
