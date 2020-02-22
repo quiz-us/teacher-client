@@ -112,7 +112,7 @@ describe('<EditForm />', () => {
     expect(tag).toBeTruthy();
 
     const standard = await findByText(
-      `${originalStandard.title}:${originalStandard.description}`
+      `${originalStandard.title}: ${originalStandard.description}`
     );
     expect(standard).toBeTruthy();
   });

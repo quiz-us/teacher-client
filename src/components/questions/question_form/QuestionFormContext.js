@@ -11,7 +11,7 @@ const defaultAnswer = (correct = false) => ({
 });
 
 const generateDefaultState = () => ({
-  questionType: 'Multiple Choice',
+  questionType: 'Free Response',
   standardId: '',
   tags: [],
   question: {},
