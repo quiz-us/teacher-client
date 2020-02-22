@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import gql from 'graphql-tag';
 import useAuthFormStyles from './AuthFormStyles';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { LOGIN } from '../gql/mutations/Auth';
 import AuthForm from './AuthForm';
 import localforage from 'localforage';
 import useForm from '../hooks/useForm';
 import parseError from '../../util/parseError';
-
-const LOGIN = gql`
-  mutation logInTeacher($email: String!, $password: String!) {
-    logInTeacher(email: $email, password: $password) {
-      id
-      email
-      token
-    }
-  }
-`;
 
 export default ({ history }) => {
   const classes = useAuthFormStyles();
