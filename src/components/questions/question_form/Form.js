@@ -29,6 +29,7 @@ const useStyles = makeStyles({
   formControl: {
     // width: '40%',
     marginBottom: '20px',
+    zIndex: 'unset',
   },
   wideFormControl: {
     // width: '90%'
