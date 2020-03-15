@@ -81,6 +81,7 @@ const ClassRoster = ({ match }) => {
   const { students } = data;
   return (
     <div className={classes.root}>
+      <StudentCreator periodId={params.id} />
       <h3>
         Your Students (
         <Link className="link" to={`${match.url}/badges`}>
@@ -136,7 +137,6 @@ const ClassRoster = ({ match }) => {
             }),
         }}
       />
-      <StudentCreator periodId={params.id} />
       <Modal
         message={message}
         title={title}

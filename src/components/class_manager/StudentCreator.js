@@ -12,9 +12,9 @@ import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: '20px',
     display: 'flex',
     justifyContent: 'center',
+    marginBottom: '20px',
   },
   formContainer: {
     display: 'flex',
@@ -115,7 +115,7 @@ const Form = ({ classes, periodId }) => {
   );
 };
 
-const ClassCreator = ({ periodId }) => {
+const StudentCreator = ({ periodId }) => {
   const classes = useStyles();
   const [activated, setActivated] = useState(false);
   return (
@@ -135,4 +135,4 @@ const ClassCreator = ({ periodId }) => {
   );
 };
 
-export default ClassCreator;
+export default StudentCreator;
