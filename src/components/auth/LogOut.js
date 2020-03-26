@@ -13,23 +13,13 @@ const useStyles = makeStyles({
   },
 });
 
-const Logout = () => {
+const Logout = ({ logout }) => {
   const classes = useStyles();
   let history = useHistory();
-  const [logOutTeacher, { loading }] = useMutation(LOGOUT, {
-    onError: error => {
-      console.error(error);
-    },
-    onCompleted: () => {
-      history.push('/login');
-    },
-  });
-  if (loading) {
-    return <GlobalLoader />;
-  }
+
   return (
     <Button
-      onClick={logOutTeacher}
+      onClick={() => logout()}
       variant="contained"
       color="secondary"
       className={classes.logout}

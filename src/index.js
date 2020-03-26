@@ -12,8 +12,11 @@ import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import localforage from 'localforage';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { Auth0Provider } from './react-auth0-spa';
+import config from './auth_config.json';
 import { NotificationsProvider } from './components/app/notifications/NotificationsContext';
 import ErrorBoundary from './ErrorBoundary';
+import history from './util/history';
 
 const { NODE_ENV, REACT_APP_SERVER } = process.env;
 
@@ -80,13 +83,31 @@ client.writeData({
   },
 });
 
+// A function that routes the user to the right place
+// after login
+const onRedirectCallback = appState => {
+  history.push(
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : window.location.pathname
+  );
+};
+
 ReactDOM.render(
   <ErrorBoundary>
-    <ApolloProvider client={client}>
-      <NotificationsProvider>
-        <App />
-      </NotificationsProvider>
-    </ApolloProvider>
+    <Auth0Provider
+      domain={config.domain}
+      client_id={config.clientId}
+      audience={config.audience}
+      redirect_uri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+    >
+      <ApolloProvider client={client}>
+        <NotificationsProvider>
+          <App />
+        </NotificationsProvider>
+      </ApolloProvider>
+    </Auth0Provider>
   </ErrorBoundary>,
   document.getElementById('root')
 );

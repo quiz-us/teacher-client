@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
-import LotOut from '../auth/LogOut';
+import LogOut from '../auth/LogOut';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
@@ -17,6 +17,7 @@ import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import { ReactComponent as Logo } from '../../assets/quizus.svg';
 import { ReactComponent as SidebarLogo } from '../../assets/quizus-sidebar.svg';
+import { useAuth0 } from '../../react-auth0-spa';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -55,7 +56,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function ButtonAppBar() {
   const classes = useStyles();
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const [navOpen, setNavOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      loginWithRedirect({});
+    }
+  }, [isAuthenticated, loginWithRedirect]);
 
   const sideNav = () => (
     <div className={classes.list} onClick={closeNav} onKeyDown={closeNav}>
@@ -121,7 +129,7 @@ export default function ButtonAppBar() {
         <Link to="/">
           <Logo className={classes.logo} />
         </Link>
-        <LotOut />
+        {isAuthenticated && <LogOut logout={logout} />}
       </Toolbar>
       <Drawer open={navOpen} onClose={closeNav}>
         {sideNav()}
