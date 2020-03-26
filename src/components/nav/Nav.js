@@ -56,14 +56,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function ButtonAppBar() {
   const classes = useStyles();
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, logout } = useAuth0();
   const [navOpen, setNavOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      loginWithRedirect({});
-    }
-  }, [isAuthenticated, loginWithRedirect]);
 
   const sideNav = () => (
     <div className={classes.list} onClick={closeNav} onKeyDown={closeNav}>
