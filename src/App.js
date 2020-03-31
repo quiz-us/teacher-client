@@ -31,14 +31,12 @@ const theme = createMuiTheme({
   },
 });
 
-const { NODE_ENV, REACT_APP_SERVER } = process.env;
+const { REACT_APP_SERVER } = process.env;
 
 const appCache = new InMemoryCache();
 
-let server = 'http://localhost:3000/graphql';
-if (NODE_ENV === 'production') {
-  server = REACT_APP_SERVER;
-}
+const server = REACT_APP_SERVER;
+
 const httpLink = createHttpLink({
   uri: server,
 });
