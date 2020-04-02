@@ -14,7 +14,7 @@ import decamelize from 'decamelize';
 import Plain from 'slate-plain-serializer';
 import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 import TagsForm from './TagsForm';
-import { GET_STANDARDS } from '../../gql/queries/Standard';
+import { GET_STANDARDS } from '../../../gql/queries/Standard';
 import GlobalLoader from '../../app/GlobalLoader';
 import { QuestionFormContext } from './QuestionFormContext';
 import QuestionAndAnswers from './QuestionAndAnswers';

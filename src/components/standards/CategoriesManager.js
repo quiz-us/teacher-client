@@ -6,8 +6,8 @@ import {
   CREATE_STANDARDS_CATEGORY,
   EDIT_STANDARDS_CATEGORY,
   DELETE_STANDARDS_CATEGORY,
-} from '../gql/mutations/StandardsCategory';
-import { GET_STANDARDS_WITH_CATEGORIES } from '../gql/queries/Standard';
+} from '../../gql/mutations/StandardsCategory';
+import { GET_STANDARDS_WITH_CATEGORIES } from '../../gql/queries/Standard';
 import MaterialTable from '../table/MaterialTable';
 import Modal from '../app/Modal';
 import { mapStandards } from './StandardsManager';

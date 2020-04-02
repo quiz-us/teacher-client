@@ -22,12 +22,12 @@ import { ReadOnly } from '../../editor';
 import { CurrentDeckContext } from '../CurrentDeckContext';
 import EditForm from '../../questions/question_form/EditForm';
 
-import { GET_QUESTIONS } from '../../gql/queries/Question';
-import { DELETE_QUESTION } from '../../gql/mutations/Question';
+import { GET_QUESTIONS } from '../../../gql/queries/Question';
+import { DELETE_QUESTION } from '../../../gql/mutations/Question';
 import {
   ADD_QUESTION_TO_DECK,
   REMOVE_QUESTION_FROM_DECK,
-} from '../../gql/mutations/Deck';
+} from '../../../gql/mutations/Deck';
 import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 
 const useStyles = makeStyles({

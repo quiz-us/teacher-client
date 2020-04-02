@@ -9,8 +9,8 @@ import {
   QuestionFormContext,
 } from './QuestionFormContext';
 import { CurrentDeckContext } from '../../decks/CurrentDeckContext';
-import { CREATE_QUESTION } from '../../gql/mutations/Question';
-import { ADD_QUESTION_TO_DECK } from '../../gql/mutations/Deck';
+import { CREATE_QUESTION } from '../../../gql/mutations/Question';
+import { ADD_QUESTION_TO_DECK } from '../../../gql/mutations/Deck';
 import GlobalLoader from '../../app/GlobalLoader';
 import { NotificationsContext } from '../../app/notifications/NotificationsContext';
 

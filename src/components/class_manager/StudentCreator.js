@@ -6,8 +6,8 @@ import Card from '@material-ui/core/Card';
 import useForm from '../hooks/useForm';
 import { useMutation } from '@apollo/react-hooks';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { GET_STUDENTS } from '../gql/queries/Student';
-import { ENROLL_STUDENT } from '../gql/mutations/Student';
+import { GET_STUDENTS } from '../../gql/queries/Student';
+import { ENROLL_STUDENT } from '../../gql/mutations/Student';
 import ErrorModal from '../app/ErrorModal';
 
 const useStyles = makeStyles(theme => ({

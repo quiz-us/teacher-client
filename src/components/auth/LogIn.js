@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import useAuthFormStyles from './AuthFormStyles';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
-import { LOGIN } from '../gql/mutations/Auth';
+import { LOGIN } from '../../gql/mutations/Auth';
 import AuthForm from './AuthForm';
 import localforage from 'localforage';
 import useForm from '../hooks/useForm';
