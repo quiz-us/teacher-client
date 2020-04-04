@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import Nav from './components/nav/Nav';
-import LogIn from './components/auth/LogIn';
 import { createMuiTheme } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import teal from '@material-ui/core/colors/teal';
 import amber from '@material-ui/core/colors/amber';
 import PrivateRoute from './components/PrivateRoute';
@@ -54,14 +53,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
   if (graphQLErrors) {
     graphQLErrors.some(({ message }) => {
-      if (message === 'Unauthenticated') {
-        appCache.writeData({
-          data: {
-            loggedIn: false,
-          },
-        });
-        return true;
-      }
       console.error(message);
       return false;
     });
@@ -106,8 +97,6 @@ const App = () => {
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <Nav />
             <Switch>
-              <Route exact path="/login" component={LogIn} />
-              {/* <Route exact path="/signup" component={SignUp} /> */}
               <PrivateRoute path="/" component={MainRoutes} />
             </Switch>
           </MuiPickersUtilsProvider>
