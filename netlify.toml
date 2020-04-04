@@ -10,6 +10,12 @@
 
 [context.production.environment]
   REACT_APP_SERVER = "https://quiz-us.herokuapp.com/graphql"
+  REACT_APP_AUTH_0_DOMAIN = "quizus.auth0.com"
+  REACT_APP_AUTH_0_CLIENT = "ODXqpbj8acb1Y7CkkI25BIH86TG84eUO"
+  REACT_APP_AUDIENCE = "https://quiz-us.herokuapp.com"
 
 [context.staging.environment]
   REACT_APP_SERVER = "https://quiz-us-staging.herokuapp.com/graphql"
+  REACT_APP_AUTH_0_DOMAIN = "quizus-staging.auth0.com"
+  REACT_APP_AUTH_0_CLIENT = "Oj6Se1O1dvjmUC6ClR0vH2CFxC6af0YD"
+  REACT_APP_AUDIENCE = "https://quiz-us.herokuapp.com"

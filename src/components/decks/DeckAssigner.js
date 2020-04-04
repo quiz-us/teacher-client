@@ -14,10 +14,10 @@ import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
-import { GET_PERIODS } from '../gql/queries/Period';
+import { GET_PERIODS } from '../../gql/queries/Period';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { DatePicker } from '@material-ui/pickers';
-import { CREATE_ASSIGNMENTS } from '../gql/mutations/Assignment';
+import { CREATE_ASSIGNMENTS } from '../../gql/mutations/Assignment';
 import DialogActions from '@material-ui/core/DialogActions';
 
 const useStyles = makeStyles(theme => ({

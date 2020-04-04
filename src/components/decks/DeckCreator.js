@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import DeckForm from './DeckForm';
-import { CREATE_DECK } from '../gql/mutations/Deck';
+import { CREATE_DECK } from '../../gql/mutations/Deck';
 import parseError from '../../util/parseError';
 import GlobalLoader from '../app/GlobalLoader';
 import { CurrentDeckContext } from './CurrentDeckContext';

@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 // The component AND the query need to be exported
 import ClassMastery from './ClassMastery';
-import { GET_PERIOD_SUMMARY } from '../../gql/queries/Period';
+import { GET_PERIOD_SUMMARY } from '../../../gql/queries/Period';
 
 const mocks = [
   {
