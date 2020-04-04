@@ -94,7 +94,6 @@ const App = () => {
       setClient(client);
     });
   }, [getTokenSilently, isAuthenticated, loginWithRedirect]);
-  console.log('client', client);
   if (!client) {
     return <GlobalLoader />;
   }
