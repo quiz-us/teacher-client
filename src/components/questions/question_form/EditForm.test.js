@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, fireEvent } from '@testing-library/react';
 
 import EditForm from './EditForm';
-import { GET_STANDARDS } from '../../gql/queries/Standard';
+import { GET_STANDARDS } from '../../../gql/queries/Standard';
 
 // https://www.polvara.me/posts/testing-a-custom-select-with-react-testing-library/
 jest.mock(

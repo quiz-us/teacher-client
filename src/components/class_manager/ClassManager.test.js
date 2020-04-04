@@ -5,7 +5,7 @@ import { MemoryRouter, Route } from 'react-router-dom';
 
 // The component AND the query need to be exported
 import ClassManager from './ClassManager';
-import { GET_PERIODS } from '../gql/queries/Period';
+import { GET_PERIODS } from '../../gql/queries/Period';
 
 const generateMocked = data => [
   {

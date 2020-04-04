@@ -6,7 +6,7 @@ import faker from 'faker';
 
 // The component AND the query need to be exported
 import ClassRoster from './ClassRoster';
-import { GET_STUDENTS } from '../gql/queries/Student';
+import { GET_STUDENTS } from '../../gql/queries/Student';
 
 const {
   name: { firstName, lastName },
