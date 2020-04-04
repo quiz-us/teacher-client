@@ -12,8 +12,8 @@ import Button from '@material-ui/core/Button';
 import useForm from '../hooks/useForm';
 import { NotificationsContext } from '../app/notifications/NotificationsContext';
 import { mapStandards } from './StandardsManager';
-import { CREATE_STANDARD } from '../gql/mutations/Standard';
-import { GET_STANDARDS_WITH_CATEGORIES } from '../gql/queries/Standard';
+import { CREATE_STANDARD } from '../../gql/mutations/Standard';
+import { GET_STANDARDS_WITH_CATEGORIES } from '../../gql/queries/Standard';
 
 const useStyles = makeStyles(theme => ({
   standardsForm: {

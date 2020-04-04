@@ -8,7 +8,7 @@ import ClassCreator from './ClassCreator';
 import { useQuery } from '@apollo/react-hooks';
 import GlobalLoader from '../app/GlobalLoader';
 import { Route } from 'react-router-dom';
-import { GET_PERIODS } from '../gql/queries/Period';
+import { GET_PERIODS } from '../../gql/queries/Period';
 import { Link } from 'react-router-dom';
 import ClassShow from './ClassShow';
 

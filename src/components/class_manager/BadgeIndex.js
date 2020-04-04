@@ -1,7 +1,7 @@
 import React from 'react';
 import GlobalLoader from '../app/GlobalLoader';
-import { GET_STUDENTS } from '../gql/queries/Student';
-import { GET_PERIOD } from '../gql/queries/Period';
+import { GET_STUDENTS } from '../../gql/queries/Student';
+import { GET_PERIOD } from '../../gql/queries/Period';
 import QRCode from 'qrcode.react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
