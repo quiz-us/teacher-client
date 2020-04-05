@@ -13,13 +13,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuIcon from '@material-ui/icons/Menu';
 import BuildIcon from '@material-ui/icons/Build';
+import HomeIcon from '@material-ui/icons/Home';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import { ReactComponent as Logo } from '../../assets/quizus.svg';
 import { ReactComponent as SidebarLogo } from '../../assets/quizus-sidebar.svg';
 import { useAuth0 } from '../../react-auth0-spa';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
@@ -68,6 +69,14 @@ export default function ButtonAppBar() {
       </div>
       <Divider />
       <List>
+        <Link to="/">
+          <ListItem button>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Your Decks'} />
+          </ListItem>
+        </Link>
         <Link to="/decks/create">
           <ListItem button>
             <ListItemIcon>
@@ -98,7 +107,7 @@ export default function ButtonAppBar() {
 
   const openNav = () => setNavOpen(true);
 
-  const closeNav = event => {
+  const closeNav = (event) => {
     if (
       event.type === 'keydown' &&
       (event.key === 'Tab' || event.key === 'Shift')
