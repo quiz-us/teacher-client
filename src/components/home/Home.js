@@ -73,6 +73,7 @@ const Home = () => {
             Check out{' '}
             <a
               href="https://info.quizus.org/"
+              className={classes.link}
               target="_blank"
               rel="noopener noreferrer"
             >
