@@ -60,15 +60,27 @@ const Home = () => {
   return (
     <div className={classes.root}>
       <div className={classes.deckContainer}>
-        {decks &&
-          decks.length > 0 &&
+        {decks && decks.length > 0 ? (
           decks.map((deck) => (
             <DeckDisplay
               openAssigner={openAssigner(deck)}
               deck={deck}
               key={`deckKey-${deck.id}`}
             />
-          ))}
+          ))
+        ) : (
+          <p>
+            Check out{' '}
+            <a
+              href="https://info.quizus.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              the guide
+            </a>{' '}
+            to get started!
+          </p>
+        )}
       </div>
       <DeckAssigner
         open={open}

@@ -71,7 +71,7 @@ const StandardsForm = ({ setOpen, setStandards, categories }) => {
         },
       });
     }
-  }, [categories, handleInputChange]);
+  }, [categories, handleInputChange, inputs.categoryId.length]);
 
   const [createStandard] = useMutation(CREATE_STANDARD, {
     onCompleted: (data) => {
