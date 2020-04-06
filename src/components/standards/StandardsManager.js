@@ -36,14 +36,14 @@ const columns = [
     title: 'Standards Description',
     field: 'standardsDescription',
     grouping: false,
-    editComponent: props => (
+    editComponent: (props) => (
       <TextField
         label="Standards Description"
         type="text"
         name="standardsDescription"
         multiline
         value={props.value}
-        onChange={e => props.onChange(e.target.value)}
+        onChange={(e) => props.onChange(e.target.value)}
       />
     ),
   },
@@ -89,7 +89,7 @@ const StandardsManager = () => {
       });
 
       const updatedStandards = allStandards.filter(
-        standard => standard.id !== id
+        (standard) => standard.id !== id
       );
 
       cache.writeQuery({
@@ -108,7 +108,7 @@ const StandardsManager = () => {
         query: GET_STANDARDS_WITH_CATEGORIES,
       });
 
-      const updatedStandards = allStandards.map(standard => {
+      const updatedStandards = allStandards.map((standard) => {
         if (standard.id === id) {
           return res.data.editStandard;
         }
@@ -161,6 +161,7 @@ const StandardsManager = () => {
           data={standards}
           options={{
             grouping: true,
+            defaultExpanded: true,
           }}
           editable={{
             onRowUpdate: (newData, oldData) =>
@@ -187,9 +188,9 @@ const StandardsManager = () => {
                   },
                 })
                   .then(() => resolve())
-                  .catch(error => reject(error));
+                  .catch((error) => reject(error));
               }),
-            onRowDelete: oldData =>
+            onRowDelete: (oldData) =>
               new Promise((resolve, reject) => {
                 const confirmation = {
                   type: 'OPEN_CONFIRMATION',
@@ -201,7 +202,7 @@ const StandardsManager = () => {
                         .then(() => {
                           resolve();
                         })
-                        .catch(error => reject(error));
+                        .catch((error) => reject(error));
                     },
                     cancelFunc: () => {
                       resolve();

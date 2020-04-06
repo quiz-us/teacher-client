@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ import { mapStandards } from './StandardsManager';
 import { CREATE_STANDARD } from '../../gql/mutations/Standard';
 import { GET_STANDARDS_WITH_CATEGORIES } from '../../gql/queries/Standard';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   standardsForm: {
     display: 'flex',
     alignItems: 'center',
@@ -62,8 +62,19 @@ const StandardsForm = ({ setOpen, setStandards, categories }) => {
     description: '',
   });
 
+  useEffect(() => {
+    if (inputs.categoryId.length === 0 && categories[0]) {
+      handleInputChange({
+        target: {
+          name: 'categoryId',
+          value: categories[0].id,
+        },
+      });
+    }
+  }, [categories, handleInputChange, inputs.categoryId.length]);
+
   const [createStandard] = useMutation(CREATE_STANDARD, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       // display success snackbar:
       dispatch({
         type: 'PUSH_SNACK',
@@ -91,10 +102,10 @@ const StandardsForm = ({ setOpen, setStandards, categories }) => {
 
   const { categoryId, title, description } = inputs;
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     const formNotFilled = Object.keys(inputs).some(
-      inputKey => inputs[inputKey] === ''
+      (inputKey) => inputs[inputKey] === ''
     );
     if (formNotFilled) {
       dispatch({

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import { Link } from 'react-router-dom';
 import DeckDisplay from './DeckDisplay';
 import DeckAssigner from '../decks/DeckAssigner';
 import GlobalLoader from '../app/GlobalLoader';
@@ -46,7 +45,7 @@ const Home = () => {
   }
 
   const { decks = {} } = data;
-  const openAssigner = deck => {
+  const openAssigner = (deck) => {
     return () => {
       setOpen(true);
       setSelectedDeck(deck);
@@ -61,8 +60,8 @@ const Home = () => {
   return (
     <div className={classes.root}>
       <div className={classes.deckContainer}>
-        {decks && decks.length ? (
-          decks.map(deck => (
+        {decks && decks.length > 0 ? (
+          decks.map((deck) => (
             <DeckDisplay
               openAssigner={openAssigner(deck)}
               deck={deck}
@@ -70,13 +69,18 @@ const Home = () => {
             />
           ))
         ) : (
-          <div>
-            You currently have no decks. Go{' '}
-            <Link className={classes.link} to="/decks/create">
-              here
-            </Link>{' '}
-            to create your first deck!
-          </div>
+          <p>
+            Check out{' '}
+            <a
+              href="https://info.quizus.org/"
+              className={classes.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              the guide
+            </a>{' '}
+            to get started!
+          </p>
         )}
       </div>
       <DeckAssigner
