@@ -22,7 +22,7 @@ const TAG_SEARCH = gql`
   }
 `;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -154,7 +154,7 @@ function DownshiftMultiple(props) {
     }
   }
 
-  const handleDelete = item => () => {
+  const handleDelete = (item) => () => {
     const newSelectedItem = [...tags];
     newSelectedItem.splice(newSelectedItem.indexOf(item), 1);
     updateTags(newSelectedItem);
@@ -178,10 +178,10 @@ function DownshiftMultiple(props) {
             {renderInput({
               fullWidth: true,
               classes,
-              label: 'Tags',
+              label: 'Tags (optional)',
               InputLabelProps: getLabelProps(),
               InputProps: {
-                startAdornment: tags.map(item => (
+                startAdornment: tags.map((item) => (
                   <Chip
                     key={item}
                     tabIndex={-1}
@@ -197,7 +197,7 @@ function DownshiftMultiple(props) {
                     handleChange(inputValue);
                   }
                 },
-                onChange: event => {
+                onChange: (event) => {
                   handleInputChange(event);
                   onChange(event);
                 },
@@ -221,7 +221,7 @@ function DownshiftMultiple(props) {
                 })}
                 {inputValue &&
                   !suggestions.some(
-                    suggestion => suggestion.name === inputValue
+                    (suggestion) => suggestion.name === inputValue
                   ) &&
                   renderSuggestion({
                     suggestion: { name: inputValue, label: inputValue },

@@ -75,7 +75,7 @@ const Form = ({ handleSubmit, editMode }) => {
 
   const { allStandards = [] } = data;
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     dispatch({
       type: 'update',
       name: e.target.name,
@@ -83,7 +83,7 @@ const Form = ({ handleSubmit, editMode }) => {
     });
   };
 
-  const handleQuestionTypeChange = e => {
+  const handleQuestionTypeChange = (e) => {
     const { value } = e.target;
 
     if (value === 'Free Response' && answers.length > 1) {
@@ -100,7 +100,7 @@ const Form = ({ handleSubmit, editMode }) => {
     }
   };
 
-  const validateAnswers = answers => {
+  const validateAnswers = (answers) => {
     if (questionType === 'Multiple Choice' && answers.length <= 1) {
       return 'Multiple Choice questions should have more than 1 answer choice!';
     }
@@ -115,7 +115,7 @@ const Form = ({ handleSubmit, editMode }) => {
     return null;
   };
 
-  const displayError = error => {
+  const displayError = (error) => {
     dispatchNotify({
       type: 'OPEN_DIALOG',
       dialog: {
@@ -139,7 +139,7 @@ const Form = ({ handleSubmit, editMode }) => {
           return false;
         }
       }
-      if (empty(inputVal)) {
+      if (inputKey !== 'tags' && empty(inputVal)) {
         displayError(`Please fill out '${decamelize(inputKey, ' ')}'!`);
         return false;
       }
@@ -147,7 +147,7 @@ const Form = ({ handleSubmit, editMode }) => {
     return true;
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
       handleSubmit(state);
@@ -172,7 +172,7 @@ const Form = ({ handleSubmit, editMode }) => {
                 id: 'questionType-select',
               }}
             >
-              {questionTypes.map(type => {
+              {questionTypes.map((type) => {
                 return (
                   <MenuItem
                     className={classes.menuItem}
@@ -199,7 +199,7 @@ const Form = ({ handleSubmit, editMode }) => {
               id: 'standard-select',
             }}
           >
-            {allStandards.map(standard => {
+            {allStandards.map((standard) => {
               return (
                 <MenuItem
                   className={classes.menuItem}
