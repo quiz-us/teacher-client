@@ -11,7 +11,7 @@
     "@material-ui/lab": "^4.0.0-alpha.47",
     "@material-ui/pickers": "^3.2.10",
     "apollo-boost": "^0.4.7",
-    "apollo-link-context": "^1.0.19",
+    "apollo-link-context": "^1.0.20",
     "crypto": "^1.0.1",
     "decamelize": "^3.2.0",
     "downshift": "^3.4.8",
