@@ -10,7 +10,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.52",
     "@material-ui/pickers": "^3.2.10",
-    "apollo-boost": "^0.4.7",
+    "apollo-boost": "^0.4.8",
     "apollo-link-context": "^1.0.20",
     "crypto": "^1.0.1",
     "decamelize": "^3.2.0",
