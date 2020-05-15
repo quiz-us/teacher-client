@@ -14,7 +14,7 @@
     "apollo-link-context": "^1.0.20",
     "crypto": "^1.0.1",
     "decamelize": "^3.2.0",
-    "downshift": "^3.4.8",
+    "downshift": "^5.3.0",
     "graphql": "^14.6.0",
     "html2canvas": "^1.0.0-rc.5",
     "immutable": "^4.0.0-rc.12",
