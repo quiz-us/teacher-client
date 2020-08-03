@@ -22,7 +22,7 @@
     "jspdf": "^1.5.3",
     "localforage": "^1.9.0",
     "lodash.clonedeep": "^4.5.0",
-    "material-table": "^1.67.1",
+    "material-table": "^1.68.0",
     "mdi-react": "^6.7.0",
     "moment": "^2.27.0",
     "qrcode.react": "^1.0.0",
