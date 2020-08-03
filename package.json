@@ -20,7 +20,7 @@
     "immutable": "^4.0.0-rc.12",
     "is-empty": "^1.2.0",
     "jspdf": "^1.5.3",
-    "localforage": "^1.8.1",
+    "localforage": "^1.9.0",
     "lodash.clonedeep": "^4.5.0",
     "material-table": "^1.67.1",
     "mdi-react": "^6.7.0",
