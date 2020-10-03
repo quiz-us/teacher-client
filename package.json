@@ -16,7 +16,7 @@
     "decamelize": "^3.2.0",
     "downshift": "^3.4.8",
     "graphql": "^14.7.0",
-    "html2canvas": "^1.0.0-rc.5",
+    "html2canvas": "^1.0.0-rc.7",
     "immutable": "^4.0.0-rc.12",
     "is-empty": "^1.2.0",
     "jspdf": "^1.5.3",
