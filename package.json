@@ -23,7 +23,7 @@
     "localforage": "^1.9.0",
     "lodash.clonedeep": "^4.5.0",
     "material-table": "^1.69.1",
-    "mdi-react": "^6.7.0",
+    "mdi-react": "^7.4.0",
     "moment": "^2.29.1",
     "qrcode.react": "^1.0.0",
     "react": "^16.14.0",
