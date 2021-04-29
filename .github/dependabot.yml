@@ -1,0 +1,39 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: faker
+    versions:
+    - 5.2.0
+    - 5.3.1
+    - 5.4.0
+    - 5.5.0
+    - 5.5.1
+    - 5.5.2
+  - dependency-name: "@testing-library/react"
+    versions:
+    - 11.2.3
+    - 11.2.5
+  - dependency-name: mdi-react
+    versions:
+    - 7.4.0
+  - dependency-name: downshift
+    versions:
+    - 6.1.0
+    - 6.1.1
+    - 6.1.2
+  - dependency-name: use-debounce
+    versions:
+    - 5.2.0
+    - 5.2.1
+    - 6.0.0
+  - dependency-name: "@date-io/moment"
+    versions:
+    - 2.10.6
+  - dependency-name: react-dom
+    versions:
+    - 16.14.0
