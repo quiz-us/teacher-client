@@ -19,7 +19,7 @@
     "html2canvas": "^1.0.0-rc.7",
     "immutable": "^4.0.0-rc.12",
     "is-empty": "^1.2.0",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "localforage": "^1.9.0",
     "lodash.clonedeep": "^4.5.0",
     "material-table": "^1.69.1",
